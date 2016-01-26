@@ -4,6 +4,9 @@
   * examples:
     * (function), I choose you
     * (function) use (method)
+    
+* Sunior Script
+  * Do a language how we wish to do it (implement the require feature and more)
 
 # Features for Language
 ### For loop
