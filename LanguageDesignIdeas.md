@@ -25,11 +25,15 @@
 ### Assertions
 
 ### Built in types
-  *list/Array
+  * list/Array
 
 ### Custom objects / Classes
 
 ### Awesome features we want to include
+
+## null?
+
+## optional assignment operator
 
 * list comprehensions
   * e.g. - [x*x for x in list when x%2 is 0]
