@@ -1,16 +1,20 @@
-# Seniors-Compiler
+# Roo
 
 A simple curly-brace language.
 
+# Compile
+```
+kanga helloworld.roo
+```
+
 ##Example Program
 ```
-# gcd.kyte
+# gcd.roo
 
 fun gcd a, b {
   if b != 0 {
     return a
-  }
-  else { 
+  } else { 
     return gcd b, a%b
   }
 }
@@ -37,6 +41,18 @@ x
 y = 3
 z = "hello"
 ```
-###If statements
+###If Statements
+```
+if x > 3 {
+  return "x is greater than 3"
+} else {
+  return "x is less than or equal to 3"
+}
+
+# is equivalent to
+
+if x > 3 {return "x is greater than 3"}
+else {return "x is less than or equal to 3"}
+```
 ###For Loops
 ###While Loops
