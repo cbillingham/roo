@@ -2,7 +2,7 @@
 
 A simple curly-brace language.
 
-# Compile
+## Compile
 ```
 kanga helloworld.roo
 ```
