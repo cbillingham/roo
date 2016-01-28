@@ -11,11 +11,11 @@ kanga helloworld.roo
 ```
 # gcd.roo
 
-fun gcd a, b {
+fun gcd(a, b) {
   if b != 0 {
     return a
   } else { 
-    return gcd b, a%b
+    return gcd(b, a%b)
   }
 }
 ```
@@ -55,4 +55,9 @@ if x > 3 {return "x is greater than 3"}
 else {return "x is less than or equal to 3"}
 ```
 ###For Loops
+```
+for x in [1..5] {
+  return x
+}
+```
 ###While Loops
