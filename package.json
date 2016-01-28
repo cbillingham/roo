@@ -1,0 +1,29 @@
+{
+    "name":"Roo Compiler",
+    "version":"0.0.1",
+    "author": {
+        "name":"Cameron Bilingham"
+    },
+    "contributors":[
+        {
+            "name": "Jeff Fennell"
+        },
+        {
+            "name":"Misa Pham"
+        },
+        {
+            "name":"Joseph Barbosa"
+        },
+        {
+            "name":"Matt Flickner"
+        }
+    ],
+    "description":"A compiler for the Roo programming language",
+    "dependencies":"",
+    "devDependencies":{
+        "mocha":"^2.3.4"
+    },
+    "scripts": {
+        "test": "mocha server/test -c -R spec"
+    }
+}
