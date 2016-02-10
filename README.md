@@ -1,5 +1,4 @@
-![alt tag](roo/roo.jpg)
-
+![Image](raw.github.com/cbillingham/roo/roo.jpg)
 
 # Roo
 
