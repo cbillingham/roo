@@ -1,9 +1,14 @@
 {
-    "name":"Roo Compiler",
+    "name":"Roo-Compiler",
     "version":"0.0.1",
     "author": {
         "name":"Cameron Bilingham"
     },
+    "repository":{ 
+        "type" : "git", 
+        "url" : "https://github.com/cbillingham/roo.git"
+    },
+    "license": "MIT",
     "contributors":[
         {
             "name": "Jeff Fennell"
@@ -19,11 +24,13 @@
         }
     ],
     "description":"A compiler for the Roo programming language",
-    "dependencies":"",
+    "dependencies":{
+        "coffee-script": "^1.10.0"
+    },
     "devDependencies":{
         "mocha":"^2.3.4"
     },
     "scripts": {
-        "test": "mocha server/test -c -R spec"
+        "test": "mocha --compilers coffee:coffee-script/register --recursive test -c -R nyan"
     }
 }

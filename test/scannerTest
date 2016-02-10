@@ -1,0 +1,4 @@
+process.env.NODE_ENV = 'test';
+scanner = require '../src/scanner'
+  
+  describe 'scanner' ->
