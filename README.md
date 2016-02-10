@@ -1,4 +1,4 @@
-![Image](raw.github.com/cbillingham/roo/roo.jpg)
+![alt text](roo/roo.jpg)
 
 # Roo
 
