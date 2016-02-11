@@ -116,6 +116,7 @@ loop {
     break
   }
   print "x<y is true"
+  x--
 }
 ```
 ###Functions
