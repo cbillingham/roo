@@ -151,7 +151,7 @@ printResult(double, 3)           # prints 6
 Roo also allows anonymous functions by using the single arrow () ->
 ```
 fun add(b) {
-  return (a,b) -> {return a+b} 
+  return (a) -> {return a+b} 
 }
   
 add5 = add(5)
