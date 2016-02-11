@@ -46,6 +46,27 @@ If you would like to create an immutable variable, just use const or final.
 const ONE = 1
 final TWO = 2
 ```
+###Operators
+Roo adds some additional keywords as operators for readability. The following is a list of operators that Roo supports.
+```
+Roo                                     JavaScript
+--------                                --------------
+>                                       >
+>=                                      >=
+<                                       <
+<=                                      <=
+is,   ==                                ===
+isnt, !=                                !==
+not,  !                                 !
+and,  &&                                &&
+or,   ||                                ||
+true, yes, on                           true
+false, no, off                          false
+this                                    this
+
+a ** b	                                Math.pow(a, b)
+a // b	                                Math.floor(a / b)
+```
 ###If Statements
 ```
 if x > 3 {
