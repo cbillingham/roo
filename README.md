@@ -1,8 +1,6 @@
 ![Logo](https://raw.githubusercontent.com/cbillingham/roo/master/roo.jpg)
 
-# Roo
-
-A simple curly-brace language.
+A simple, curly-brace language that compiles to Javascript. Roo combines the scripting benefits of a dynamically typed language with a readable syntax that is inspired by Java and Swift. While the basic syntax of Roo is inspired by Java and Swift, Roo adds modern functionailty, such as list comprehensions, default parameters, and much more, to the programmers toolbelt.
 
 ## Compile
 ```
@@ -42,6 +40,11 @@ Variable assignments are simple. No keyword or special symbol necessary.
 x
 y = 3
 z = "hello"
+```
+If you would like to create an immutable variable, just use const or final.
+```
+const ONE = 1
+final TWO = 2
 ```
 ###If Statements
 ```
@@ -114,3 +117,41 @@ loop {
   }
   print "x<y is true"
 }
+```
+###Functions
+
+Functions are declared with the keyword fun.
+```
+fun gcd(a, b) {
+  if b != 0 {
+    return a
+  } else { 
+    return gcd(b, a%b)
+  }
+}
+```
+In Roo functions are also objects, so they are first-class by default.
+```
+fun printResult(f, a) {
+  print( f(a) )
+}
+
+fun square(a) {
+  return a*a
+}
+
+fun double(a) {
+  return a*2
+}
+
+printResult(square, 3)           # prints 9
+printResult(double, 3)           # prints 6
+```
+Roo also allows anonymous functions by using the single arrow () ->
+```
+fun add(b) {
+  return (a,b) -> {return a+b} 
+}
+  
+add5 = add(5)
+```
