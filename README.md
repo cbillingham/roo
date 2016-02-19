@@ -183,8 +183,8 @@ add5 = add(5)
 ```
 letter = [\p{L}]
 digit = [\p{Nd}]
-keyword = 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|
-          'true'|'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'
+keyword = 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'|
+          'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'read'
 id = letter(letter|digit|_)*
 intlit = digit+
 relop = '<'|'<='|'=='|'is'|'!='|'isnt'|'>='|'>'
