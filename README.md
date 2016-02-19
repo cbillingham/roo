@@ -99,7 +99,7 @@ List comprehensions will replace most cases where traditional loops are used.
 Using `..` is inclusive:
 ```
 for countdown in [10..1] {
-  print countdown
+  print(countdown)
 }
 ```
 When the above code is executed it returns:
@@ -177,7 +177,77 @@ fun add(b) {
   
 add5 = add(5)
 ```
+### Insist Statement
 
+To easily check function arguments, you can use the insist keyword to remove the boilerplate of throwing exceptions for illegal arguments.
+
+```
+fun divide(x, y) {
+  insist y isnt 0
+  
+  return x / y
+}
+
+divide(4,0) # throws an illegal argument exception
+```
+
+### Scoping
+
+Roo uses lexical scoping. All variables are bound to the local scope, unless the keyword __**global**__ keyword is used.
+Variables in lower scopes shadow those in higher scopes.
+
+```
+x = 4                   #local
+```
+
+```
+() -> {
+  global x = 4         #global 
+}
+```
+
+```
+x = 4 
+
+fun add1(y) {
+  return x + 1          # returns 5
+}
+```
+
+```
+x = 4 
+
+fun add1(y) {
+  x = 7
+  return x + 1          # returns 8
+}
+```
+
+```
+x = 4 
+
+fun printNum(z) {
+  global y = 47
+  print(z)                
+}
+
+printNum(x)            #prints 4
+printNum(y)            #prints 47
+```
+
+```
+x = 47
+
+fun printANumber() {
+   x = 4
+   fun doThePrinting() {
+      print(x)          
+   }
+   doThePrinting()
+}
+
+printANumber()        #prints 4
+```
 ## Syntax
 ### Micro Syntax
 ```
