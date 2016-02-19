@@ -177,3 +177,21 @@ fun add(b) {
   
 add5 = add(5)
 ```
+
+## Syntax
+### Micro Syntax
+```
+letter = [\p{L}]
+digit = [\p{Nd}]
+keyword = 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|
+          'true'|'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'
+id = letter(letter|digit|_)*
+intlit = digit+
+relop = '<'|'<='|'=='|'is'|'!='|'isnt'|'>='|'>'
+addop = '+'|'-'
+mulop = '*'|'/'|'//'
+exp = '**'
+prefixop = '!'|'-'
+boolit = 'true'|'false'
+skip = [\x09-\x0d \u2028\u2029\p{Zs}] |  '#' [^\r\n]* [\r\n]
+```
