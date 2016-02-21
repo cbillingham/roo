@@ -337,7 +337,7 @@ letter    ::= [\p{L}]
 digit     ::= [\p{Nd}]
 keyword   ::= 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'
             | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'|
-            | 'class'|'null'
+            | 'class'|'null' | 'new'
 id        ::= letter(letter|digit|_)*
 intlit    ::= digit+
 floatlit  ::= digit* '.' digit+
@@ -347,7 +347,7 @@ mulop     ::= '*'|'/'|'%'|'//'
 expop     ::= '**'
 prefixop  ::= '!'|'-'
 postfixop ::= '++'|'--'
-boolit    ::= 'true'|'false'
+boollit   ::= 'true'|'false'
 char      ::= [^\x00-\x1F'"\\] | [\\] [rnst'"\\]
 stringlit ::= ('"' char* '"') | (\x27 char* \x27)
 nulllit   ::= 'null'
@@ -357,34 +357,40 @@ comment   ::= '#' [^\n]* newline
 ```
 ### MacroSyntax
 ```
-Program    ::= Block
-Block      ::= (Stmt)+
-Stmt       ::= WhileLoop | IfStmt | Loop | ForLoop | FunDec | ObjectDec | Exp | AssignStmt
-AssignStmt ::= 'global'? id '=' Exp | Increment
-Increment  ::= Var IncOp
+Program      ::= Block
+Block        ::= (Stmt)+
+Stmt         ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp | AssignStmt
+               | ReturnStmt | BreakStmt | ContinueStmt
+AssignStmt   ::= 'global'? id '=' Exp | Increment
+Increment    ::= Var postfixop
 
-Dec        ::= VarDec | FunDec | ObjectDec
-VarDec     :: 'global'? id '=' Exp
-FunDec     ::= 'fun' id Params Body
-Params     ::= '(' IdList ')'
-IdList     ::= id (',' id)*
-ObjectDec  ::= 'class' id Body
+Dec          ::= VarDec | FunDec | ObjectDec
+VarDec       :: 'global'? id '=' Exp
+FunDec       ::= 'fun' id Params Body
+Params       ::= '(' IdList ')'
+IdList       ::= id (',' id)*
+ObjectDec    ::= 'class' id Body
 
-Loop       ::= 'loop' Body
-WhileLoop  ::= 'while' Exp Body
-ForLoop    ::= 'for' Exp Body
-IfStmt     ::= 'if' Exp Body (ElseIfStmt)* ElseSmt?
-ElseIfStmt ::= 'else if' Exp Body
-ElseStmt   ::= 'else' Body
+Loop         ::= 'loop' Body
+WhileLoop    ::= 'while' Exp Body
+ForLoop      ::= 'for' Exp Body
+IfStmt       ::= 'if' Exp Body (ElseIfStmt)* ElseSmt?
+ElseIfStmt   ::= 'else if' Exp Body
+ElseStmt     ::= 'else' Body
+BreakStmt    ::= 'break'
+ContinueStmt ::= 'continue'
+ReturnStmt   ::= 'return' Exp?
 
-Body       ::= '{' Block? '}'
-Exp        ::= Exp1 (( 'or' | 'and' | '||' | '&&' ) Exp1)*
-Exp1       ::= Exp2 (relop Exp2)?
-Exp2       ::= Exp3 (addop Exp3)*
-Exp3       ::= Exp4 (mulop Exp4)*
-Exp4       ::= Exp5 (expop Exp5)*
-Exp5       ::= PrefixOp? Exp6
-Exp6       ::= Literal | AssignStmt | ObjectDec | FunCall | '('Exp')'
-Literal    ::=  null | boolit | intlit | floatlit | stringlit
-Var        ::=  id | Call | Var '[' Exp ']' | Var '.' id
+Body         ::= '{' Block? '}'
+Exp          ::= Exp1 (( 'or' | 'and' | '||' | '&&' ) Exp1)*
+Exp1         ::= Exp2 (relop Exp2)?
+Exp2         ::= Exp3 (addop Exp3)*
+Exp3         ::= Exp4 (mulop Exp4)*
+Exp4         ::= Exp5 (expop Exp5)*
+Exp5         ::= PrefixOp? Exp6
+Exp6         ::= Literal | AssignStmt | Var | '('Exp')'
+Literal      ::= nulllit | boollit | intlit | floatlit | stringlit
+Var          ::= id | FunCall | Var '[' Exp ']' | Var '.' id
+FunCall      ::= id '(' ExpList ')'
+ExpList      ::= (Exp (',' Exp)*)?
 ```
