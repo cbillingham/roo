@@ -7,26 +7,30 @@ A simple, curly-brace language that compiles to Javascript. Roo combines the scr
 kanga helloworld.roo
 ```
 
-##Example Program
+## Example Program
 ```
 # gcd.roo
 
 fun gcd(a, b) {
-  if b != 0 {
+  if b is 0 {
     return a
   } else { 
     return gcd(b, a%b)
   }
 }
+
+print( gcd(9,3) )      # prints 3
 ```
 
-##Features
-###Comments
+## Features
+### Comments
 Single line comments are created with #
+
 ```
 # this is a comment
 ```
 Multi-line comments are created with a /# ... #/
+
 ```
 /#
 this is a mult-line comment
@@ -34,20 +38,58 @@ still a comment?
 yep, still a comment
 #/
 ```
-###Assignments
+### Assignments
 Variable assignments are simple. No keyword or special symbol necessary.
+
 ```
 x
 y = 3
 z = "hello"
 ```
 If you would like to create an immutable variable, just use const or final.
+
 ```
 const ONE = 1
 final TWO = 2
 ```
-###Operators
+
+### Types
+Roo has the following built-in primitive types:
+
+```
+x = 3                      # int
+
+y = 3.0                    # double
+y = 3.4
+y = 0.4
+y = .3
+y = 3.                     # syntax error
+
+w = true                   # bool
+w = false
+
+z = null                   # roo has a null type, which can be assigned to variables
+```
+Roo also has built in reference types including String, List, Set, Tuple, and Map.
+
+```
+s = "a"                    # Roo does not have characters, only strings
+s = "hello"                
+s = 'a'                    # Strings can use both single or double quotes
+s = 'hello'
+
+a = [1,2,3]                # lists are ordered and mutable
+
+b = (1,2,3)                # tuples are ordered and immutable
+
+c = <1,2,3>                # sets are unordered and mutable
+
+d = {x:1, y:2, z:3}        # maps are a mutable collection of key-value pairs
+```
+
+### Operators
 Roo adds some additional keywords as operators for readability. The following is a list of operators that Roo supports.
+
 ```
 Roo                                     JavaScript
 --------                                --------------
@@ -62,12 +104,19 @@ and,  &&                                &&
 or,   ||                                ||
 true                                    true
 false                                   false
-this                                    this
 
 a ** b	                                Math.pow(a, b)
 a // b	                                Math.floor(a / b)
+
+a * b                                   a * b
+a / b                                   a / b
+a % b                                   a % b
+
+a++                                     a = a + 1
+a--                                     a = a - 1
+
 ```
-###If Statements
+### If Statements
 ```
 if x > 3 {
   return "x is greater than 3"
@@ -80,29 +129,31 @@ if x > 3 {
 if x > 3 {return "x is greater than 3"}
 else {return "x is less than or equal to 3"}
 ```
-###For Loops
+### For Loops
 For loops use list comprehensions which allow you to easily loop through objects or lists.
+
 ```
 people = ["jack", "jill"]
 
 for person in people {
   goUpTheHill(person)
 }
+```
+If you need the index as well just use the built in enumerate function.
 
-# if you need the index as well just use i
-
-for person, i in people {
-  setAge(person, 8+i)
+```
+for (index, person) in enumerate(people) {
+  setAge(person, 8+index)
 }
 ```
-List comprehensions will replace most cases where traditional loops are used.
-Using `..` is inclusive:
+For looping over a certain range of numbers use the 'to' keyword.
 ```
-for countdown in [10..1] {
+for countdown in 10 to 1 {
   print(countdown)
 }
 ```
 When the above code is executed it returns:
+
 ```
 10
 9
@@ -115,22 +166,29 @@ When the above code is executed it returns:
 2
 1
 ```
-If you don't need the values of your loop you can just run the following. Using `...` is exclusive:
-```
-for [0...count] {
-  x = x/y
-}
-```
-When the above code is executed it will divide x by y count times, looping through 0 to count-1.
+If you don't need the values of your loop you can just run the following. Also use the 'by' keyword to change your iteration number.
 
-###While Loops
+```
+                                     # Javascript equivalent
+                                     
+count = 8                            # var count = 8
+
+for 1 to count by 2 {                # for (int i = 1; i <= count; i=i+2) {
+  x = x/y                            #    x = x/y
+}                                    # }
+```
+When the above code is executed it will divide x by y 4 times, looping through 1 to 8, increasing by 2 each time.
+
+### While Loops
 While loops are standard syntax.
+
 ```
 while x < y {
   print "x<y is true"
 }
 ```
 You can run a while true loop with the following:
+
 ```
 loop {
   if x < y {
@@ -140,12 +198,13 @@ loop {
   x--
 }
 ```
-###Functions
+### Functions
 
 Functions are declared with the keyword fun.
+
 ```
 fun gcd(a, b) {
-  if b != 0 {
+  if b is 0 {
     return a
   } else { 
     return gcd(b, a%b)
@@ -153,6 +212,7 @@ fun gcd(a, b) {
 }
 ```
 In Roo functions are also objects, so they are first-class by default.
+
 ```
 fun printResult(f, a) {
   print( f(a) )
@@ -170,6 +230,7 @@ printResult(square, 3)           # prints 9
 printResult(double, 3)           # prints 6
 ```
 Roo also allows anonymous functions by using the single arrow () ->
+
 ```
 fun add(b) {
   return (a) -> {return a+b} 
@@ -191,9 +252,9 @@ fun divide(x, y) {
 divide(4,0) # throws an illegal argument exception
 ```
 
-### Scoping
+## Scoping
 
-Roo uses lexical scoping. Variable declarations are bound to the local scope, unless the keyword __**global**__ keyword is used.
+Roo uses lexical scoping. Variable declarations are bound to the local scope, unless the __**global**__ keyword is used.
 Variables declared in lower scopes shadow those in higher scopes with the same name.
 
 ```
@@ -248,20 +309,31 @@ fun printANumber() {
 
 printANumber()        #prints 4
 ```
+
 ## Syntax
-### Micro Syntax
+### MicroSyntax
 ```
-letter = [\p{L}]
-digit = [\p{Nd}]
-keyword = 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'|
-          'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'read'
-id = letter(letter|digit|_)*
-intlit = digit+
-relop = '<'|'<='|'=='|'is'|'!='|'isnt'|'>='|'>'
-addop = '+'|'-'
-mulop = '*'|'/'|'//'
-exp = '**'
-prefixop = '!'|'-'
-boolit = 'true'|'false'
-skip = [\x09-\x0d \u2028\u2029\p{Zs}] |  '#' [^\r\n]* [\r\n]
+newline   ::= [\s* (\r*\n)+]
+letter    ::= [\p{L}]
+digit     ::= [\p{Nd}]
+keyword   ::= 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'
+            | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'|
+            | 'class'|'null'
+id        ::= letter(letter|digit|_)*
+intlit    ::= digit+
+floatlit  ::= digit* '.' digit+
+relop     ::= '<'|'<='|'=='|'is'|'!='|'isnt'|'>='|'>'
+addop     ::= '+'|'-'
+mulop     ::= '*'|'/'|'%'|'//'
+expop     ::= '**'
+prefixop  ::= '!'|'-'
+postfixop ::= '++'|'--'
+boolit    ::= 'true'|'false'
+char      ::= [^\x00-\x1F'"\\] | [\\] [rnst'"\\]
+stringlit ::= ('"' char* '"') | (\x27 char* \x27)
+nulllit   ::= 'null'
+skip      ::= [\x09-\x0d \u2028\u2029\p{Zs}] |  '#' [^\r\n]* [\r\n]
+comment   ::= '#' [^\n]* newline
+            | '/#' .* '#/'
 ```
+### MacroSyntax
