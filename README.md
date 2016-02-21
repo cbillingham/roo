@@ -356,3 +356,18 @@ comment   ::= '#' [^\n]* newline
             | '/#' .* '#/'
 ```
 ### MacroSyntax
+```
+Program    ::= Block
+Block      ::= (Stmt)+
+Body       ::= '{' Block? '}'
+Stmt       ::= WhileLoop | IfStmt | Loop | ForLoop | FunDec | ObjectDec | Exp | AssignStmt
+WhileLoop  ::= 'while' Exp Body
+ForLoop    ::= 'for' Exp Body
+IfStmt     ::= 'if' Exp Body (ElseIfStmt)* ElseSmt?
+ElseIfStmt ::= 'else if' Exp Body
+ElseStmt   ::= 'else' Body
+FunDec     ::= 'fun' id Params Body
+Params     ::= '(' IdList ')'
+IdList     ::= id (',' id)*
+ObjectDec  ::= 'class' id Body
+AssignStmt ::= 'global'? id '=' Exp
