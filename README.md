@@ -359,15 +359,31 @@ comment   ::= '#' [^\n]* newline
 ```
 Program    ::= Block
 Block      ::= (Stmt)+
-Body       ::= '{' Block? '}'
 Stmt       ::= WhileLoop | IfStmt | Loop | ForLoop | FunDec | ObjectDec | Exp | AssignStmt
+AssignStmt ::= 'global'? id '=' Exp | Increment
+Increment  ::= Var IncOp
+
+Dec        ::= VarDec | FunDec | ObjectDec
+VarDec     :: 'global'? id '=' Exp
+FunDec     ::= 'fun' id Params Body
+Params     ::= '(' IdList ')'
+IdList     ::= id (',' id)*
+ObjectDec  ::= 'class' id Body
+
 WhileLoop  ::= 'while' Exp Body
 ForLoop    ::= 'for' Exp Body
 IfStmt     ::= 'if' Exp Body (ElseIfStmt)* ElseSmt?
 ElseIfStmt ::= 'else if' Exp Body
 ElseStmt   ::= 'else' Body
-FunDec     ::= 'fun' id Params Body
-Params     ::= '(' IdList ')'
-IdList     ::= id (',' id)*
-ObjectDec  ::= 'class' id Body
-AssignStmt ::= 'global'? id '=' Exp
+
+Body       ::= '{' Block? '}'
+Exp        ::= Exp1 (('or'|'and') Exp1)*
+Exp1       ::= Exp2 (relop Exp2)?
+Exp2       ::= Exp3 (addop Exp3)*
+Exp3       ::= Exp4 (mulop Exp4)*
+Exp4       ::= Exp5 (expop Exp5)*
+Exp5       ::= PrefixOp? Exp6
+Exp6       ::= Literal | AssignStmt | ObjectDec | FunCall | '('Exp')'
+Literal    ::=  null | boolit | intlit | floatlit | stringlit
+Var        ::=  id | Call | Var '[' Exp ']' | Var '.' id
+```
