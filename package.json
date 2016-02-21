@@ -25,10 +25,16 @@
     ],
     "description":"A compiler for the Roo programming language",
     "dependencies":{
-        "coffee-script": "^1.10.0"
+        "coffee-script": "latest",
+        "xregexp": "latest",
+        "hashmap": "latest",
+        "yargs": "latest",
+        "byline": "latest"
+
     },
     "devDependencies":{
-        "mocha":"^2.3.4"
+        "mocha": "latest",
+        "should": "latest"
     },
     "scripts": {
         "test": "mocha --compilers coffee:coffee-script/register --recursive test -c -R nyan"
