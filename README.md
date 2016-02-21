@@ -193,8 +193,8 @@ divide(4,0) # throws an illegal argument exception
 
 ### Scoping
 
-Roo uses lexical scoping. All variables are bound to the local scope, unless the keyword __**global**__ keyword is used.
-Variables in lower scopes shadow those in higher scopes.
+Roo uses lexical scoping. Variable declarations are bound to the local scope, unless the keyword __**global**__ keyword is used.
+Variables declared in lower scopes shadow those in higher scopes with the same name.
 
 ```
 x = 4                   #local
