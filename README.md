@@ -378,7 +378,7 @@ ElseIfStmt ::= 'else if' Exp Body
 ElseStmt   ::= 'else' Body
 
 Body       ::= '{' Block? '}'
-Exp        ::= Exp1 (('or'|'and') Exp1)*
+Exp        ::= Exp1 (( 'or' | 'and' | '||' | '&&' ) Exp1)*
 Exp1       ::= Exp2 (relop Exp2)?
 Exp2       ::= Exp3 (addop Exp3)*
 Exp3       ::= Exp4 (mulop Exp4)*
