@@ -86,6 +86,26 @@ c = <1,2,3>                # sets are unordered and mutable
 
 d = {x:1, y:2, z:3}        # maps are a mutable collection of key-value pairs
 ```
+#### List Ranges, Comprehensions, and Slices
+Roo adds modern list functionality to make your code more readable and easier to write.
+
+```
+x = [0 to 3]               # using list ranges is the same as saying [0,1,2,3]
+```
+Use a similar syntax for returning list slices
+
+```
+l = ['hi','bye',1,3]
+y = l[0 to 1]               # y = ['hi','bye']
+y = l[0 to 2 by 2]          # y = ['hi',1]
+```
+
+Roo also has list comprehensions.
+
+```
+l = [0,1,2,3]
+y = [x*2 for x in l]        # y = [0,2,4,6]
+```
 
 ### Operators
 Roo adds some additional keywords as operators for readability. The following is a list of operators that Roo supports.
@@ -170,7 +190,7 @@ If you don't need the values of your loop you can just run the following. Also u
 
 ```
                                      # Javascript equivalent
-                                     
+
 count = 8                            # var count = 8
 
 for 1 to count by 2 {                # for (int i = 1; i <= count; i=i+2) {
