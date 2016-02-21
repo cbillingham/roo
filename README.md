@@ -134,7 +134,6 @@ a % b                                   a % b
 
 a++                                     a = a + 1
 a--                                     a = a - 1
-
 ```
 ### If Statements
 ```
@@ -352,7 +351,7 @@ boolit    ::= 'true'|'false'
 char      ::= [^\x00-\x1F'"\\] | [\\] [rnst'"\\]
 stringlit ::= ('"' char* '"') | (\x27 char* \x27)
 nulllit   ::= 'null'
-skip      ::= [\x09-\x0d \u2028\u2029\p{Zs}] |  '#' [^\r\n]* [\r\n]
+skip      ::= [\x09-\x0d \u2028\u2029\p{Zs}] | comment
 comment   ::= '#' [^\n]* newline
             | '/#' .* '#/'
 ```
