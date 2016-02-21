@@ -370,6 +370,7 @@ Params     ::= '(' IdList ')'
 IdList     ::= id (',' id)*
 ObjectDec  ::= 'class' id Body
 
+Loop       ::= 'loop' Body
 WhileLoop  ::= 'while' Exp Body
 ForLoop    ::= 'for' Exp Body
 IfStmt     ::= 'if' Exp Body (ElseIfStmt)* ElseSmt?
