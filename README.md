@@ -379,7 +379,7 @@ ElseIfStmt   ::= 'else if' Exp Body
 ElseStmt     ::= 'else' Body
 BreakStmt    ::= 'break'
 ContinueStmt ::= 'continue'
-ReturnStmt   ::= 'return' Exp?
+ReturnStmt   ::= 'return' Exp
 
 Body         ::= '{' Block? '}'
 Exp          ::= Exp1 (( 'or' | 'and' | '||' | '&&' ) Exp1)*
