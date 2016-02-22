@@ -8,7 +8,7 @@ DIGIT = XRegExp '[\\p{Nd}]'
 WORD_CHAR = XRegExp '[\\p{L}\\p{Nd}_]'
 
 KEYWORDS = /^(global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist)$/
-TWO_CHAR_TOKENS = /<=|==|!=|>=|**/
+TWO_CHAR_TOKENS = /<=|==|!=|>=|\*\*/
 ONE_CHAR_TOKENS = /[+\-*\/(),:=<>]/
 
 
@@ -42,11 +42,11 @@ scan = (line, linenumber, tokens) ->
     start = pos
 
     # Nothing on line
-    break if pos >= line.length
+    break if (pos >= line.length)
 
     #Multiline Comments
-    inComment = true if line[pos] is '/' and line[pos+1] is '#'
-    inComment = false if line[pos] is '#' and line[pos+1] is '/'
+    inComment = (line[pos] is '/' and line[pos+1] is '#')
+    inComment = (line[pos] is '#' and line[pos+1] is '/')
     continue if inComment
 
     # Line is comment
