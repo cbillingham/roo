@@ -37,6 +37,6 @@
         "should": "latest"
     },
     "scripts": {
-        "test": "mocha --compilers coffee:coffee-script/register --recursive test -c -R nyan"
+        "test": "mocha --compilers coffee:coffee-script/register --recursive test -c"
     }
 }
