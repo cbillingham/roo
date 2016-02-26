@@ -1,0 +1,10 @@
+# this is a comment
+/#
+#
+# These are multiline comments
+# a = 0 # this should not matter
+#/
+
+
+
+x = 0 #this is a comment after variable declaration
