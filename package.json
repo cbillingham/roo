@@ -25,11 +25,11 @@
     ],
     "description":"A compiler for the Roo programming language",
     "dependencies":{
-        "coffee-script": "latest",
-        "xregexp": "latest",
-        "hashmap": "latest",
-        "yargs": "latest",
-        "byline": "latest"
+        "coffee-script": "^1.10.0",
+        "xregexp": "^3.1.0",
+        "hashmap": "^2.0.4",
+        "yargs": "^4.2.0",
+        "byline": "^4.2.1"
 
     },
     "devDependencies":{

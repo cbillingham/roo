@@ -1,6 +1,6 @@
 fs        = require 'fs'
 byline    = require 'byline'
-{XRegExp} = require 'xregexp'
+XRegExp = require 'xregexp'
 error     = require './error'
 
 LETTER = XRegExp '[\\p{L}]'
