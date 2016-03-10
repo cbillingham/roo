@@ -7,6 +7,9 @@ A simple, curly-brace language that compiles to Javascript. Roo combines the scr
 kanga helloworld.roo
 ```
 
+## Hello World
+```print("Hello, World!")
+
 ## Example Program
 ```
 # gcd.roo
