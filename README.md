@@ -4,12 +4,12 @@ A simple, curly-brace language that compiles to Javascript. Roo combines the scr
 
 ## Compile
 ```
-kanga helloworld.roo
+kanga helloWorld.roo
 ```
 
 ## Hello World
 ```
-#helloWorld.roo
+# helloWorld.roo
 
 print("Hello, World!")
 ```
