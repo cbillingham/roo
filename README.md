@@ -8,7 +8,11 @@ kanga helloworld.roo
 ```
 
 ## Hello World
-```print("Hello, World!")```
+```
+#helloWorld.roo
+
+print("Hello, World!")
+```
 
 ## Example Program
 ```
