@@ -1,6 +1,5 @@
-#initialContext = require('../analyzer/analyzer').initialContext
-
 class Program
+
   constructor: (@block) ->
 
   toString: ->

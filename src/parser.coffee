@@ -7,6 +7,7 @@ scanner = require './scanner'
 error = require './error'
 
 Program = require './entities/program'
+Block = require './entities/block'
 
 
 tokens = []

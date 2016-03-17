@@ -336,7 +336,7 @@ fun printANumber() {
 printANumber()        #prints 4
 ```
 
-## Syntax
+## Grammar
 ### MicroSyntax
 ```
 newline   ::= [\s* (\r*\n)+]
