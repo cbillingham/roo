@@ -11,4 +11,4 @@ class ReturnStatement
   optimize: ->
      #TODO
 
-module.exports = Block
+module.exports = ReturnStatement
