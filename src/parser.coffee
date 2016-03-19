@@ -9,9 +9,8 @@ error = require './error'
 Program = require './entities/program'
 Block = require './entities/block'
 
-
 tokens = []
-
+tokenTypes = ['']
 
 module.exports = (scannerOutput) ->
   tokens = scannerOutput
@@ -23,7 +22,11 @@ parseProgram = ->
   new Program(parseBlock())
 
 parseBlock = ->
-   #TODO
+  statements= []
+  loop
+    statements.push parseStatement()
+    break unless at tokenTypes
+  new Block(statements)
 
 at = (kind) ->
   if tokens.length is 0

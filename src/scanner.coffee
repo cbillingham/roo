@@ -75,6 +75,3 @@ scan = (line, linenumber, tokens) ->
     else
       error "Illegal character: #(line[pos])", {line: linenumber, col: pos+1}
       pos++
-
-
-
