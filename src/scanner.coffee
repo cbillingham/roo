@@ -45,8 +45,11 @@ scan = (line, linenumber, tokens) ->
     break if (pos >= line.length)
 
     #Multiline Comments
-    inComment = (line[pos] is '/' and line[pos+1] is '#')
-    inComment = (line[pos] is '#' and line[pos+1] is '/')
+    if not inComment
+      inComment = (line[pos] is '/' and line[pos+1] is '#')
+    if inComment
+      inComment = !(line[pos-1] is '#' and line[pos] is '/')
+      pos++
     continue if inComment
 
     # Line is comment

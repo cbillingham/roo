@@ -1,4 +1,4 @@
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'test'
 scan = require '../src/scanner'
 should = require 'should'
 error = require '../src/error'
@@ -26,3 +26,24 @@ describe 'The scanner', ->
          i(tokens[21]).should.equal i {kind:'true',lexeme:'true',line:1,col:76}
          i(tokens[23]).should.equal i {kind:'false',lexeme:'false',line:1,col:81}
          done()
+
+   it 'properly handles comments and blank lines', (done) ->
+      scan 'test/data/token-tests/comments-and-blank-lines', (tokens) ->
+         i(tokens[0]).should.equal i {kind:'id', lexeme:'x', line:10,col:1}
+         i(tokens[1]).should.equal i {kind:'=', lexeme:'=', line:10,col:3}
+         i(tokens[2]).should.equal i {kind:'intlit', lexeme:'0', line:10,col:5}
+         done()
+
+   # it 'reads symbolic tokens properly', (done) ->
+   #    scan 'test/data/token-tests/symbols', (tokens) ->
+   #       i(tokens[0]).should.equal i {kind:'<=', lexeme:'<=', line:1,col:1}
+   #       done()
+
+   # it 'scans the simpliest program', (done) ->
+   #    scan 'test/data/good-programs/helloworld.roo', (tokens) ->
+   #       i(tokens[0]).should.equal i {kind:'id',lexeme:'print',line:1,col:1}
+   #       i(tokens[1]).should.equal i {kind:'(', lexeme:'(',line:1,col:6}
+   #       i(tokens[2]).should.equal i {kind:'strlit',lexeme:'helloworld',line:1,col:8}
+   #       done()
+
+
