@@ -46,4 +46,12 @@ describe 'The scanner', ->
    #       i(tokens[2]).should.equal i {kind:'strlit',lexeme:'helloworld',line:1,col:8}
    #       done()
 
-
+   it 'recognizes valid floating point numbers', (done) ->
+      scan 'test/data/good-programs/floating-point.roo', (tokens) ->
+         i(tokens[0]).should.equal i {kind:'id', lexeme:'x', line:1, col:1}
+         i(tokens[1]).should.equal i {kind:'=', lexeme:'=', line:1, col:2}
+         i(tokens[2]).should.equal i {kind:'floatlit', lexeme:'4.325', line:1, col:3}
+         i(tokens[3]).should.equal i {kind:'id', lexeme:'y', line:2, col:1}
+         i(tokens[3]).should.equal i {kind:'=', lexeme:'=', line:2, col:2}
+         i(tokens[4]).should.equal i {kind:'-', lexeme:'-', line:2, col:3}
+         i(tokens[5]).should.equal i {kind:'floatlit', lexeme:'4.325', line:2, col:4}
