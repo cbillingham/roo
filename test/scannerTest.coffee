@@ -34,10 +34,10 @@ describe 'The scanner', ->
          i(tokens[2]).should.equal i {kind:'intlit', lexeme:'0', line:10,col:5}
          done()
 
-   # it 'reads symbolic tokens properly', (done) ->
-   #    scan 'test/data/token-tests/symbols', (tokens) ->
-   #       i(tokens[0]).should.equal i {kind:'<=', lexeme:'<=', line:1,col:1}
-   #       done()
+   it 'reads symbolic tokens properly', (done) ->
+      scan 'test/data/token-tests/symbols', (tokens) ->
+         i(tokens[0]).should.equal i {kind:'<=', lexeme:'<=', line:1,col:1}
+         done()
 
    # it 'scans the simpliest program', (done) ->
    #    scan 'test/data/good-programs/helloworld.roo', (tokens) ->
