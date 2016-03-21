@@ -73,7 +73,7 @@ scan = (line, linenumber, tokens) ->
       emit 'intlit', line.substring start, pos
 
     else
-      error "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
+      error "Illegal character: '#{line[pos]}'", {line: linenumber, col: pos+1}
       pos++
 
   emit "newline", "newline"
