@@ -8,7 +8,7 @@ DIGIT = XRegExp '[\\p{Nd}]'
 WORD_CHAR = XRegExp '[\\p{L}\\p{Nd}_]'
 
 KEYWORDS = /^(global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist)$/
-TWO_CHAR_TOKENS = /<=|==|!=|>=|\*\*/
+TWO_CHAR_TOKENS = /\+\+|--|<=|==|!=|>=|\*\*/
 ONE_CHAR_TOKENS = /[+\-*\/(),:=<>]/
 
 
@@ -73,8 +73,9 @@ scan = (line, linenumber, tokens) ->
       emit 'intlit', line.substring start, pos
 
     else
-      error "Illegal character: #(line[pos])", {line: linenumber, col: pos+1}
+      error "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
       pos++
 
+  emit "newline", "newline"
 
 
