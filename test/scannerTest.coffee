@@ -25,6 +25,8 @@ describe 'The scanner', ->
          i(tokens[19]).should.equal i {kind:'id',lexeme:'write',line:1,col:70}
          i(tokens[21]).should.equal i {kind:'true',lexeme:'true',line:1,col:76}
          i(tokens[23]).should.equal i {kind:'false',lexeme:'false',line:1,col:81}
+         #i(tokens[17]).should.equal i {kind:'require',lexeme:'require',line:2,col:1}
+         #i(tokens[24]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
    it 'properly handles comments and blank lines', (done) ->
@@ -32,6 +34,7 @@ describe 'The scanner', ->
          i(tokens[0]).should.equal i {kind:'id', lexeme:'x', line:10,col:1}
          i(tokens[1]).should.equal i {kind:'=', lexeme:'=', line:10,col:3}
          i(tokens[2]).should.equal i {kind:'intlit', lexeme:'0', line:10,col:5}
+         i(tokens[3]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
    it 'reads symbolic tokens properly', (done) ->
@@ -50,7 +53,18 @@ describe 'The scanner', ->
          i(tokens[11]).should.equal i {kind:'+', lexeme: '+', line:1, col:16}
          i(tokens[12]).should.equal i {kind:'-', lexeme: '-', line:1, col:17}
          i(tokens[13]).should.equal i {kind:'*', lexeme: '*', line:1, col:18}
-         i(tokens[14]).should.equal i {kind:'/', lexeme: '/', line:1, col:15}
+         i(tokens[14]).should.equal i {kind:'/', lexeme: '/', line:1, col:19}
+         i(tokens[15]).should.equal i {kind:'<', lexeme: '<', line:1, col:20}
+         i(tokens[16]).should.equal i {kind:'>', lexeme: '>', line:1, col:21}
+         i(tokens[17]).should.equal i {kind:'[', lexeme: '[', line:1, col:22}
+         i(tokens[18]).should.equal i {kind:']', lexeme: ']', line:1, col:23}
+         i(tokens[19]).should.equal i {kind:'{', lexeme: '{', line:1, col:24}
+         i(tokens[20]).should.equal i {kind:'}', lexeme: '}', line:1, col:25}
+         i(tokens[21]).should.equal i {kind:'**', lexeme: '**', line:1, col:26}
+         i(tokens[22]).should.equal i {kind:'&&', lexeme: '&&', line:1, col:28}
+         i(tokens[23]).should.equal i {kind:'||', lexeme: '||', line:1, col:30}
+         i(tokens[24]).should.equal i {kind:'!', lexeme: '!', line:1, col:32}
+         i(tokens[25]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
    # it 'scans the simpliest program', (done) ->
