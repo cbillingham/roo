@@ -64,14 +64,15 @@ describe 'The scanner', ->
          i(tokens[22]).should.equal i {kind:'&&', lexeme: '&&', line:1, col:28}
          i(tokens[23]).should.equal i {kind:'||', lexeme: '||', line:1, col:30}
          i(tokens[24]).should.equal i {kind:'!', lexeme: '!', line:1, col:32}
+         #i(tokens[25]).should.equal i {kind:'"', lexeme: '"', line:1, col:33}
          i(tokens[25]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
-   # it 'scans the simpliest program', (done) ->
-   #    scan 'test/data/good-programs/helloworld.roo', (tokens) ->
-   #       i(tokens[0]).should.equal i {kind:'id',lexeme:'print',line:1,col:1}
-   #       i(tokens[1]).should.equal i {kind:'(', lexeme:'(',line:1,col:6}
-   #       i(tokens[2]).should.equal i {kind:'strlit',lexeme:'helloworld',line:1,col:8}
-   #       done()
+   it 'scans the simpliest program', (done) ->
+      scan 'test/data/good-programs/helloworld.roo', (tokens) ->
+         i(tokens[0]).should.equal i {kind:'id',lexeme:'print',line:1,col:1}
+         i(tokens[1]).should.equal i {kind:'(', lexeme:'(',line:1,col:6}
+         i(tokens[3]).should.equal i {kind:'strlit',lexeme:'"helloworld"',line:1,col:8}
+         done()
 
 

@@ -9,7 +9,7 @@ WORD_CHAR = XRegExp '[\\p{L}\\p{Nd}_]'
 
 KEYWORDS = /^(global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist)$/
 TWO_CHAR_TOKENS = /<=|==|!=|>=|\*\*|&&|\|\|/
-ONE_CHAR_TOKENS = /[\[+\-*\/(),:=<>\]\{\}!]/
+ONE_CHAR_TOKENS = /[\[+\-*\/(),:=<>\]\{\}!"]/
 
 
 module.exports = (filename, callback) ->
@@ -57,10 +57,24 @@ scan = (line, linenumber, tokens) ->
     break if (line[pos] is '#')
 
     # String Literals
+    inString = (line[pos] is '"')
+    if inString
+      console.log "Position is " + line[pos]
+      console.log "Position is " + pos
+      pos++
+      console.log "Position is " + line[pos]
+      console.log "Position is " + pos
+      while not line[pos] is '"'
+        pos++ 
+        console.log "swag"
 
+      inString = false
+      console.log line.substring start, pos
+      emit 'strlit', line.substring start, pos
+      continue
 
     # Two-Character tokens
-    if TWO_CHAR_TOKENS.test line.substring(pos, pos+2)
+    else if TWO_CHAR_TOKENS.test line.substring(pos, pos+2)
       emit line.substring pos, pos+2
       pos += 2
 
