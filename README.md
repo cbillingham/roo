@@ -58,7 +58,7 @@ comment   ::= '#' [^\n]* newline
 ### MacroSyntax
 ```
 Program      ::= Block
-Block        ::= (Stmt)+
+Block        ::= (Stmt) (newline Stmt)*
 Stmt         ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp | AssignStmt
                | ReturnStmt | BreakStmt | ContinueStmt
 AssignStmt   ::= 'global'? id '=' Exp | Increment
