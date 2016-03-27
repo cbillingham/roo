@@ -8,8 +8,8 @@ DIGIT = XRegExp '[\\p{Nd}]'
 WORD_CHAR = XRegExp '[\\p{L}\\p{Nd}_]'
 
 KEYWORDS = /^(global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist)$/
-TWO_CHAR_TOKENS = /<=|==|!=|>=|\*\*/
-ONE_CHAR_TOKENS = /[+\-*\/(),:=<>]/
+TWO_CHAR_TOKENS = /<=|==|!=|>=|\*\*|&&|\|\|/
+ONE_CHAR_TOKENS = /[\[+\-*\/(),:=<>\]\{\}!"]/
 
 
 module.exports = (filename, callback) ->
@@ -34,6 +34,7 @@ scan = (line, linenumber, tokens) ->
     tokens.push {kind, lexeme: lexeme or kind, line: linenumber, col: start+1}
 
   inComment = false
+  inString = false
 
   loop
 
@@ -45,15 +46,31 @@ scan = (line, linenumber, tokens) ->
     break if (pos >= line.length)
 
     #Multiline Comments
-    inComment = (line[pos] is '/' and line[pos+1] is '#')
-    inComment = (line[pos] is '#' and line[pos+1] is '/')
+    if not inComment
+      inComment = (line[pos] is '/' and line[pos+1] is '#')
+    if inComment
+      inComment = !(line[pos-1] is '#' and line[pos] is '/')
+      pos++
     continue if inComment
 
     # Line is comment
     break if (line[pos] is '#')
 
+    # String Literals
+    inString = (line[pos] is '"')
+    if inString
+      pos++
+      while line[pos] != '"'
+        pos++ 
+
+      start++ # Ignore the opening "
+      pos++   # Ignore the ending " next loop
+      inString = false
+      emit 'strlit', line.substring start, pos-1
+      continue
+
     # Two-Character tokens
-    if TWO_CHAR_TOKENS.test line.substring(pos, pos+2)
+    else if TWO_CHAR_TOKENS.test line.substring(pos, pos+2)
       emit line.substring pos, pos+2
       pos += 2
 
