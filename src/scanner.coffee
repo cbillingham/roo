@@ -87,7 +87,15 @@ scan = (line, linenumber, tokens) ->
     # Numeric literals
     else if DIGIT.test line[pos]
       pos++ while DIGIT.test line[pos]
-      emit 'intlit', line.substring start, pos
+      if line[pos] == '.'
+        pos++ #go to next character after period
+        if !DIGIT.test line[pos]
+          emit 'intlit' , line.substring start, pos-1
+        else
+          pos++ while DIGIT.test line[pos]
+          emit 'floatlit' , line.substring start, pos
+      else
+        emit 'intlit', line.substring start, pos
 
     else
       error "Illegal character: #(line[pos])", {line: linenumber, col: pos+1}
