@@ -8,8 +8,8 @@ DIGIT = XRegExp '[\\p{Nd}]'
 WORD_CHAR = XRegExp '[\\p{L}\\p{Nd}_]'
 
 KEYWORDS = /^(global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist)$/
-TWO_CHAR_TOKENS = /<=|==|!=|>=|\*\*/
-ONE_CHAR_TOKENS = /[+\-*\/(),:=<>]/
+TWO_CHAR_TOKENS = /<=|==|!=|>=|\*\*|&&|\|\|/
+ONE_CHAR_TOKENS = /[\[+\-*\/(),:=<>\]\{\}!.]/
 
 
 module.exports = (filename, callback) ->
@@ -34,6 +34,7 @@ scan = (line, linenumber, tokens) ->
     tokens.push {kind, lexeme: lexeme or kind, line: linenumber, col: start+1}
 
   inComment = false
+  inString = false
 
   loop
 
@@ -55,8 +56,21 @@ scan = (line, linenumber, tokens) ->
     # Line is comment
     break if (line[pos] is '#')
 
+    # String Literals
+    inString = (line[pos] is '"')
+    if inString
+      pos++
+      while line[pos] != '"'
+        pos++ 
+
+      start++ # Ignore the opening "
+      pos++   # Ignore the ending " next loop
+      inString = false
+      emit 'strlit', line.substring start, pos-1
+      continue
+
     # Two-Character tokens
-    if TWO_CHAR_TOKENS.test line.substring(pos, pos+2)
+    else if TWO_CHAR_TOKENS.test line.substring(pos, pos+2)
       emit line.substring pos, pos+2
       pos += 2
 
@@ -73,7 +87,16 @@ scan = (line, linenumber, tokens) ->
     # Numeric literals
     else if DIGIT.test line[pos]
       pos++ while DIGIT.test line[pos]
-      emit 'intlit', line.substring start, pos
+      if line[pos] == '.'
+        pos++ #go to next character after period
+        if !DIGIT.test line[pos]
+          pos--
+          emit 'intlit' , line.substring start, pos
+        else
+          pos++ while DIGIT.test line[pos]
+          emit 'floatlit' , line.substring start, pos
+      else
+        emit 'intlit', line.substring start, pos
 
     else
       error "Illegal character: #(line[pos])", {line: linenumber, col: pos+1}

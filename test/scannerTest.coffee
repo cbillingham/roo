@@ -25,6 +25,8 @@ describe 'The scanner', ->
          i(tokens[19]).should.equal i {kind:'id',lexeme:'write',line:1,col:70}
          i(tokens[21]).should.equal i {kind:'true',lexeme:'true',line:1,col:76}
          i(tokens[23]).should.equal i {kind:'false',lexeme:'false',line:1,col:81}
+         #i(tokens[17]).should.equal i {kind:'require',lexeme:'require',line:2,col:1}
+         #i(tokens[24]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
    it 'properly handles comments and blank lines', (done) ->
@@ -32,11 +34,13 @@ describe 'The scanner', ->
          i(tokens[0]).should.equal i {kind:'id', lexeme:'x', line:10,col:1}
          i(tokens[1]).should.equal i {kind:'=', lexeme:'=', line:10,col:3}
          i(tokens[2]).should.equal i {kind:'intlit', lexeme:'0', line:10,col:5}
+         i(tokens[3]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
    it 'reads symbolic tokens properly', (done) ->
       scan 'test/data/token-tests/symbols', (tokens) ->
          i(tokens[0]).should.equal i {kind:'<=', lexeme:'<=', line:1,col:1}
+<<<<<<< HEAD
          i(tokens[2]).should.equal i {kind:'<', lexeme:'<', line:1,col:3}
          i(tokens[4]).should.equal i {kind:'==', lexeme:'==', line:1,col:5}
          i(tokens[6]).should.equal i {kind:'=', lexeme:'=', line:1,col:7}
@@ -47,14 +51,53 @@ describe 'The scanner', ->
          i(tokens[12]).should.equal i {kind:':', lexeme:':', line:1,col:13}
          i(tokens[14]).should.equal i {kind:'(', lexeme:'(', line:1,col:15}
          i(tokens[15]).should.equal i {kind:')', lexeme:')', line:1,col:16}
+=======
+         i(tokens[1]).should.equal i {kind:'<', lexeme:'<', line:1, col:3}
+         i(tokens[2]).should.equal i {kind:',', lexeme:',', line:1, col:4}
+         i(tokens[3]).should.equal i {kind:'==', lexeme:'==', line:1, col:5}
+         i(tokens[4]).should.equal i {kind:'=', lexeme:'=', line:1, col:7}
+         i(tokens[5]).should.equal i {kind:'>=', lexeme:'>=', line:1, col:8}
+         i(tokens[6]).should.equal i {kind:'>', lexeme:'>', line:1, col:10}
+         i(tokens[7]).should.equal i {kind:'!=', lexeme:'!=', line:1, col:11}
+         i(tokens[8]).should.equal i {kind:':', lexeme: ':', line:1, col:13}
+         i(tokens[9]).should.equal i {kind:'(', lexeme: '(', line:1, col:14}
+         i(tokens[10]).should.equal i {kind:')', lexeme: ')', line:1, col:15}
+         i(tokens[11]).should.equal i {kind:'+', lexeme: '+', line:1, col:16}
+         i(tokens[12]).should.equal i {kind:'-', lexeme: '-', line:1, col:17}
+         i(tokens[13]).should.equal i {kind:'*', lexeme: '*', line:1, col:18}
+         i(tokens[14]).should.equal i {kind:'/', lexeme: '/', line:1, col:19}
+         i(tokens[15]).should.equal i {kind:'<', lexeme: '<', line:1, col:20}
+         i(tokens[16]).should.equal i {kind:'>', lexeme: '>', line:1, col:21}
+         i(tokens[17]).should.equal i {kind:'[', lexeme: '[', line:1, col:22}
+         i(tokens[18]).should.equal i {kind:']', lexeme: ']', line:1, col:23}
+         i(tokens[19]).should.equal i {kind:'{', lexeme: '{', line:1, col:24}
+         i(tokens[20]).should.equal i {kind:'}', lexeme: '}', line:1, col:25}
+         i(tokens[21]).should.equal i {kind:'**', lexeme: '**', line:1, col:26}
+         i(tokens[22]).should.equal i {kind:'&&', lexeme: '&&', line:1, col:28}
+         i(tokens[23]).should.equal i {kind:'||', lexeme: '||', line:1, col:30}
+         i(tokens[24]).should.equal i {kind:'!', lexeme: '!', line:1, col:32}
+         i(tokens[25]).should.equal i {kind:'.', lexeme: '.', line:1, col:33}
+         i(tokens[26]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
-   # it 'scans the simpliest program', (done) ->
-   #    scan 'test/data/good-programs/helloworld.roo', (tokens) ->
-   #       i(tokens[0]).should.equal i {kind:'id',lexeme:'print',line:1,col:1}
-   #       i(tokens[1]).should.equal i {kind:'(', lexeme:'(',line:1,col:6}
-   #       i(tokens[2]).should.equal i {kind:'strlit',lexeme:'helloworld',line:1,col:8}
-   #       done()
+   it 'scans the simpliest program', (done) ->
+      scan 'test/data/good-programs/helloworld.roo', (tokens) ->
+         i(tokens[0]).should.equal i {kind:'id',lexeme:'print',line:1,col:1}
+         i(tokens[1]).should.equal i {kind:'(', lexeme:'(',line:1,col:6}
+         i(tokens[2]).should.equal i {kind:'strlit',lexeme:'hello world',line:1,col:8}
+         i(tokens[3]).should.equal i {kind:')', lexeme:')',line:1,col:20}
+>>>>>>> master
+         done()
+
+   it 'distinguishes between integers and floats', (done) ->
+      scan 'test/data/token-tests/floats', (tokens) ->
+         i(tokens[0]).should.equal i {kind:'intlit', lexeme:'100', line:1, col:1}
+         i(tokens[1]).should.equal i {kind:'intlit', lexeme:'13', line:1, col:5}
+         i(tokens[2]).should.equal i {kind:'floatlit', lexeme:'13.0', line:1, col:8}
+         i(tokens[3]).should.equal i {kind:'floatlit', lexeme:'69.69', line:1, col:13}
+         i(tokens[4]).should.equal i {kind:'intlit', lexeme:'14', line:1, col:19}
+         i(tokens[5]).should.equal i {kind:'.', lexeme:'.', line:1, col:21}
+         done()
 
    it 'recognizes valid floating point numbers', (done) ->
       scan 'test/data/good-programs/floating-point.roo', (tokens) ->
