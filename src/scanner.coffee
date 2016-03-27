@@ -66,7 +66,7 @@ scan = (line, linenumber, tokens) ->
       start++ # Ignore the opening "
       pos++   # Ignore the ending " next loop
       inString = false
-      emit 'strlit', line.substring start, pos-1
+      emit 'stringlit', line.substring start, pos-1
       continue
 
     # Two-Character tokens
@@ -82,7 +82,15 @@ scan = (line, linenumber, tokens) ->
     else if LETTER.test line[pos]
       pos++ while WORD_CHAR.test(line[pos]) and pos < line.length
       word = line.substring start, pos
-      emit (if KEYWORDS.test word then word else 'id'), word
+      if KEYWORDS.test word
+        if word == 'true' or word == 'false'
+          emit 'boollit', word
+        else if word == "null"
+          emit 'nulllit', word
+        else
+          emit word , word
+      else
+        emit 'id', word
 
     # Numeric literals
     else if DIGIT.test line[pos]
