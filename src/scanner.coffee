@@ -9,7 +9,7 @@ WORD_CHAR = XRegExp '[\\p{L}\\p{Nd}_]'
 
 KEYWORDS = /^(global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist)$/
 TWO_CHAR_TOKENS = /<=|==|!=|>=|\*\*|&&|\|\|/
-ONE_CHAR_TOKENS = /[\[+\-*\/(),:=<>\]\{\}!"]/
+ONE_CHAR_TOKENS = /[\[+\-*\/(),:=<>\]\{\}!.]/
 
 
 module.exports = (filename, callback) ->
@@ -90,7 +90,8 @@ scan = (line, linenumber, tokens) ->
       if line[pos] == '.'
         pos++ #go to next character after period
         if !DIGIT.test line[pos]
-          emit 'intlit' , line.substring start, pos-1
+          pos--
+          emit 'intlit' , line.substring start, pos
         else
           pos++ while DIGIT.test line[pos]
           emit 'floatlit' , line.substring start, pos

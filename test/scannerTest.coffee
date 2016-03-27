@@ -64,8 +64,8 @@ describe 'The scanner', ->
          i(tokens[22]).should.equal i {kind:'&&', lexeme: '&&', line:1, col:28}
          i(tokens[23]).should.equal i {kind:'||', lexeme: '||', line:1, col:30}
          i(tokens[24]).should.equal i {kind:'!', lexeme: '!', line:1, col:32}
-         #i(tokens[25]).should.equal i {kind:'"', lexeme: '"', line:1, col:33}
-         i(tokens[25]).should.equal i {kind:'EOF',lexeme:'EOF'}
+         i(tokens[25]).should.equal i {kind:'.', lexeme: '.', line:1, col:33}
+         i(tokens[26]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
    it 'scans the simpliest program', (done) ->
@@ -83,6 +83,7 @@ describe 'The scanner', ->
          i(tokens[2]).should.equal i {kind:'floatlit', lexeme:'13.0', line:1, col:8}
          i(tokens[3]).should.equal i {kind:'floatlit', lexeme:'69.69', line:1, col:13}
          i(tokens[4]).should.equal i {kind:'intlit', lexeme:'14', line:1, col:19}
+         i(tokens[5]).should.equal i {kind:'.', lexeme:'.', line:1, col:21}
          done()
 
 
