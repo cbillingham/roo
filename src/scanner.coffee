@@ -59,18 +59,14 @@ scan = (line, linenumber, tokens) ->
     # String Literals
     inString = (line[pos] is '"')
     if inString
-      console.log "Position is " + line[pos]
-      console.log "Position is " + pos
       pos++
-      console.log "Position is " + line[pos]
-      console.log "Position is " + pos
-      while not line[pos] is '"'
+      while line[pos] != '"'
         pos++ 
-        console.log "swag"
 
+      start++ # Ignore the opening "
+      pos++   # Ignore the ending " next loop
       inString = false
-      console.log line.substring start, pos
-      emit 'strlit', line.substring start, pos
+      emit 'strlit', line.substring start, pos-1
       continue
 
     # Two-Character tokens

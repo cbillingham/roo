@@ -72,7 +72,8 @@ describe 'The scanner', ->
       scan 'test/data/good-programs/helloworld.roo', (tokens) ->
          i(tokens[0]).should.equal i {kind:'id',lexeme:'print',line:1,col:1}
          i(tokens[1]).should.equal i {kind:'(', lexeme:'(',line:1,col:6}
-         i(tokens[3]).should.equal i {kind:'strlit',lexeme:'"helloworld"',line:1,col:8}
+         i(tokens[2]).should.equal i {kind:'strlit',lexeme:'hello world',line:1,col:8}
+         i(tokens[3]).should.equal i {kind:')', lexeme:')',line:1,col:20}
          done()
 
 
