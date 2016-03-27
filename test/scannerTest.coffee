@@ -34,10 +34,20 @@ describe 'The scanner', ->
          i(tokens[2]).should.equal i {kind:'intlit', lexeme:'0', line:10,col:5}
          done()
 
-   # it 'reads symbolic tokens properly', (done) ->
-   #    scan 'test/data/token-tests/symbols', (tokens) ->
-   #       i(tokens[0]).should.equal i {kind:'<=', lexeme:'<=', line:1,col:1}
-   #       done()
+   it 'reads symbolic tokens properly', (done) ->
+      scan 'test/data/token-tests/symbols', (tokens) ->
+         i(tokens[0]).should.equal i {kind:'<=', lexeme:'<=', line:1,col:1}
+         i(tokens[2]).should.equal i {kind:'<', lexeme:'<', line:1,col:3}
+         i(tokens[4]).should.equal i {kind:'==', lexeme:'==', line:1,col:5}
+         i(tokens[6]).should.equal i {kind:'=', lexeme:'=', line:1,col:7}
+         i(tokens[7]).should.equal i {kind:'>', lexeme:'>', line:1,col:8}
+         i(tokens[8]).should.equal i {kind:'=', lexeme:'=', line:1,col:9}
+         i(tokens[9]).should.equal i {kind:'>', lexeme:'>', line:1,col:10}
+         i(tokens[10]).should.equal i {kind:'!=', lexeme:'!=', line:1,col:11}
+         i(tokens[12]).should.equal i {kind:':', lexeme:':', line:1,col:13}
+         i(tokens[14]).should.equal i {kind:'(', lexeme:'(', line:1,col:15}
+         i(tokens[15]).should.equal i {kind:')', lexeme:')', line:1,col:16}
+         done()
 
    # it 'scans the simpliest program', (done) ->
    #    scan 'test/data/good-programs/helloworld.roo', (tokens) ->
