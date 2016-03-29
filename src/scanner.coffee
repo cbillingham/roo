@@ -60,7 +60,7 @@ scan = (line, linenumber, tokens) ->
     inString = (line[pos] is '"')
     if inString
       pos++
-      while line[pos] != '"'
+      while line[pos] isnt '"'
         pos++ 
 
       start++ # Ignore the opening "
@@ -83,19 +83,19 @@ scan = (line, linenumber, tokens) ->
       pos++ while WORD_CHAR.test(line[pos]) and pos < line.length
       word = line.substring start, pos
       if KEYWORDS.test word
-        if word == 'true' or word == 'false'
+        if word is 'true' or word is 'false'
           emit 'boollit', word
-        else if word == "null"
+        else if word is 'null'
           emit 'nulllit', word
         else
-          emit word , word
+          emit word, word
       else
         emit 'id', word
 
     # Numeric literals
     else if DIGIT.test line[pos]
       pos++ while DIGIT.test line[pos]
-      if line[pos] == '.'
+      if line[pos] is '.'
         pos++ #go to next character after period
         if !DIGIT.test line[pos]
           pos--
