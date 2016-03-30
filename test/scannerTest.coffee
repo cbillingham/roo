@@ -106,8 +106,8 @@ describe 'The scanner', ->
          i(tokens[9]).should.equal i {kind:'id', lexeme:'z', line:3, col:1}
          i(tokens[10]).should.equal i {kind:'=', lexeme:'=', line:3, col:3}
          i(tokens[11]).should.equal i {kind:'floatlit', lexeme:'.35', line:3, col:5}
-         i(tokens[12]).should.equal i {kind:'id', lexeme:'a', line:4, col:1}
-         i(tokens[13]).should.equal i {kind:'EOL',lexeme:'EOL'}
+         i(tokens[12]).should.equal i {kind:'EOL',lexeme:'EOL'}
+         i(tokens[13]).should.equal i {kind:'id', lexeme:'a', line:4, col:1}
          i(tokens[14]).should.equal i {kind:'=', lexeme:'=', line:4, col:3}
          i(tokens[15]).should.equal i {kind:'-', lexeme:'-', line:4, col:5}
          i(tokens[16]).should.equal i {kind:'floatlit', lexeme:'.35', line:4, col:6}

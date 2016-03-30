@@ -96,7 +96,16 @@ scan = (line, linenumber, tokens) ->
 
     # One-Character tokens
     else if ONE_CHAR_TOKENS.test line[pos]
-      emit line[pos++]
+      #check for floats
+      if line[pos] is '.'
+        if DIGIT.test line[pos+1]
+          pos++
+          pos++ while DIGIT.test line[pos]
+          emit 'floatlit' , line.substring start, pos
+        else
+          emit line[pos++]
+      else
+        emit line[pos++]
 
     # Reserved words or identifiers
     else if LETTER.test line[pos]
