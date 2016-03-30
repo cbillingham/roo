@@ -76,6 +76,7 @@ describe 'The scanner', ->
          i(tokens[1]).should.equal i {kind:'(', lexeme:'(',line:1,col:6}
          i(tokens[2]).should.equal i {kind:'stringlit',lexeme:'hello world',line:1,col:8}
          i(tokens[3]).should.equal i {kind:')', lexeme:')',line:1,col:20}
+         i(tokens[4]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
    it 'distinguishes between integers and floats', (done) ->
@@ -86,6 +87,7 @@ describe 'The scanner', ->
          i(tokens[3]).should.equal i {kind:'floatlit', lexeme:'69.69', line:1, col:13}
          i(tokens[4]).should.equal i {kind:'intlit', lexeme:'14', line:1, col:19}
          i(tokens[5]).should.equal i {kind:'.', lexeme:'.', line:1, col:21}
+         i(tokens[6]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
    it 'recognizes valid floating point numbers', (done) ->
@@ -104,4 +106,5 @@ describe 'The scanner', ->
          i(tokens[11]).should.equal i {kind:'=', lexeme:'=', line:4, col:3}
          i(tokens[12]).should.equal i {kind:'-', lexeme:'-', line:4, col:5}
          i(tokens[13]).should.equal i {kind:'floatlit', lexeme:'.35', line:4, col:6}
+         i(tokens[14]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()

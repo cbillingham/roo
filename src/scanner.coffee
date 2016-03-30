@@ -32,7 +32,6 @@ scan = (line, linenumber, tokens) ->
   [start, pos] = [0,0]
 
   emit = (kind, lexeme) ->
-    console.log {kind, lexeme: lexeme or kind, line: linenumber, col: start+1}
     tokens.push {kind, lexeme: lexeme or kind, line: linenumber, col: start+1}
   
   inString = false
