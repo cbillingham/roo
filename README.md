@@ -29,6 +29,72 @@ fun gcd(a, b) {
 print( gcd(9,3) )      # prints 3
 ```
 
+## Syntax
+### MicroSyntax
+```
+newline   ::= [\s* (\r*\n)+]
+letter    ::= [\p{L}]
+digit     ::= [\p{Nd}]
+keyword   ::= 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'
+            | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'|
+            | 'class'|'new'
+id        ::= letter(letter|digit|_)*
+intlit    ::= digit+
+floatlit  ::= digit* '.' digit+
+relop     ::= '<'|'<='|'=='|'is'|'!='|'isnt'|'>='|'>'
+addop     ::= '+'|'-'
+mulop     ::= '*'|'/'|'%'|'//'
+expop     ::= '**'
+prefixop  ::= '!'|'-'
+postfixop ::= '++'|'--'
+boollit   ::= 'true'|'false'
+char      ::= [^\p{Cc}'"\\] | [\\] [rnst'"\\]
+stringlit ::= ('"' char* '"') | (\x27 char* \x27)
+nulllit   ::= 'null'
+skip      ::= [\x09-\x0d \u2028\u2029\p{Zs}] | comment
+comment   ::= '#' [^\n]* newline
+            | '/#' .* '#/'
+```
+### MacroSyntax
+```
+Program      ::= Block
+Block        ::= (Stmt) (newline Stmt)*
+Stmt         ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp | AssignStmt
+               | ReturnStmt | BreakStmt | ContinueStmt
+AssignStmt   ::= 'global'? id '=' Exp | Increment
+Increment    ::= Var postfixop
+
+Dec          ::= VarDec | FunDec | ObjectDec
+VarDec       :: 'global'? id '=' Exp
+FunDec       ::= 'fun' id Params Body
+Params       ::= '(' IdList ')'
+IdList       ::= id (',' id)*
+ObjectDec    ::= 'class' id Body
+
+Loop         ::= 'loop' Body
+WhileLoop    ::= 'while' Exp Body
+ForLoop      ::= 'for' Exp Body
+IfStmt       ::= 'if' Exp Body (ElseIfStmt)* ElseSmt?
+ElseIfStmt   ::= 'else if' Exp Body
+ElseStmt     ::= 'else' Body
+BreakStmt    ::= 'break'
+ContinueStmt ::= 'continue'
+ReturnStmt   ::= 'return' Exp
+
+Body         ::= '{' Block? '}'
+Exp          ::= Exp1 (( 'or' | 'and' | '||' | '&&' ) Exp1)*
+Exp1         ::= Exp2 (relop Exp2)?
+Exp2         ::= Exp3 (addop Exp3)*
+Exp3         ::= Exp4 (mulop Exp4)*
+Exp4         ::= Exp5 (expop Exp5)*
+Exp5         ::= PrefixOp? Exp6
+Exp6         ::= Literal | AssignStmt | Var | '('Exp')'
+Literal      ::= nulllit | boollit | intlit | floatlit | stringlit
+Var          ::= id | FunCall | Var '[' Exp ']' | Var '.' id
+FunCall      ::= id '(' ExpList ')'
+ExpList      ::= (Exp (',' Exp)*)?
+```
+
 ## Features
 ### Comments
 Single line comments are created with #
@@ -173,6 +239,7 @@ for (index, person) in enumerate(people) {
 }
 ```
 For looping over a certain range of numbers use the 'to' keyword.
+
 ```
 for countdown in 10 to 1 {
   print(countdown)
@@ -275,7 +342,7 @@ fun divide(x, y) {
   return x / y
 }
 
-divide(4,0) # throws an illegal argument exception
+divide(4,0)        # throws an illegal argument exception
 ```
 
 ## Scoping
@@ -334,70 +401,4 @@ fun printANumber() {
 }
 
 printANumber()        #prints 4
-```
-
-## Syntax
-### MicroSyntax
-```
-newline   ::= [\s* (\r*\n)+]
-letter    ::= [\p{L}]
-digit     ::= [\p{Nd}]
-keyword   ::= 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'
-            | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'|
-            | 'class'|'new'
-id        ::= letter(letter|digit|_)*
-intlit    ::= digit+
-floatlit  ::= digit* '.' digit+
-relop     ::= '<'|'<='|'=='|'is'|'!='|'isnt'|'>='|'>'
-addop     ::= '+'|'-'
-mulop     ::= '*'|'/'|'%'|'//'
-expop     ::= '**'
-prefixop  ::= '!'|'-'
-postfixop ::= '++'|'--'
-boollit   ::= 'true'|'false'
-char      ::= [^\p{Cc}'"\\] | [\\] [rnst'"\\]
-stringlit ::= ('"' char* '"') | (\x27 char* \x27)
-nulllit   ::= 'null'
-skip      ::= [\x09-\x0d \u2028\u2029\p{Zs}] | comment
-comment   ::= '#' [^\n]* newline
-            | '/#' .* '#/'
-```
-### MacroSyntax
-```
-Program      ::= Block
-Block        ::= (Stmt)+
-Stmt         ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp | AssignStmt
-               | ReturnStmt | BreakStmt | ContinueStmt
-AssignStmt   ::= 'global'? id '=' Exp | Increment
-Increment    ::= Var postfixop
-
-Dec          ::= VarDec | FunDec | ObjectDec
-VarDec       :: 'global'? id '=' Exp
-FunDec       ::= 'fun' id Params Body
-Params       ::= '(' IdList ')'
-IdList       ::= id (',' id)*
-ObjectDec    ::= 'class' id Body
-
-Loop         ::= 'loop' Body
-WhileLoop    ::= 'while' Exp Body
-ForLoop      ::= 'for' Exp Body
-IfStmt       ::= 'if' Exp Body (ElseIfStmt)* ElseSmt?
-ElseIfStmt   ::= 'else if' Exp Body
-ElseStmt     ::= 'else' Body
-BreakStmt    ::= 'break'
-ContinueStmt ::= 'continue'
-ReturnStmt   ::= 'return' Exp
-
-Body         ::= '{' Block? '}'
-Exp          ::= Exp1 (( 'or' | 'and' | '||' | '&&' ) Exp1)*
-Exp1         ::= Exp2 (relop Exp2)?
-Exp2         ::= Exp3 (addop Exp3)*
-Exp3         ::= Exp4 (mulop Exp4)*
-Exp4         ::= Exp5 (expop Exp5)*
-Exp5         ::= PrefixOp? Exp6
-Exp6         ::= Literal | AssignStmt | Var | '('Exp')'
-Literal      ::= nulllit | boollit | intlit | floatlit | stringlit
-Var          ::= id | FunCall | Var '[' Exp ']' | Var '.' id
-FunCall      ::= id '(' ExpList ')'
-ExpList      ::= (Exp (',' Exp)*)?
 ```
