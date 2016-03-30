@@ -69,6 +69,20 @@ scan = (line, linenumber, tokens) ->
       emit 'stringlit', line.substring start, pos-1
       continue
 
+    # Numeric literals
+    else if DIGIT.test line[pos]
+      pos++ while DIGIT.test line[pos]
+      if line[pos] is '.'
+        pos++ #go to next character after period
+        if !DIGIT.test line[pos]
+          pos--
+          emit 'intlit' , line.substring start, pos
+        else
+          pos++ while DIGIT.test line[pos]
+          emit 'floatlit' , line.substring start, pos
+      else
+        emit 'intlit', line.substring start, pos
+
     # Two-Character tokens
     else if TWO_CHAR_TOKENS.test line.substring(pos, pos+2)
       emit line.substring pos, pos+2
@@ -91,20 +105,6 @@ scan = (line, linenumber, tokens) ->
           emit word, word
       else
         emit 'id', word
-
-    # Numeric literals
-    else if DIGIT.test line[pos]
-      pos++ while DIGIT.test line[pos]
-      if line[pos] is '.'
-        pos++ #go to next character after period
-        if !DIGIT.test line[pos]
-          pos--
-          emit 'intlit' , line.substring start, pos
-        else
-          pos++ while DIGIT.test line[pos]
-          emit 'floatlit' , line.substring start, pos
-      else
-        emit 'intlit', line.substring start, pos
 
     else
       error "Illegal character: #(line[pos])", {line: linenumber, col: pos+1}

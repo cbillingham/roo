@@ -42,18 +42,6 @@ describe 'The scanner', ->
    it 'reads symbolic tokens properly', (done) ->
       scan 'test/data/token-tests/symbols', (tokens) ->
          i(tokens[0]).should.equal i {kind:'<=', lexeme:'<=', line:1,col:1}
-<<<<<<< HEAD
-         i(tokens[2]).should.equal i {kind:'<', lexeme:'<', line:1,col:3}
-         i(tokens[4]).should.equal i {kind:'==', lexeme:'==', line:1,col:5}
-         i(tokens[6]).should.equal i {kind:'=', lexeme:'=', line:1,col:7}
-         i(tokens[7]).should.equal i {kind:'>', lexeme:'>', line:1,col:8}
-         i(tokens[8]).should.equal i {kind:'=', lexeme:'=', line:1,col:9}
-         i(tokens[9]).should.equal i {kind:'>', lexeme:'>', line:1,col:10}
-         i(tokens[10]).should.equal i {kind:'!=', lexeme:'!=', line:1,col:11}
-         i(tokens[12]).should.equal i {kind:':', lexeme:':', line:1,col:13}
-         i(tokens[14]).should.equal i {kind:'(', lexeme:'(', line:1,col:15}
-         i(tokens[15]).should.equal i {kind:')', lexeme:')', line:1,col:16}
-=======
          i(tokens[1]).should.equal i {kind:'<', lexeme:'<', line:1, col:3}
          i(tokens[2]).should.equal i {kind:',', lexeme:',', line:1, col:4}
          i(tokens[3]).should.equal i {kind:'==', lexeme:'==', line:1, col:5}
@@ -88,7 +76,6 @@ describe 'The scanner', ->
          i(tokens[1]).should.equal i {kind:'(', lexeme:'(',line:1,col:6}
          i(tokens[2]).should.equal i {kind:'stringlit',lexeme:'hello world',line:1,col:8}
          i(tokens[3]).should.equal i {kind:')', lexeme:')',line:1,col:20}
->>>>>>> master
          done()
 
    it 'distinguishes between integers and floats', (done) ->
@@ -104,16 +91,17 @@ describe 'The scanner', ->
    it 'recognizes valid floating point numbers', (done) ->
       scan 'test/data/good-programs/floating-point.roo', (tokens) ->
          i(tokens[0]).should.equal i {kind:'id', lexeme:'x', line:1, col:1}
-         i(tokens[1]).should.equal i {kind:'=', lexeme:'=', line:1, col:2}
-         i(tokens[2]).should.equal i {kind:'floatlit', lexeme:'4.325', line:1, col:3}
+         i(tokens[1]).should.equal i {kind:'=', lexeme:'=', line:1, col:3}
+         i(tokens[2]).should.equal i {kind:'floatlit', lexeme:'4.35', line:1, col:5}
          i(tokens[3]).should.equal i {kind:'id', lexeme:'y', line:2, col:1}
-         i(tokens[3]).should.equal i {kind:'=', lexeme:'=', line:2, col:2}
-         i(tokens[4]).should.equal i {kind:'-', lexeme:'-', line:2, col:3}
-         i(tokens[5]).should.equal i {kind:'floatlit', lexeme:'4.325', line:2, col:4}
-         i(tokens[6]).should.equal i {kind:'id', lexeme:'z', line:3, col:1}
-         i(tokens[7]).should.equal i {kind:'=', lexeme:'=', line:3, col:3}
-         i(tokens[8]).should.equal i {kind:'floatlit', lexeme:'.35', line:3, col:5}
-         i(tokens[9]).should.equal i {kind:'id', lexeme:'a', line:4, col:1}
-         i(tokens[10]).should.equal i {kind:'=', lexeme:'=', line:4, col:3}
-         i(tokens[11]).should.equal i {kind:'-', lexeme:'-', line:4, col:5}
-         i(tokens[12]).should.equal i {kind:'floatlit', lexeme:'.35', line:4, col:6}
+         i(tokens[4]).should.equal i {kind:'=', lexeme:'=', line:2, col:3}
+         i(tokens[5]).should.equal i {kind:'-', lexeme:'-', line:2, col:5}
+         i(tokens[6]).should.equal i {kind:'floatlit', lexeme:'4.35', line:2, col:6}
+         i(tokens[7]).should.equal i {kind:'id', lexeme:'z', line:3, col:1}
+         i(tokens[8]).should.equal i {kind:'=', lexeme:'=', line:3, col:3}
+         i(tokens[9]).should.equal i {kind:'floatlit', lexeme:'.35', line:3, col:5}
+         i(tokens[10]).should.equal i {kind:'id', lexeme:'a', line:4, col:1}
+         i(tokens[11]).should.equal i {kind:'=', lexeme:'=', line:4, col:3}
+         i(tokens[12]).should.equal i {kind:'-', lexeme:'-', line:4, col:5}
+         i(tokens[13]).should.equal i {kind:'floatlit', lexeme:'.35', line:4, col:6}
+         done()
