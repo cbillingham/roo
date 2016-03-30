@@ -11,6 +11,7 @@ KEYWORDS = /^(global|if|else|for|while|break|continue|return|loop|true|false|to|
 TWO_CHAR_TOKENS = /<=|==|!=|>=|\*\*|&&|\|\|/
 ONE_CHAR_TOKENS = /[\[+\-*\/(),:=<>\]\{\}!.]/
 
+inComment = false
 
 module.exports = (filename, callback) ->
   baseStream = fs.createReadStream filename, {encoding: 'utf8'}
@@ -31,9 +32,9 @@ scan = (line, linenumber, tokens) ->
   [start, pos] = [0,0]
 
   emit = (kind, lexeme) ->
+    console.log {kind, lexeme: lexeme or kind, line: linenumber, col: start+1}
     tokens.push {kind, lexeme: lexeme or kind, line: linenumber, col: start+1}
-
-  inComment = false
+  
   inString = false
 
   loop
@@ -47,11 +48,15 @@ scan = (line, linenumber, tokens) ->
 
     #Multiline Comments
     if not inComment
-      inComment = (line[pos] is '/' and line[pos+1] is '#')
+      if (line[pos] is '/' and line[pos+1] is '#')
+        inComment = true
+        pos += 2
+        continue
+
     if inComment
       inComment = !(line[pos-1] is '#' and line[pos] is '/')
       pos++
-    continue if inComment
+      continue
 
     # Line is comment
     break if (line[pos] is '#')

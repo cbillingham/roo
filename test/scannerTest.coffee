@@ -33,9 +33,9 @@ describe 'The scanner', ->
 
    it 'properly handles comments and blank lines', (done) ->
       scan 'test/data/token-tests/comments-and-blank-lines', (tokens) ->
-         i(tokens[0]).should.equal i {kind:'id', lexeme:'x', line:10,col:1}
-         i(tokens[1]).should.equal i {kind:'=', lexeme:'=', line:10,col:3}
-         i(tokens[2]).should.equal i {kind:'intlit', lexeme:'0', line:10,col:5}
+         i(tokens[0]).should.equal i {kind:'id', lexeme:'x', line:10,col:22}
+         i(tokens[1]).should.equal i {kind:'=', lexeme:'=', line:10,col:24}
+         i(tokens[2]).should.equal i {kind:'intlit', lexeme:'0', line:10,col:26}
          i(tokens[3]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
