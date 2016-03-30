@@ -23,10 +23,12 @@ describe 'The scanner', ->
          i(tokens[15]).should.equal i {kind:'id',lexeme:'bool',line:1,col:60}
          i(tokens[17]).should.equal i {kind:'id',lexeme:'read',line:1,col:65}
          i(tokens[19]).should.equal i {kind:'id',lexeme:'write',line:1,col:70}
-         i(tokens[21]).should.equal i {kind:'true',lexeme:'true',line:1,col:76}
-         i(tokens[23]).should.equal i {kind:'false',lexeme:'false',line:1,col:81}
-         #i(tokens[17]).should.equal i {kind:'require',lexeme:'require',line:2,col:1}
-         #i(tokens[24]).should.equal i {kind:'EOF',lexeme:'EOF'}
+         i(tokens[21]).should.equal i {kind:'boollit',lexeme:'true',line:1,col:76}
+         i(tokens[23]).should.equal i {kind:'boollit',lexeme:'false',line:1,col:81}
+         i(tokens[24]).should.equal i {kind:'insist',lexeme:'insist',line:2,col:1}
+         i(tokens[25]).should.equal i {kind:'nulllit',lexeme:'null',line:2,col:8}
+         i(tokens[26]).should.equal i {kind:'id',lexeme:'nul',line:2,col:13}
+         i(tokens[27]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
    it 'properly handles comments and blank lines', (done) ->
@@ -84,7 +86,7 @@ describe 'The scanner', ->
       scan 'test/data/good-programs/helloworld.roo', (tokens) ->
          i(tokens[0]).should.equal i {kind:'id',lexeme:'print',line:1,col:1}
          i(tokens[1]).should.equal i {kind:'(', lexeme:'(',line:1,col:6}
-         i(tokens[2]).should.equal i {kind:'strlit',lexeme:'hello world',line:1,col:8}
+         i(tokens[2]).should.equal i {kind:'stringlit',lexeme:'hello world',line:1,col:8}
          i(tokens[3]).should.equal i {kind:')', lexeme:')',line:1,col:20}
 >>>>>>> master
          done()
