@@ -32,6 +32,7 @@ print( gcd(9,3) )      # prints 3
 ## Syntax
 ### MicroSyntax
 ```
+endofline ::= newline | $
 newline   ::= [\s* (\r*\n)+]
 letter    ::= [\p{L}]
 digit     ::= [\p{Nd}]
@@ -58,7 +59,7 @@ comment   ::= '#' [^\n]* newline
 ### MacroSyntax
 ```
 Program      ::= Block
-Block        ::= (Stmt) (newline Stmt)*
+Block        ::= (Stmt endofline)*
 Stmt         ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp | AssignStmt
                | ReturnStmt | BreakStmt | ContinueStmt
 AssignStmt   ::= 'global'? id '=' Exp | Increment

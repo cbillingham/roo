@@ -1,5 +1,5 @@
 fs        = require 'fs'
-byline    = require 'byline'
+readline    = require 'readline'
 XRegExp = require 'xregexp'
 error     = require './error'
 
@@ -18,12 +18,13 @@ module.exports = (filename, callback) ->
   baseStream = fs.createReadStream filename, {encoding: 'utf8'}
   baseStream.on 'error', (err) -> error(err)
 
-  stream = byline baseStream, {keepEmptyLines: true}
+  stream = readline.createInterface input: baseStream
   tokens = []
   linenumber = 0
-  stream.on 'readable', () ->
-    scan stream.read(), ++linenumber, tokens
-  stream.once 'end', () ->
+  stream.on 'line', (line) ->
+    scan line, ++linenumber, tokens
+    tokens.push {kind: 'EOL', lexeme: 'EOL'} #after every line (even blanks)
+  stream.on 'close', () ->
     tokens.push {kind: 'EOF', lexeme: 'EOF'}
     callback tokens
 
@@ -114,7 +115,4 @@ scan = (line, linenumber, tokens) ->
     else
       error "Illegal character: '#{line[pos]}'", {line: linenumber, col: pos+1}
       pos++
-
-  emit "newline", "newline"
-
 
