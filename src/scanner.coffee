@@ -7,7 +7,7 @@ LETTER = XRegExp '[\\p{L}]'
 DIGIT = XRegExp '[\\p{Nd}]'
 WORD_CHAR = XRegExp '[\\p{L}\\p{Nd}_]'
 
-KEYWORDS = /^(global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist)$/
+KEYWORDS = /^(fun|global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist)$/
 
 TWO_CHAR_TOKENS = /[%<>=+\-*\/!]=|\+\+|--|->|\*\*|&&|\|\|/
 ONE_CHAR_TOKENS = /[\[+%\-*\/(),:=<>\]\{\}!.]/
