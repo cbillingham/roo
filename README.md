@@ -32,12 +32,13 @@ print( gcd(9,3) )      # prints 3
 ## Syntax
 ### MicroSyntax
 ```
+endofline ::= newline | $
 newline   ::= [\s* (\r*\n)+]
 letter    ::= [\p{L}]
 digit     ::= [\p{Nd}]
 keyword   ::= 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'
             | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'|
-            | 'class'|'new'
+            | 'class'|'new'|'const'
 id        ::= letter(letter|digit|_)*
 intlit    ::= digit+
 floatlit  ::= digit* '.' digit+
@@ -58,7 +59,7 @@ comment   ::= '#' [^\n]* newline
 ### MacroSyntax
 ```
 Program      ::= Block
-Block        ::= (Stmt) (newline Stmt)*
+Block        ::= (Stmt endofline)*
 Stmt         ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp | AssignStmt
                | ReturnStmt | BreakStmt | ContinueStmt
 AssignStmt   ::= 'global'? id '=' Exp | Increment
@@ -123,7 +124,6 @@ If you would like to create an immutable variable, just use const or final.
 
 ```
 const ONE = 1
-final TWO = 2
 ```
 
 ### Types

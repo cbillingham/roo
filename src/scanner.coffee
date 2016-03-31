@@ -1,5 +1,5 @@
 fs        = require 'fs'
-byline    = require 'byline'
+readline    = require 'readline'
 XRegExp = require 'xregexp'
 error     = require './error'
 
@@ -7,21 +7,25 @@ LETTER = XRegExp '[\\p{L}]'
 DIGIT = XRegExp '[\\p{Nd}]'
 WORD_CHAR = XRegExp '[\\p{L}\\p{Nd}_]'
 
-KEYWORDS = /^(global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist)$/
-TWO_CHAR_TOKENS = /<=|==|!=|>=|\*\*|&&|\|\|/
-ONE_CHAR_TOKENS = /[\[+\-*\/(),:=<>\]\{\}!.]/
+KEYWORDS = /^(const|fun|global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist)$/
 
+TWO_CHAR_TOKENS = /[%<>=+\-*\/!]=|\+\+|--|\/\/|->|\*\*|&&|\|\|/
+ONE_CHAR_TOKENS = /[\[+%\-*\/(),:=<>\]\{\}!.]/
+
+inComment = false
+endOfString = '"'
 
 module.exports = (filename, callback) ->
   baseStream = fs.createReadStream filename, {encoding: 'utf8'}
   baseStream.on 'error', (err) -> error(err)
 
-  stream = byline baseStream, {keepEmptyLines: true}
+  stream = readline.createInterface input: baseStream
   tokens = []
   linenumber = 0
-  stream.on 'readable', () ->
-    scan stream.read(), ++linenumber, tokens
-  stream.once 'end', () ->
+  stream.on 'line', (line) ->
+    scan line, ++linenumber, tokens
+    tokens.push {kind: 'EOL', lexeme: 'EOL'} #after every line (even blanks)
+  stream.on 'close', () ->
     tokens.push {kind: 'EOF', lexeme: 'EOF'}
     callback tokens
 
@@ -32,8 +36,7 @@ scan = (line, linenumber, tokens) ->
 
   emit = (kind, lexeme) ->
     tokens.push {kind, lexeme: lexeme or kind, line: linenumber, col: start+1}
-
-  inComment = false
+  
   inString = false
 
   loop
@@ -47,50 +50,34 @@ scan = (line, linenumber, tokens) ->
 
     #Multiline Comments
     if not inComment
-      inComment = (line[pos] is '/' and line[pos+1] is '#')
+      if (line[pos] is '/' and line[pos+1] is '#')
+        inComment = true
+        pos += 2
+        continue
+
     if inComment
       inComment = !(line[pos-1] is '#' and line[pos] is '/')
       pos++
-    continue if inComment
+      continue
 
     # Line is comment
     break if (line[pos] is '#')
 
     # String Literals
-    inString = (line[pos] is '"')
     if inString
       pos++
-      while line[pos] isnt '"'
+      while line[pos] isnt endOfString
         pos++ 
 
       start++ # Ignore the opening "
       pos++   # Ignore the ending " next loop
       inString = false
       emit 'stringlit', line.substring start, pos-1
-      continue
 
-    # Two-Character tokens
-    else if TWO_CHAR_TOKENS.test line.substring(pos, pos+2)
-      emit line.substring pos, pos+2
-      pos += 2
+    else if line[pos] is "'" or line[pos] is '"'
+      inString = true
+      endOfString = line[pos]
 
-    # One-Character tokens
-    else if ONE_CHAR_TOKENS.test line[pos]
-      emit line[pos++]
-
-    # Reserved words or identifiers
-    else if LETTER.test line[pos]
-      pos++ while WORD_CHAR.test(line[pos]) and pos < line.length
-      word = line.substring start, pos
-      if KEYWORDS.test word
-        if word is 'true' or word is 'false'
-          emit 'boollit', word
-        else if word is 'null'
-          emit 'nulllit', word
-        else
-          emit word, word
-      else
-        emit 'id', word
 
     # Numeric literals
     else if DIGIT.test line[pos]
@@ -106,9 +93,39 @@ scan = (line, linenumber, tokens) ->
       else
         emit 'intlit', line.substring start, pos
 
+    # Two-Character tokens
+    else if TWO_CHAR_TOKENS.test line.substring(pos, pos+2)
+      emit line.substring pos, pos+2
+      pos += 2
+
+    # One-Character tokens
+    else if ONE_CHAR_TOKENS.test line[pos]
+      #check for floats
+      if line[pos] is '.'
+        if DIGIT.test line[pos+1]
+          pos++
+          pos++ while DIGIT.test line[pos]
+          emit 'floatlit' , line.substring start, pos
+        else
+          emit line[pos++]
+      else
+        emit line[pos++]
+
+    # Reserved words or identifiers
+    else if LETTER.test line[pos]
+      pos++ while WORD_CHAR.test(line[pos]) and pos < line.length
+      word = line.substring start, pos
+      if KEYWORDS.test word
+        if word is 'true' or word is 'false'
+          emit 'boollit', word
+        else if word is 'null'
+          emit 'nulllit', word
+        else
+          emit word, word
+      else
+        emit 'id', word
+
     else
-      error "Illegal character: #(line[pos])", {line: linenumber, col: pos+1}
+      error "Illegal character: '#{line[pos]}'", {line: linenumber, col: pos+1}
       pos++
-
-
 
