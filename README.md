@@ -38,7 +38,7 @@ letter    ::= [\p{L}]
 digit     ::= [\p{Nd}]
 keyword   ::= 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'
             | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'|
-            | 'class'|'new'
+            | 'class'|'new'|'const'
 id        ::= letter(letter|digit|_)*
 intlit    ::= digit+
 floatlit  ::= digit* '.' digit+
@@ -124,7 +124,6 @@ If you would like to create an immutable variable, just use const or final.
 
 ```
 const ONE = 1
-final TWO = 2
 ```
 
 ### Types
