@@ -99,6 +99,17 @@ describe 'The scanner', ->
          i(tokens[5]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
+   it 'recognizes valid strings', (done) ->
+      scan 'test/data/token-tests/strings', (tokens) ->
+         i(tokens[0]).should.equal i {kind:'id',lexeme:'print',line:1,col:1}
+         i(tokens[1]).should.equal i {kind:'(', lexeme:'(',line:1,col:6}
+         i(tokens[2]).should.equal i {kind:'stringlit',lexeme:'hello world',line:1,col:8}
+         i(tokens[3]).should.equal i {kind:')', lexeme:')',line:1,col:20}
+         i(tokens[5]).should.equal i {kind:'stringlit',lexeme:'hi',line:2,col:2}
+         i(tokens[6]).should.equal i {kind:'stringlit', lexeme:'yikes',line:2,col:6}
+         i(tokens[8]).should.equal i {kind:'EOF',lexeme:'EOF'}
+         done()
+
    it 'distinguishes between integers and floats', (done) ->
       scan 'test/data/token-tests/floats', (tokens) ->
          i(tokens[0]).should.equal i {kind:'intlit', lexeme:'100', line:1, col:1}

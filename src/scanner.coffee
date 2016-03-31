@@ -13,6 +13,7 @@ TWO_CHAR_TOKENS = /[%<>=+\-*\/!]=|\+\+|--|->|\*\*|&&|\|\|/
 ONE_CHAR_TOKENS = /[\[+%\-*\/(),:=<>\]\{\}!.]/
 
 inComment = false
+endOfString = '"'
 
 module.exports = (filename, callback) ->
   baseStream = fs.createReadStream filename, {encoding: 'utf8'}
@@ -63,17 +64,20 @@ scan = (line, linenumber, tokens) ->
     break if (line[pos] is '#')
 
     # String Literals
-    inString = (line[pos] is '"')
     if inString
       pos++
-      while line[pos] isnt '"'
+      while line[pos] isnt endOfString
         pos++ 
 
       start++ # Ignore the opening "
       pos++   # Ignore the ending " next loop
       inString = false
       emit 'stringlit', line.substring start, pos-1
-      continue
+
+    else if line[pos] is "'" or line[pos] is '"'
+      inString = true
+      endOfString = line[pos]
+
 
     # Numeric literals
     else if DIGIT.test line[pos]
