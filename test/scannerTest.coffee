@@ -30,7 +30,14 @@ describe 'The scanner', ->
          i(tokens[26]).should.equal i {kind:'nulllit',lexeme:'null',line:2,col:8}
          i(tokens[27]).should.equal i {kind:'id',lexeme:'nul',line:2,col:13}
          i(tokens[28]).should.equal i {kind:'EOL',lexeme:'EOL'}
-         i(tokens[29]).should.equal i {kind:'EOF',lexeme:'EOF'}
+         i(tokens[29]).should.equal i {kind:'global',lexeme:'global',line:3,col:1}
+         i(tokens[30]).should.equal i {kind:'to',lexeme:'to',line:3,col:8}
+         i(tokens[31]).should.equal i {kind:'for',lexeme:'for',line:3,col:11}
+         i(tokens[32]).should.equal i {kind:'in',lexeme:'in',line:3,col:15}
+         i(tokens[33]).should.equal i {kind:':',lexeme:':',line:3,col:18}
+         i(tokens[34]).should.equal i {kind:'return',lexeme:'return',line:3,col:19}
+         i(tokens[35]).should.equal i {kind:'EOL',lexeme:'EOL'}
+         i(tokens[36]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
    it 'properly handles comments and blank lines', (done) ->
