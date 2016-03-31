@@ -69,7 +69,18 @@ describe 'The scanner', ->
          i(tokens[23]).should.equal i {kind:'||', lexeme: '||', line:1, col:30}
          i(tokens[24]).should.equal i {kind:'!', lexeme: '!', line:1, col:32}
          i(tokens[25]).should.equal i {kind:'.', lexeme: '.', line:1, col:33}
-         i(tokens[27]).should.equal i {kind:'EOF',lexeme:'EOF'}
+         i(tokens[26]).should.equal i {kind:'EOL',lexeme:'EOL'}
+         i(tokens[27]).should.equal i {kind:'/', lexeme:'/', line:2,col:1}
+         i(tokens[28]).should.equal i {kind:'*=', lexeme:'*=', line:2,col:2}
+         i(tokens[29]).should.equal i {kind:'/=', lexeme:'/=', line:2,col:4}
+         i(tokens[30]).should.equal i {kind:'=', lexeme:'=', line:2,col:6}
+         i(tokens[31]).should.equal i {kind:'->', lexeme:'->', line:2,col:7}
+         i(tokens[32]).should.equal i {kind:'%', lexeme:'%', line:2,col:9}
+         i(tokens[33]).should.equal i {kind:'%', lexeme:'%', line:2,col:10}
+         i(tokens[34]).should.equal i {kind:'%=', lexeme:'%=', line:2,col:11}
+         i(tokens[35]).should.equal i {kind:'--', lexeme:'--', line:2,col:13}
+         i(tokens[36]).should.equal i {kind:'=', lexeme:'=', line:2,col:15}
+         i(tokens[38]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
    it 'scans the simpliest program', (done) ->
