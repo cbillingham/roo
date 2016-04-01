@@ -1,10 +1,10 @@
-# this is a comment
+# this a comment
 /#
-#
-# These are multiline comments
-# a = 0 # this should not matter
+
+These are multiline comments
+a = 0 # this should not matter
 #/
 
+/#
 
-
-x = 0 #this is a comment after variable declaration
+still in a comment #/x = 0 #this is a comment after variable declaration
