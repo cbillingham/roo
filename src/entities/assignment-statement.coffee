@@ -4,7 +4,7 @@ class AssignmentStatement
     @global = global ? ""
 
   toString: ->
-     "(Assignment Statement #{@global} #{@variableReference.toString()} = #{@value})"
+     "(Assignment Statement #{@global} #{@variableReference} = #{@value})"
   
   isGlobal: ->
     @global?
