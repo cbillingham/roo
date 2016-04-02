@@ -6,8 +6,9 @@
 scanner = require './scanner'
 error = require './error'
 
-Program = require './entities/program'
-Block = require './entities/block'
+Program             = require './entities/program'
+Block               = require './entities/block'
+AssignmentStatement = require './entities/assignment-statement'
 
 tokens = []
 tokenTypes = ['var', 'id','if','loop','for','return','break','continue']
@@ -38,11 +39,11 @@ parseStatement = ->
 
 parseAssignmentStatement = ->
   if at 'global' 
-    match 'global'
-  match 'id'
+    global = match 'global'
+  identifier = new VariableReference(match 'id')
   match '='
   value = parseExpression()
-  new AssignmentStatement(target, source, global) 
+  new AssignmentStatement(identifier, value, global) 
   
 at = (kind) ->
   if tokens.length is 0
@@ -61,64 +62,4 @@ match = (kind) ->
     error "Expected \"#{kind}\" but found \"#{tokens[0].kind}\"", tokens[0]
 
 parseExpression = ->
-  left = parseExp1()
-  while at 'or'
-    op = match()
-    right = parseExp1()
-    left = new BinaryExpression(op, left, right)
-  left
-
-parseExp1 = ->
-  left = parseExp2()
-  while at 'and'
-    op = match()
-    right = parseExp2()
-    left = new BinaryExpression(op, left, right)
-  left
-
-parseExp2 = ->
-  left = parseExp3()
-  if at ['<','<=','==','!=','>=','>']
-    op = match()
-    right = parseExp3()
-    left = new BinaryExpression(op, left, right)
-  left
-
-parseExp3 = ->
-  left = parseExp4()
-  while at ['+','-']
-    op = match()
-    right = parseExp4()
-    left = new BinaryExpression(op, left, right)
-  left
-
-parseExp4 = ->
-  left = parseExp5()
-  while at ['*','/']
-    op = match()
-    right = parseExp5()
-    left = new BinaryExpression(op, left, right)
-  left
-
-parseExp5 = ->
-  if at ['-','not']
-    op = match()
-    operand = parseExp6()
-    new UnaryExpression(op, operand)
-  else
-    parseExp6()
-
-parseExp6 = ->
-  if at ['true','false']
-    new BooleanLiteral(match().lexeme)
-  else if at 'intlit'
-    new IntegerLiteral(match().lexeme)
-  else if at 'id'
-    new VariableReference(match())
-  else if at '('
-    match()
-    expression = parseExpression()
-    match ')'
-    expression
-  else
-    error 'Illegal start of expression', tokens[0]
+  #todo
