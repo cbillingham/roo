@@ -2,7 +2,7 @@ class BooleanLiteral
     constructor: (@name) ->
 
     value: ->
-        name
+        @name
 
     toString: ->
         @name
