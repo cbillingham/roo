@@ -9,9 +9,11 @@ error = require './error'
 Program             = require './entities/program'
 Block               = require './entities/block'
 AssignmentStatement = require './entities/assignment-statement'
+WhileLoop           = require './entities/while-loop'
+IfStatement         = require './entities/if-statement'
 
 tokens = []
-tokenTypes = ['var', 'id','if','loop','for','return','break','continue']
+tokenTypes = ['id','if','loop','for','return','break','continue']
 
 module.exports = (scannerOutput) ->
   tokens = scannerOutput
@@ -33,7 +35,9 @@ parseStatement = ->
   if at 'id' or at 'global'
     parseAssignmentStatement()
   else if at 'while'
-    parseWhileStatement()
+    parseWhileLoop()
+  else if at 'if'
+    parseIfStatement()
   else
     error 'Statement expected', tokens[0]
 
@@ -45,6 +49,31 @@ parseAssignmentStatement = ->
   value = parseExpression()
   new AssignmentStatement(identifier, value, global) 
   
+parseWhileLoop = ->
+  match 'while'
+  condition = parseExpression()
+  body = parseBody()
+  new WhileLoop(condition, body)
+
+parseBody = ->
+  match '{'
+  parseBlock()
+  match '}'
+
+parseIfStatement = ->
+  match 'if'
+  condition = parseExpression()
+  body = parseBody()
+  elseifs = []
+  while at 'else'
+    match 'else'
+    elseStatement = new elseStatement(parseBody())
+    if at 'if'
+      elseif = parseIfStatement
+      elseifs.push elseif
+   
+  new IfStatement(condition, body, elseifs, else)
+
 at = (kind) ->
   if tokens.length is 0
     false
