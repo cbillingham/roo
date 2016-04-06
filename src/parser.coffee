@@ -30,7 +30,8 @@ parseProgram = ->
 parseBlock = ->
   statements= []
   loop
-    match 'EOL' if at 'EOL'
+    while at 'EOL'
+      match 'EOL'
     statements.push parseStatement()
     match 'EOL'
     break unless at tokenTypes
@@ -232,6 +233,17 @@ parseExp7 = ->
     new NullLiteral()
   else if at 'id'
     identifier = new VariableReference(match 'id')
+  else if at '['
+    parseListLiteral()
+  else if at '<'
+    parseSetLiteral()
+  else if at '{'
+    parseMapLiteral()
+  else if at '('
+    match()
+    expression = parseExpression()
+    match ')'
+    expression
   else
     error 'Illegal start of expression', tokens[0]
 
