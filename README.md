@@ -63,8 +63,7 @@ Block        ::= (Stmt endofline)*
 Stmt         ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp
                | ReturnStmt | BreakStmt | ContinueStmt
 
-Dec          ::= VarDec | FunDec | ObjectDec
-VarDec       :: 'global'? id '=' Exp
+Dec          ::= AssignStmt | FunDec | ObjectDec
 FunDec       ::= 'fun' id Params Body
 Params       ::= '(' IdList ')'
 IdList       ::= id (',' id)*
