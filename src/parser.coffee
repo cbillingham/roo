@@ -79,14 +79,14 @@ parseBody = ->
 
 parseReturnStatement = ->
   match 'return'
-  new ReturnStatement(parseExpression())
+  new ReturnStatement parseExpression()
 
 parseIfStatement = ->
   conditions = []
   bodies = []
   match 'if'
-  condition = parseExpression()
-  body = parseBody()
+  conditions.push parseExpression()
+  bodies.push parseBody()
   elseifs = []
   while at 'else'
     match 'else'
@@ -97,7 +97,6 @@ parseIfStatement = ->
     else
       bodies.push parseBody()
       break
-   
   new IfStatement(conditions, bodies)
 
 at = (kind) ->
