@@ -64,6 +64,8 @@ Stmt         ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp
                | ReturnStmt | BreakStmt | ContinueStmt
 
 Dec          ::= AssignStmt | FunDec | ObjectDec
+AssignStmt   ::= 'const'? global'? Var '=' Exp | Increment
+Increment    ::= Var postfixop
 FunDec       ::= 'fun' id Params Body
 Params       ::= '(' IdList ')'
 IdList       ::= id (',' id)*
@@ -86,13 +88,12 @@ Exp2         ::= Exp3 (addop Exp3)*
 Exp3         ::= Exp4 (mulop Exp4)*
 Exp4         ::= Exp5 (expop Exp5)*
 Exp5         ::= PrefixOp? Exp6
-Exp6         ::= Literal | AssignStmt | Var | '('Exp')'
-AssignStmt   ::= 'const'? global'? id '=' Exp | Increment
-Increment    ::= Var postfixop
+Exp6         ::= Literal | Var | '('Exp')' | Lambda
 Literal      ::= nulllit | boollit | intlit | floatlit | stringlit
 Var          ::= id | FunCall | Var '[' Exp ']' | Var '.' id
 FunCall      ::= id '(' ExpList ')'
 ExpList      ::= (Exp (',' Exp)*)?
+Lambda       ::= Params '->' Body
 ```
 
 ## Features

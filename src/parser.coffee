@@ -30,6 +30,7 @@ parseProgram = ->
 parseBlock = ->
   statements= []
   loop
+    match 'EOL' if at 'EOL'
     statements.push parseStatement()
     match 'EOL'
     break unless at tokenTypes
@@ -48,19 +49,35 @@ parseStatement = ->
     parseContinueStatement()
   else if at 'break'
     parseBreakStatement()
+  else if at ['global','const','id']
+    parseAssignmentStatement()
+  else if at 'fun'
+    parseFunDec()
+  else if at 'class'
+    parseClassDec()
   else
     parseExpression()
 
 parseAssignmentStatement = ->
   if at 'global'
-    global = match 'global'
+    match()
+    global = true
   if at 'const'
-    constant = match 'const'
-    if at 'global'
-      global = match 'global'
+    match()
+    constant = true
+    if at 'global'        #fix this to be more elegant
+      match()
+      global = true
   identifier = new VariableReference(match 'id')
-  match '='
-  value = parseExpression()
+  if at ['++','--']
+    value = new PostUnaryExpression(identifier, match().lexeme)
+  if at ['%=','*=','/=','+=','-=']
+    op = match().lexeme[0]
+    right = parseExpression()
+    value = new BinaryExpression(op, identifier, right)
+  else
+    match '='
+    value = parseExpression()
   new AssignmentStatement(identifier, value, global, constant)
   
 parseWhileLoop = ->
@@ -81,13 +98,20 @@ parseReturnStatement = ->
   match 'return'
   new ReturnStatement parseExpression()
 
+parseBreakStatement = ->
+  match 'break'
+  new BreakStatement()
+
+parseContinueStatement = ->
+  match 'continue'
+  new ContinueStatement()
+
 parseIfStatement = ->
   conditions = []
   bodies = []
   match 'if'
   conditions.push parseExpression()
   bodies.push parseBody()
-  elseifs = []
   while at 'else'
     match 'else'
     if at 'if'
@@ -98,6 +122,102 @@ parseIfStatement = ->
       bodies.push parseBody()
       break
   new IfStatement(conditions, bodies)
+
+parseForLoop = ->
+  match 'for'
+  iteration = parseExpression()
+  body = parseBody()
+  new ForLoop(iteration, body)
+
+parseFunDec = ->
+  match 'fun'
+  identifier = new VariableReference(match 'id')
+  params = parseParams()
+  body = parseBody()
+  new FunctionDeclaration(identifier, param, body)
+
+parseClassDec = ->
+  match 'class'
+  identifier = new VariableReference(match 'id')
+  body = parseBody()
+  new ClassDeclaration(identifier, body)
+
+parseExpression = ->
+  left = parseExp1()
+  while at ['or','||']
+    op = match().lexeme
+    right = parseExp1()
+    left = new BinaryExpression(op, left, right)
+  left
+
+parseExp1 = ->
+  left = parseExp2()
+  while at ['and','&&']
+    op = match().lexeme
+    right parseExp2()
+    left = new BinaryExpression(op, left, right)
+  left
+
+parseExp2 = ->
+  left = parseExp3()
+  while at ['<','>','<=','>=','==','!=','is','isnt']
+    op = match().lexeme
+    right = parseExp3()
+    left = new BinaryExpression(op, left, right)
+  left
+
+parseExp3 = ->
+  left = parseExp4()
+  while at ['+','-']
+    op = match().lexeme
+    right = parseExp4()
+    left = new BinaryExpression(op, left, right)
+  left
+
+parseExp4 = ->
+  left = parseExp5()
+  while at ['*','/','%','//']
+    op = match().lexeme
+    right = parseExp5()
+    left = new BinaryExpression(op, left, right)
+  left
+
+parseExp5 = ->
+  left = parseExp6()
+  if at ['**']
+    op = match().lexeme
+    right = parseExp6()
+    left = new BinaryExpression(op, left, right)
+  left
+
+parseExp6 = ->
+  if at ['!','-']
+    op = match().lexeme
+    right = parseExp7()
+    left = new PreUnaryExpression(op, right)
+  else
+    parseExp7()
+
+parseExp7 = ->
+  if at 'boollit'
+    value = Boolean(match().lexeme)
+    new BooleanLiteral(value)
+  else if at 'intlit'
+    value = Number(match().lexeme)
+    new IntegerLiteral(value)
+  else if at 'floatlit'
+    value = Number(match().lexeme)
+    new FloatLiteral(value)
+  else if at 'stringlit'
+    new StringLiteral(match().lexeme)
+  else if at 'nulllit'
+    match()
+    new NullLiteral()
+  else if at 'id'
+    identifier = new VariableReference(match 'id')
+
+
+
 
 at = (kind) ->
   if tokens.length is 0
@@ -114,6 +234,3 @@ match = (kind) ->
     tokens.shift()
   else
     error "Expected \"#{kind}\" but found \"#{tokens[0].kind}\"", tokens[0]
-
-parseExpression = ->
-  #todo
