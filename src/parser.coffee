@@ -199,6 +199,23 @@ parseExp6 = ->
     parseExp7()
 
 parseExp7 = ->
+  left = parseExp8()
+  while at ['.','[','(']
+    if at '.'
+      match()
+      right = parseExp9()
+      left = new ClassPropertyAccess(left, right)
+    if at '['
+      match()
+      right = parseExpression()
+      match ']'
+      left = new IterableAccess(left, right)
+    if at '('
+      right = parseArguments()
+      left = new FunctionCall(left, right)
+  left
+
+parseExp7 = ->
   if at 'boollit'
     value = Boolean(match().lexeme)
     new BooleanLiteral(value)
@@ -215,9 +232,17 @@ parseExp7 = ->
     new NullLiteral()
   else if at 'id'
     identifier = new VariableReference(match 'id')
+  else
+    error 'Illegal start of expression', tokens[0]
 
-
-
+parseArguments = ->
+  match '('
+  exps = []
+  while not at ')'
+    exps.push parseExpression()
+    match ',' if not at ')'
+  match ')'
+  exps
 
 at = (kind) ->
   if tokens.length is 0
