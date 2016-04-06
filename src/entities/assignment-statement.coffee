@@ -1,10 +1,11 @@
 class AssignmentStatement
   
-  constructor: (@variableReference, @value, global) ->
+  constructor: (@variableReference, @value, global, constant) ->
     @global = global ? ""
+    @constant = constant ? ""
 
   toString: ->
-     "(Assignment Statement #{@global} #{@variableReference} = #{@value})"
+     "(Assign #{@global} #{@variableReference} = #{@value})"
   
   isGlobal: ->
     @global?

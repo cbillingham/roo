@@ -1,8 +1,15 @@
+_ = require 'underscore'
+
 class IfStatement
-    constructor: (@condition, @body, @elseifStatements, @else) ->
+    constructor: (@conditions, @bodies) ->
 
     toString: ->
-        "If #{@condition} #{@body}"
+      s = "If #{@conditions[0]} #{@bodies[0]}"
+      for condition, body in _.zip(conditions[1..], bodies[1..])
+        if condition?
+          s = s.concat " else if #{condition} #{body}"
+        else
+          s = s.concat " else #{body}"
 
     analyze: ->
         #todo

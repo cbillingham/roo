@@ -11,9 +11,12 @@ Block               = require './entities/block'
 AssignmentStatement = require './entities/assignment-statement'
 WhileLoop           = require './entities/while-loop'
 IfStatement         = require './entities/if-statement'
+ReturnStatement     = require './entities/return-statement'
 
+errors
 tokens = []
 tokenTypes = ['id','if','loop','for','return','break','continue']
+
 
 module.exports = (scannerOutput) ->
   tokens = scannerOutput
@@ -28,26 +31,37 @@ parseBlock = ->
   statements= []
   loop
     statements.push parseStatement()
+    match 'EOL'
     break unless at tokenTypes
   new Block(statements)
 
 parseStatement = ->
-  if at 'id' or at 'global'
-    parseAssignmentStatement()
-  else if at 'while'
+  if at ['while','loop']
     parseWhileLoop()
+  else if at 'for'
+    parseForLoop()
   else if at 'if'
     parseIfStatement()
+  else if at 'return'
+    parseReturnStatement()
+  else if at 'continue'
+    parseContinueStatement()
+  else if at 'break'
+    parseBreakStatement()
   else
-    error 'Statement expected', tokens[0]
+    parseExpression()
 
 parseAssignmentStatement = ->
-  if at 'global' 
+  if at 'global'
     global = match 'global'
+  if at 'const'
+    constant = match 'const'
+    if at 'global'
+      global = match 'global'
   identifier = new VariableReference(match 'id')
   match '='
   value = parseExpression()
-  new AssignmentStatement(identifier, value, global) 
+  new AssignmentStatement(identifier, value, global, constant)
   
 parseWhileLoop = ->
   match 'while'
@@ -57,22 +71,34 @@ parseWhileLoop = ->
 
 parseBody = ->
   match '{'
-  parseBlock()
+  match 'EOL' if at 'EOL'
+  body = parseBlock()
   match '}'
+  match 'EOL'
+  body
+
+parseReturnStatement = ->
+  match 'return'
+  new ReturnStatement(parseExpression())
 
 parseIfStatement = ->
+  conditions = []
+  bodies = []
   match 'if'
   condition = parseExpression()
   body = parseBody()
   elseifs = []
   while at 'else'
     match 'else'
-    elseStatement = new elseStatement(parseBody())
     if at 'if'
-      elseif = parseIfStatement
-      elseifs.push elseif
+      match()
+      conditions.push parseExpression()
+      bodies.push parseBody()
+    else
+      bodies.push parseBody()
+      break
    
-  new IfStatement(condition, body, elseifs, else)
+  new IfStatement(conditions, bodies)
 
 at = (kind) ->
   if tokens.length is 0

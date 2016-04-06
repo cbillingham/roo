@@ -60,10 +60,8 @@ comment   ::= '#' [^\n]* newline
 ```
 Program      ::= Block
 Block        ::= (Stmt endofline)*
-Stmt         ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp | AssignStmt
+Stmt         ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp
                | ReturnStmt | BreakStmt | ContinueStmt
-AssignStmt   ::= 'global'? id '=' Exp | Increment
-Increment    ::= Var postfixop
 
 Dec          ::= VarDec | FunDec | ObjectDec
 VarDec       :: 'global'? id '=' Exp
@@ -90,6 +88,8 @@ Exp3         ::= Exp4 (mulop Exp4)*
 Exp4         ::= Exp5 (expop Exp5)*
 Exp5         ::= PrefixOp? Exp6
 Exp6         ::= Literal | AssignStmt | Var | '('Exp')'
+AssignStmt   ::= 'const'? global'? id '=' Exp | Increment
+Increment    ::= Var postfixop
 Literal      ::= nulllit | boollit | intlit | floatlit | stringlit
 Var          ::= id | FunCall | Var '[' Exp ']' | Var '.' id
 FunCall      ::= id '(' ExpList ')'

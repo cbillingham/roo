@@ -28,7 +28,8 @@
         "coffee-script": "^1.10.0",
         "xregexp": "^3.1.0",
         "hashmap": "^2.0.4",
-        "yargs": "^4.2.0"
+        "yargs": "^4.2.0",
+        "underscore": "^1.8.2"
     },
     "devDependencies":{
         "mocha": "^2.4.5",

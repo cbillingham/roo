@@ -1,11 +1,11 @@
 class BooleanLiteral
-    constructor: (@name) ->
+    constructor: (@value) ->
 
     value: ->
-        @name
+        @value is "true"
 
     toString: ->
-        @name
+        @value
 
     analyze: (context) ->
         #todo
