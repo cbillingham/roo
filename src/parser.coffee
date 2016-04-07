@@ -175,22 +175,22 @@ parseExp2 = ->
   left
 
 parseExp3 = ->
+  left = null
+  right = null
   if at '..'
     match()
     right = parseExp4()
-    return Range(right = right)
-  left = parseExp4()
-  if at '..'
-    match
-    left = new Range
-  if at 'to'
-    match()
-    right = parseExp4()
-    if at 'by'
+  else
+    left = parseExp4()
+    if at '..'
+      match
+    else if at 'to'
       match()
-      step = parseExp4()
-    left = new Range(left, right, step)
-  left
+      right = parseExp4()
+  if at 'by'
+    match()
+    step = parseExp4()
+  new Range(left, right, step)
 
 parseExp4 = ->
   left = parseExp5()
@@ -226,7 +226,7 @@ parseExp7 = ->
 
 parseExp8 = ->
   if at 'new'
-    parseObjectConstruction()
+    parseObjectCreation()
   left = parseExp9()
   while at ['.','[','(']
     if at '.'
@@ -290,7 +290,7 @@ parseExpList = (exps = [], end = ')') ->
     match ',' if not at end
   exps
 
-parseObjectConstruction = ->
+parseObjectCreation = ->
   match 'new'
   classId = new VariableReference(match 'id')
   match '('
