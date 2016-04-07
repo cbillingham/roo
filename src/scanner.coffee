@@ -9,7 +9,7 @@ WORD_CHAR = XRegExp '[\\p{L}\\p{Nd}_]'
 
 KEYWORDS = /^(const|fun|global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist)$/
 
-TWO_CHAR_TOKENS = /[%<>=+\-*\/!]=|\+\+|--|\/\/|->|\*\*|&&|\|\|/
+TWO_CHAR_TOKENS = /[%<>=+\-*\/!]=|\+\+|\.\.|--|\/\/|->|\*\*|&&|\|\|/
 ONE_CHAR_TOKENS = /[\[+%\-*\/(),:=<>\]\{\}!.]/
 
 inComment = false

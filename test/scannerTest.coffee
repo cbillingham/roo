@@ -87,7 +87,8 @@ describe 'The scanner', ->
          i(tokens[34]).should.equal i {kind:'%=', lexeme:'%=', line:2,col:11}
          i(tokens[35]).should.equal i {kind:'--', lexeme:'--', line:2,col:13}
          i(tokens[36]).should.equal i {kind:'=', lexeme:'=', line:2,col:15}
-         i(tokens[38]).should.equal i {kind:'EOF',lexeme:'EOF'}
+         i(tokens[37]).should.equal i {kind:'..', lexeme:'..', line:2,col:16}
+         i(tokens[39]).should.equal i {kind:'EOF',lexeme:'EOF'}
          done()
 
    it 'scans the simpliest program', (done) ->

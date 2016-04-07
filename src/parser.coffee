@@ -36,6 +36,8 @@ parseBlock = ->
       break
     statements.push parseStatement()
     match 'EOL'
+    while at 'EOL'
+      match 'EOL'
     break unless at tokenTypes
   new Block(statements)
 
@@ -91,7 +93,6 @@ parseWhileLoop = ->
 
 parseBody = ->
   match '{'
-  match 'EOL' if at 'EOL'
   body = parseBlock()
   match '}'
   match 'EOL'
@@ -174,7 +175,14 @@ parseExp2 = ->
   left
 
 parseExp3 = ->
+  if at '..'
+    match()
+    right = parseExp4()
+    return Range(right = right)
   left = parseExp4()
+  if at '..'
+    match
+    left = new Range
   if at 'to'
     match()
     right = parseExp4()
