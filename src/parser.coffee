@@ -32,6 +32,8 @@ parseBlock = ->
   loop
     while at 'EOL'
       match 'EOL'
+    if at 'EOF'
+      break
     statements.push parseStatement()
     match 'EOL'
     break unless at tokenTypes
@@ -63,15 +65,15 @@ parseAssignmentStatement = ->
   if at 'global'
     match()
     global = true
-  if at 'const'
-    match()
-    constant = true
-    if at 'global'        #fix this to be more elegant
-      match()
-      global = true
+  # if at 'const'
+  #   match()
+  #   constant = true
+  #   if at 'global'        #fix this to be more elegant
+  #     match()
+  #     global = true
   identifier = new VariableReference(match 'id')
   if at ['++','--']
-    value = new PostUnaryExpression(identifier, match().lexeme)
+    return new PostUnaryExpression(identifier, match().lexeme)
   if at ['%=','*=','/=','+=','-=']
     op = match().lexeme[0]
     right = parseExpression()
@@ -137,6 +139,10 @@ parseFunDec = ->
   body = parseBody()
   new FunctionDeclaration(identifier, param, body)
 
+parseParams = ->
+  match '('
+  match 'id'
+
 parseClassDec = ->
   match 'class'
   identifier = new VariableReference(match 'id')
@@ -161,7 +167,7 @@ parseExp1 = ->
 
 parseExp2 = ->
   left = parseExp3()
-  while at ['<','>','<=','>=','==','!=','is','isnt']
+  if at ['<','>','<=','>=','==','!=','is','isnt']
     op = match().lexeme
     right = parseExp3()
     left = new BinaryExpression(op, left, right)
@@ -169,15 +175,18 @@ parseExp2 = ->
 
 parseExp3 = ->
   left = parseExp4()
-  while at ['+','-']
-    op = match().lexeme
+  if at 'to'
+    match()
     right = parseExp4()
-    left = new BinaryExpression(op, left, right)
+    if at 'by'
+      match()
+      step = parseExp4()
+    left = new Range(left, right, step)
   left
 
 parseExp4 = ->
   left = parseExp5()
-  while at ['*','/','%','//']
+  while at ['+','-']
     op = match().lexeme
     right = parseExp5()
     left = new BinaryExpression(op, left, right)
@@ -185,7 +194,7 @@ parseExp4 = ->
 
 parseExp5 = ->
   left = parseExp6()
-  if at ['**']
+  while at ['*','/','%','//']
     op = match().lexeme
     right = parseExp6()
     left = new BinaryExpression(op, left, right)
@@ -201,22 +210,31 @@ parseExp6 = ->
 
 parseExp7 = ->
   left = parseExp8()
+  if at ['**']
+    op = match().lexeme
+    right = parseExp8()
+    left = new BinaryExpression(op, left, right)
+  left
+
+parseExp8 = ->
+  left = parseExp9()
   while at ['.','[','(']
     if at '.'
       match()
       right = parseExp9()
-      left = new ClassPropertyAccess(left, right)
+      left = new FieldAccess(left, right)
     if at '['
       match()
       right = parseExpression()
       match ']'
-      left = new IterableAccess(left, right)
+      left = new CollectionAccess(left, right)
     if at '('
-      right = parseArguments()
+      match()
+      right = parseExpList()
       left = new FunctionCall(left, right)
   left
 
-parseExp7 = ->
+parseExp9 = ->
   if at 'boollit'
     value = Boolean(match().lexeme)
     new BooleanLiteral(value)
@@ -240,16 +258,18 @@ parseExp7 = ->
   else if at '{'
     parseMapLiteral()
   else if at '('
+    if isLambda
+      return parseLambdaExp()
     match()
-    expression = parseExpression()
-    match ')'
-    expression
+    exp = parseExpression()
+    if at ','
+      match()
+      exp = new TupleLiteral( parseExpList([exp]) )
+    exp
   else
     error 'Illegal start of expression', tokens[0]
 
-parseArguments = ->
-  match '('
-  exps = []
+parseExpList = (exps = []) ->
   while not at ')'
     exps.push parseExpression()
     match ',' if not at ')'
@@ -271,3 +291,13 @@ match = (kind) ->
     tokens.shift()
   else
     error "Expected \"#{kind}\" but found \"#{tokens[0].kind}\"", tokens[0]
+
+isLambda = ->
+  parens = 0
+  pos = 0
+  for token in tokens
+    parens++ if tokens.kind is '('
+    parens-- if tokens.kind is ')'
+    pos++
+    break if parens is 0
+  tokens[pos].kind is '->'

@@ -42,6 +42,7 @@ keyword   ::= 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true
 id        ::= letter(letter|digit|_)*
 intlit    ::= digit+
 floatlit  ::= digit* '.' digit+
+assignop  ::= '='|'+='|'-='|'*='|'/='|'%='
 relop     ::= '<'|'<='|'=='|'is'|'!='|'isnt'|'>='|'>'
 addop     ::= '+'|'-'
 mulop     ::= '*'|'/'|'%'|'//'
@@ -58,42 +59,50 @@ comment   ::= '#' [^\n]* newline
 ```
 ### MacroSyntax
 ```
-Program      ::= Block
-Block        ::= (Stmt endofline)*
-Stmt         ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp
-               | ReturnStmt | BreakStmt | ContinueStmt
+Program       ::= Block
+Block         ::= (Stmt? endofline)*
+Stmt          ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp
+                | ReturnStmt | BreakStmt | ContinueStmt
 
-Dec          ::= AssignStmt | FunDec | ObjectDec
-AssignStmt   ::= 'const'? global'? Var '=' Exp | Increment
-Increment    ::= Var postfixop
-FunDec       ::= 'fun' id Params Body
-Params       ::= '(' IdList ')'
-IdList       ::= id (',' id)*
-ObjectDec    ::= 'class' id Body
+Dec           ::= AssignStmt | FunDec | ObjectDec
+AssignStmt    ::= global'? Var assignop Exp | Increment
+Increment     ::= Var postfixop
+FunDec        ::= 'fun' id Params Body
+Params        ::= '(' (Param (',' Param)*)? ')'
+Param         ::= id '=' Exp | id
+ObjectDec     ::= 'class' id Body
 
-Loop         ::= 'loop' Body
-WhileLoop    ::= 'while' Exp Body
-ForLoop      ::= 'for' Exp Body
-IfStmt       ::= 'if' Exp Body (ElseIfStmt)* ElseSmt?
-ElseIfStmt   ::= 'else if' Exp Body
-ElseStmt     ::= 'else' Body
-BreakStmt    ::= 'break'
-ContinueStmt ::= 'continue'
-ReturnStmt   ::= 'return' Exp
+Loop          ::= 'loop' Body
+WhileLoop     ::= 'while' Exp Body
+ForLoop       ::= 'for' Exp Body
+IfStmt        ::= 'if' Exp Body (ElseIfStmt)* ElseSmt?
+ElseIfStmt    ::= 'else if' Exp Body
+ElseStmt      ::= 'else' Body
+BreakStmt     ::= 'break'
+ContinueStmt  ::= 'continue'
+ReturnStmt    ::= 'return' Exp
 
-Body         ::= '{' Block? '}'
-Exp          ::= Exp1 (( 'or' | 'and' | '||' | '&&' ) Exp1)*
-Exp1         ::= Exp2 (relop Exp2)?
-Exp2         ::= Exp3 (addop Exp3)*
-Exp3         ::= Exp4 (mulop Exp4)*
-Exp4         ::= Exp5 (expop Exp5)*
-Exp5         ::= PrefixOp? Exp6
-Exp6         ::= Literal | Var | '('Exp')' | Lambda
-Literal      ::= nulllit | boollit | intlit | floatlit | stringlit
-Var          ::= id | FunCall | Var '[' Exp ']' | Var '.' id
-FunCall      ::= id '(' ExpList ')'
-ExpList      ::= (Exp (',' Exp)*)?
-Lambda       ::= Params '->' Body
+Body          ::= '{' Block? '}'
+Exp           ::= Exp1 (( 'or' | '||' ) Exp1)*
+Exp1          ::= Exp2 (( 'and' | '&&' ) Exp2)*
+Exp2          ::= Exp3 (relop Exp3)?
+Exp3          ::= Range | Exp4
+Range         ::= Exp4 'to' Exp4 ('by' Exp4)?
+Exp3          ::= Exp4 (addop Exp4)*
+Exp4          ::= Exp5 (mulop Exp5)*
+Exp5          ::= PrefixOp? Exp6
+Exp6          ::= Exp7 (expop Exp7)?
+Exp7          ::= Var | Exp 8
+Exp8          ::= Literal | '(' Exp ')' | Lambda | Comprehension
+
+Literal       ::= nulllit | boollit | intlit | floatlit | stringlit
+                | TupleLit | ListLit | SetLit | MapLit
+Var           ::= id | FunCall | Var '[' Exp ']' | Var '.' id
+FunCall       ::= id '(' ExpList ')'
+ExpList       ::= (Exp (',' Exp)*)?
+Lambda        ::= Params '->' Body
+Comprehension ::= '[' Exp 'for' id 'in' Exp ']'
+
 ```
 
 ## Features
@@ -120,12 +129,12 @@ x
 y = 3
 z = "hello"
 ```
-If you would like to create an immutable variable, just use const or final.
+<!--  If you would like to create an immutable variable, just use const or final.
 
 ```
 const ONE = 1
 ```
-
+ -->
 ### Types
 Roo has the following built-in primitive types:
 
@@ -401,70 +410,4 @@ fun printANumber() {
 }
 
 printANumber()        #prints 4
-```
-
-## Grammar
-### MicroSyntax
-```
-newline   ::= [\s* (\r*\n)+]
-letter    ::= [\p{L}]
-digit     ::= [\p{Nd}]
-keyword   ::= 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'
-            | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'|
-            | 'class'|'new'
-id        ::= letter(letter|digit|_)*
-intlit    ::= digit+
-floatlit  ::= digit* '.' digit+
-relop     ::= '<'|'<='|'=='|'is'|'!='|'isnt'|'>='|'>'
-addop     ::= '+'|'-'
-mulop     ::= '*'|'/'|'%'|'//'
-expop     ::= '**'
-prefixop  ::= '!'|'-'
-postfixop ::= '++'|'--'
-boollit   ::= 'true'|'false'
-char      ::= [^\p{Cc}'"\\] | [\\] [rnst'"\\]
-stringlit ::= ('"' char* '"') | (\x27 char* \x27)
-nulllit   ::= 'null'
-skip      ::= [\x09-\x0d \u2028\u2029\p{Zs}] | comment
-comment   ::= '#' [^\n]* newline
-            | '/#' .* '#/'
-```
-### MacroSyntax
-```
-Program      ::= Block
-Block        ::= (Stmt)+
-Stmt         ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp | AssignStmt
-               | ReturnStmt | BreakStmt | ContinueStmt
-AssignStmt   ::= 'global'? id '=' Exp | Increment
-Increment    ::= Var postfixop
-
-Dec          ::= VarDec | FunDec | ObjectDec
-VarDec       :: 'global'? id '=' Exp
-FunDec       ::= 'fun' id Params Body
-Params       ::= '(' IdList ')'
-IdList       ::= id (',' id)*
-ObjectDec    ::= 'class' id Body
-
-Loop         ::= 'loop' Body
-WhileLoop    ::= 'while' Exp Body
-ForLoop      ::= 'for' Exp Body
-IfStmt       ::= 'if' Exp Body (ElseIfStmt)* ElseSmt?
-ElseIfStmt   ::= 'else if' Exp Body
-ElseStmt     ::= 'else' Body
-BreakStmt    ::= 'break'
-ContinueStmt ::= 'continue'
-ReturnStmt   ::= 'return' Exp
-
-Body         ::= '{' Block? '}'
-Exp          ::= Exp1 (( 'or' | 'and' | '||' | '&&' ) Exp1)*
-Exp1         ::= Exp2 (relop Exp2)?
-Exp2         ::= Exp3 (addop Exp3)*
-Exp3         ::= Exp4 (mulop Exp4)*
-Exp4         ::= Exp5 (expop Exp5)*
-Exp5         ::= PrefixOp? Exp6
-Exp6         ::= Literal | AssignStmt | Var | '('Exp')'
-Literal      ::= nulllit | boollit | intlit | floatlit | stringlit
-Var          ::= id | FunCall | Var '[' Exp ']' | Var '.' id
-FunCall      ::= id '(' ExpList ')'
-ExpList      ::= (Exp (',' Exp)*)?
 ```
