@@ -1,4 +1,4 @@
-![Logo](https://raw.githubusercontent.com/cbillingham/roo/master/roo.jpg)
+![Logo](https://raw.githubusercontent.com/cbillingham/roo/master/images/roo.jpg)
 
 A simple, curly-brace language that compiles to Javascript. Roo combines the scripting benefits of a dynamically typed language with a readable syntax that is inspired by Java and Swift. While the basic syntax of Roo is inspired by Java and Swift, Roo adds modern functionailty, such as list comprehensions, default parameters, and much more, to the programmers toolbelt.
 
@@ -30,6 +30,7 @@ print( gcd(9,3) )      # prints 3
 ```
 
 ## Syntax
+Check out a railroad diagram of our grammar here: [Roo Railroad Diagram](https://raw.githubusercontent.com/cbillingham/roo/master/images/RailroadDiagram.xhtml)
 ### MicroSyntax
 ```
 endofline ::= newline | $
@@ -37,7 +38,7 @@ newline   ::= [\s* (\r*\n)+]
 letter    ::= [\p{L}]
 digit     ::= [\p{Nd}]
 keyword   ::= 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'
-            | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'|
+            | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'
             | 'class'|'new'|'const'
 id        ::= letter(letter|digit|_)*
 intlit    ::= digit+
@@ -51,7 +52,7 @@ prefixop  ::= '!'|'-'
 postfixop ::= '++'|'--'
 boollit   ::= 'true'|'false'
 char      ::= [^\p{Cc}'"\\] | [\\] [rnst'"\\]
-stringlit ::= ('"' char* '"') | (\x27 char* \x27)
+stringlit ::= ('"' char* '"') | ("'" char* "'")
 nulllit   ::= 'null'
 skip      ::= [\x09-\x0d \u2028\u2029\p{Zs}] | comment
 comment   ::= '#' [^\n]* newline
@@ -65,7 +66,7 @@ Stmt          ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp
                 | ReturnStmt | BreakStmt | ContinueStmt
 
 Dec           ::= AssignStmt | FunDec | ObjectDec
-AssignStmt    ::= global'? Var assignop Exp | Increment
+AssignStmt    ::= 'global'? Var assignop Exp | Increment
 Increment     ::= Var postfixop
 FunDec        ::= 'fun' id Params Body
 Params        ::= '(' (Param (',' Param)*)? ')'
@@ -87,22 +88,31 @@ Exp           ::= Exp1 (( 'or' | '||' ) Exp1)*
 Exp1          ::= Exp2 (( 'and' | '&&' ) Exp2)*
 Exp2          ::= Exp3 (relop Exp3)?
 Exp3          ::= Range | Exp4
-Range         ::= Exp4 'to' Exp4 ('by' Exp4)?
-Exp3          ::= Exp4 (addop Exp4)*
-Exp4          ::= Exp5 (mulop Exp5)*
-Exp5          ::= PrefixOp? Exp6
-Exp6          ::= Exp7 (expop Exp7)?
-Exp7          ::= Var | Exp 8
-Exp8          ::= Literal | '(' Exp ')' | Lambda | Comprehension
+Range         ::= Exp4 'to' Exp4 step?
+                | Exp4 '..' step?
+                | '..' Exp4 step?
+Step          ::= 'by' Exp4
+Exp4          ::= Exp5 (addop Exp5)*
+Exp5          ::= Exp6 (mulop Exp6)*
+Exp6          ::= PrefixOp? Exp7
+Exp7          ::= Exp8 (expop Exp8)?
+Exp8          ::= Var | Exp9
+Exp9          ::= Literal | '(' Exp ')' | Lambda | Comprehension | FunCall
 
 Literal       ::= nulllit | boollit | intlit | floatlit | stringlit
                 | TupleLit | ListLit | SetLit | MapLit
-Var           ::= id | FunCall | Var '[' Exp ']' | Var '.' id
-FunCall       ::= id '(' ExpList ')'
-ExpList       ::= (Exp (',' Exp)*)?
+Var           ::= id | Var '[' Exp ']' | Var '.' id
+FunCall       ::= id '(' ExpList? ')'
+ExpList       ::= Exp (',' Exp)*
 Lambda        ::= Params '->' Body
 Comprehension ::= '[' Exp 'for' id 'in' Exp ']'
-
+TupleLit      ::= '(' TupleList? ')'
+TupleList     ::= Exp ',' (Exp (',' Exp)* ','?)?
+ListLit       ::= '[' ExpList? ']'
+SetLit        ::= '<' ExpList? '>'
+MapLit        ::= '{' BindingList? '}'
+BindingList   ::= Binding (',' Binding)*
+Binding       ::= endofline? id ':' Exp endofline?
 ```
 
 ## Features

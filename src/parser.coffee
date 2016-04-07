@@ -217,6 +217,8 @@ parseExp7 = ->
   left
 
 parseExp8 = ->
+  if at 'new'
+    parseObjectConstruction()
   left = parseExp9()
   while at ['.','[','(']
     if at '.'
@@ -229,9 +231,10 @@ parseExp8 = ->
       match ']'
       left = new CollectionAccess(left, right)
     if at '('
-      match()
-      right = parseExpList()
-      left = new FunctionCall(left, right)
+      match '('
+      args = parseExpList()
+      match ')'
+      left = new FunctionCall(left, args)
   left
 
 parseExp9 = ->
@@ -260,21 +263,32 @@ parseExp9 = ->
   else if at '('
     if isLambda
       return parseLambdaExp()
-    match()
-    exp = parseExpression()
-    if at ','
-      match()
-      exp = new TupleLiteral( parseExpList([exp]) )
+    match '('
+    if at ')'
+      return new TupleLiteral()
+    else
+      exp = parseExpression()
+      if at ','
+        match()
+        exp = new TupleLiteral( parseExpList([exp]) )
+      match ')'
     exp
   else
     error 'Illegal start of expression', tokens[0]
 
-parseExpList = (exps = []) ->
-  while not at ')'
+parseExpList = (exps = [], end = ')') ->
+  while not at end
     exps.push parseExpression()
-    match ',' if not at ')'
-  match ')'
+    match ',' if not at end
   exps
+
+parseObjectConstruction = ->
+  match 'new'
+  classId = new VariableReference(match 'id')
+  match '('
+  args = parseExpList()
+  match ')'
+  new Object(classId, args)
 
 at = (kind) ->
   if tokens.length is 0
