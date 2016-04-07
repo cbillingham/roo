@@ -1,4 +1,4 @@
-![Logo](https://raw.githubusercontent.com/cbillingham/roo/master/images/roo.jpg)
+![Logo](/images/roo.jpg?raw=true)
 
 A simple, curly-brace language that compiles to Javascript. Roo combines the scripting benefits of a dynamically typed language with a readable syntax that is inspired by Java and Swift. While the basic syntax of Roo is inspired by Java and Swift, Roo adds modern functionailty, such as list comprehensions, default parameters, and much more, to the programmers toolbelt.
 
@@ -30,7 +30,7 @@ print( gcd(9,3) )      # prints 3
 ```
 
 ## Syntax
-Check out a railroad diagram of our grammar here: [Roo Railroad Diagram](https://raw.githubusercontent.com/cbillingham/roo/master/images/RailroadDiagram.xhtml)
+Check out a railroad diagram of our grammar here: [Roo Railroad Diagram](http://htmlpreview.github.io/?https://raw.githubusercontent.com/cbillingham/roo/master/images/RailroadDiagram.xhtml)
 ### MicroSyntax
 ```
 endofline ::= newline | $
