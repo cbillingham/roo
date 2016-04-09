@@ -15,8 +15,10 @@ ReturnStatement     = require './entities/return-statement'
 
 errors
 tokens = []
-tokenTypes = ['id','if','loop','for','return','break','continue']
-
+startTokenTypes = ["fun","global","if","else","for","while","break","continue","return",
+                   "loop","class","insist","nulllit","boollit","intlit","!","-","{","("
+                   "floatlit","stringlit","maplit","setlit","listlit","tuplelit","new"
+                   "<","["]
 
 module.exports = (scannerOutput) ->
   tokens = scannerOutput
@@ -35,10 +37,6 @@ parseBlock = ->
     if at 'EOF'
       break
     statements.push parseStatement()
-    match 'EOL'
-    while at 'EOL'
-      match 'EOL'
-    break unless at tokenTypes
   new Block(statements)
 
 parseStatement = ->
@@ -54,7 +52,7 @@ parseStatement = ->
     parseContinueStatement()
   else if at 'break'
     parseBreakStatement()
-  else if at ['global','const','id']
+  else if at ['global','id']
     parseAssignmentStatement()
   else if at 'fun'
     parseFunDec()
@@ -67,12 +65,6 @@ parseAssignmentStatement = ->
   if at 'global'
     match()
     global = true
-  # if at 'const'
-  #   match()
-  #   constant = true
-  #   if at 'global'        #fix this to be more elegant
-  #     match()
-  #     global = true
   identifier = new VariableReference(match 'id')
   if at ['++','--']
     return new PostUnaryExpression(identifier, match().lexeme)
@@ -83,11 +75,15 @@ parseAssignmentStatement = ->
   else
     match '='
     value = parseExpression()
-  new AssignmentStatement(identifier, value, global, constant)
+  new AssignmentStatement(identifier, value, global)
   
 parseWhileLoop = ->
-  match 'while'
-  condition = parseExpression()
+  if at 'loop'
+    match()
+    condition = new BooleanLiteral(true)
+  else if at 'while'
+    match()
+    condition = parseExpression()
   body = parseBody()
   new WhileLoop(condition, body)
 
@@ -129,20 +125,35 @@ parseIfStatement = ->
 
 parseForLoop = ->
   match 'for'
-  iteration = parseExpression()
+  if at 'id'
+    ids = [new VariableReference(match 'id')]
+    if at ','
+      match()
+      ids.push new VariableReference(match 'id')
+    match 'in'
+  source = parseExpression()
   body = parseBody()
-  new ForLoop(iteration, body)
+  new ForLoop(source, body, ids)
 
 parseFunDec = ->
   match 'fun'
   identifier = new VariableReference(match 'id')
   params = parseParams()
   body = parseBody()
-  new FunctionDeclaration(identifier, param, body)
+  new FunctionDeclaration(identifier, params, body)
 
 parseParams = ->
+  params = []
   match '('
-  match 'id'
+  while not at ')'
+    id = new VariableReference(match 'id')
+    if at '='
+      match()
+      exp = parseExpression()
+      id = new AssignmentStatement(id, exp)
+    params.push id
+    match ','
+  params
 
 parseClassDec = ->
   match 'class'
@@ -232,7 +243,7 @@ parseExp8 = ->
     if at '.'
       match()
       right = parseExp9()
-      left = new FieldAccess(left, right)
+      left = new ObjectFieldAccess(left, right)
     if at '['
       match()
       right = parseExpression()
@@ -290,6 +301,12 @@ parseExpList = (exps = [], end = ')') ->
     match ',' if not at end
   exps
 
+parseLambdaExp = ->
+  params = parseParams()
+  match '->'
+  block = parseBody()
+  new Lambda(params, block)
+
 parseObjectCreation = ->
   match 'new'
   classId = new VariableReference(match 'id')
@@ -297,6 +314,39 @@ parseObjectCreation = ->
   args = parseExpList()
   match ')'
   new Object(classId, args)
+
+parseMapLiteral = ->
+  match '{'
+  exps = parseExpList([],'}')
+  match '}'
+  new MapLiteral(exps)
+
+parseListLiteral = ->
+  match '['
+  if at ']'
+    return new ListLiteral()
+  else
+    exp = parseExpression()
+    if at 'for'
+      parseListComprehension(exp)
+    else
+      exps = parseExpList([exp],']')
+      match ']'
+      new ListLiteral(exps)
+
+parseSetLiteral = ->
+  match '<'
+  exps = parseExpList([],'>')
+  match '>'
+  new MapLiteral(exps)
+
+parseListComprehension = (exp) ->
+  match 'for'
+  id = new VariableReference(match 'id')
+  match 'in'
+  source = parseExpression()
+  match ']'
+  new ListComprehension(exp, id, source)
 
 at = (kind) ->
   if tokens.length is 0

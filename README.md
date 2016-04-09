@@ -39,7 +39,7 @@ letter    ::= [\p{L}]
 digit     ::= [\p{Nd}]
 keyword   ::= 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'
             | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'
-            | 'class'|'new'|'const'
+            | 'class'|'new'
 id        ::= letter(letter|digit|_)*
 intlit    ::= digit+
 floatlit  ::= digit* '.' digit+
@@ -139,12 +139,6 @@ x
 y = 3
 z = "hello"
 ```
-<!--  If you would like to create an immutable variable, just use const or final.
-
-```
-const ONE = 1
-```
- -->
 ### Types
 Roo has the following built-in primitive types:
 
@@ -253,7 +247,7 @@ for person in people {
 If you need the index as well just use the built in enumerate function.
 
 ```
-for (index, person) in enumerate(people) {
+for index, person in enumerate(people) {
   setAge(person, 8+index)
 }
 ```
