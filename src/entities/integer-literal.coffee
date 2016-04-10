@@ -1,15 +1,14 @@
 class IntegerLiteral
-    constructor: (@value) ->
 
-    value: ->
-        @value
+  constructor: (@value) ->
 
-    toString: ->
-        @value
+  toString: ->
+    @value
 
-    analyze:(context) ->
+  analyze: (context) ->
+    #todo
 
-    optimize: ->
-        this
+  optimize: -> 
+    this
 
 module.exports = IntegerLiteral

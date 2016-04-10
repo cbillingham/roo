@@ -4,12 +4,12 @@ class Block
   constructor: (@statements) ->
 
   toString: ->
-     "(Block #{@statements.join(' ')})"
+    "(Block #{@statements.join(' ')})"
 
   analyze: ->
-     #TODO
+    #TODO
 
   optimize: ->
-     #TODO
+    #TODO
 
 module.exports = Block

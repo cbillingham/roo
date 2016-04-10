@@ -39,7 +39,7 @@ letter    ::= [\p{L}]
 digit     ::= [\p{Nd}]
 keyword   ::= 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'
             | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'
-            | 'class'|'new'|'const'
+            | 'class'|'new'
 id        ::= letter(letter|digit|_)*
 intlit    ::= digit+
 floatlit  ::= digit* '.' digit+
@@ -96,16 +96,16 @@ Exp4          ::= Exp5 (addop Exp5)*
 Exp5          ::= Exp6 (mulop Exp6)*
 Exp6          ::= PrefixOp? Exp7
 Exp7          ::= Exp8 (expop Exp8)?
-Exp8          ::= Var | Exp9
-Exp9          ::= Literal | '(' Exp ')' | Lambda | Comprehension | FunCall
+Exp8          ::= ObjectCreation | Var | Exp9
+Exp9          ::= Literal | '(' Exp ')' | Lambda | Comprehension
 
 Literal       ::= nulllit | boollit | intlit | floatlit | stringlit
                 | TupleLit | ListLit | SetLit | MapLit
-Var           ::= id | Var '[' Exp ']' | Var '.' id
-FunCall       ::= id '(' ExpList? ')'
+Var           ::= id ( '[' Exp ']' | '.' id | '(' ExpList ')' )*
 ExpList       ::= Exp (',' Exp)*
 Lambda        ::= Params '->' Body
 Comprehension ::= '[' Exp 'for' id 'in' Exp ']'
+ObjCreation   ::= 'new' Var '(' ExpList ')'
 TupleLit      ::= '(' TupleList? ')'
 TupleList     ::= Exp ',' (Exp (',' Exp)* ','?)?
 ListLit       ::= '[' ExpList? ']'
@@ -139,12 +139,6 @@ x
 y = 3
 z = "hello"
 ```
-<!--  If you would like to create an immutable variable, just use const or final.
-
-```
-const ONE = 1
-```
- -->
 ### Types
 Roo has the following built-in primitive types:
 
@@ -253,7 +247,7 @@ for person in people {
 If you need the index as well just use the built in enumerate function.
 
 ```
-for (index, person) in enumerate(people) {
+for index, person in enumerate(people) {
   setAge(person, 8+index)
 }
 ```

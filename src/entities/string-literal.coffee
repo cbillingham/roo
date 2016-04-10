@@ -1,13 +1,14 @@
 class StringLiteral 
-    constructor: (@value)->
 
-    value: ->
-        @value
+  constructor: (@value) ->
 
-    analyze: ->
-        #todo
+  toString: ->
+    @value
 
-    optimize: ->
-        this
+  analyze: (context) ->
+    #todo
+
+  optimize: -> 
+    this
 
 module.exports = StringLiteral

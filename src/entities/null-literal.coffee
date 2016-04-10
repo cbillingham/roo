@@ -1,17 +1,15 @@
 class NullLiteral
-    constructor: ->
-        @value = null
 
-    value: ->
-        @value
+  constructor: ->
+    @value = null
 
-    toString: ->
-        @value
+  toString: ->
+    @value
 
-    analyze: ->
-        #todo
+  analyze: (context) ->
+    #todo
 
-    optimize: ->
-        this
+  optimize: -> 
+    this
 
 module.exports = NullLiteral

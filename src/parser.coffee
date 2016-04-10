@@ -9,14 +9,42 @@ error = require './error'
 Program             = require './entities/program'
 Block               = require './entities/block'
 AssignmentStatement = require './entities/assignment-statement'
+ArgumentList        = require './entities/argument-list'
 WhileLoop           = require './entities/while-loop'
 IfStatement         = require './entities/if-statement'
 ReturnStatement     = require './entities/return-statement'
+BreakStatement      = require './entities/break-statement'
+ContinueStatement   = require './entities/continue-statement'
+ForLoop             = require './entities/for-loop'
+VariableReference   = require './entities/variable-reference'
+FunctionDeclaration = require './entities/function-declaration'
+ClassDeclaration    = require './entities/class-declaration'
+BinaryExpression    = require './entities/binary-expression'
+PreUnaryExpression  = require './entities/pre-unary-expression'
+PostUnaryExpression = require './entities/post-unary-expression'
+Range               = require './entities/range'
+FunctionCall        = require './entities/function-call'
+ObjectFieldAccess   = require './entities/object-field-access'
+CollectionAccess    = require './entities/collection-access'
+BooleanLiteral      = require './entities/boolean-literal'
+FloatLiteral        = require './entities/float-literal'
+IntegerLiteral      = require './entities/integer-literal'
+StringLiteral       = require './entities/string-literal'
+NullLiteral         = require './entities/null-literal'
+MapLiteral          = require './entities/map-literal'
+SetLiteral          = require './entities/set-literal'
+ListLiteral         = require './entities/list-literal'
+TupleLiteral        = require './entities/tuple-literal'
+ListComprehension   = require './entities/list-comprehension'
+Lambda              = require './entities/lambda'
+ObjectInstance      = require './entities/object-instance'
 
-errors
+errors = []
 tokens = []
-tokenTypes = ['id','if','loop','for','return','break','continue']
-
+startTokenTypes = ["fun","global","if","for","while","break","continue","return",
+                   "loop","class","insist","nulllit","boollit","intlit","!","-","{","("
+                   "floatlit","stringlit","maplit","setlit","listlit","tuplelit","new"
+                   "<","[","id"]
 
 module.exports = (scannerOutput) ->
   tokens = scannerOutput
@@ -35,10 +63,9 @@ parseBlock = ->
     if at 'EOF'
       break
     statements.push parseStatement()
-    match 'EOL'
     while at 'EOL'
       match 'EOL'
-    break unless at tokenTypes
+    break unless at startTokenTypes
   new Block(statements)
 
 parseStatement = ->
@@ -54,8 +81,13 @@ parseStatement = ->
     parseContinueStatement()
   else if at 'break'
     parseBreakStatement()
-  else if at ['global','const','id']
+  else if at 'global'
     parseAssignmentStatement()
+  else if at 'id'
+    if nextIs '='
+      parseAssignmentStatement
+    else
+      parseExpression()
   else if at 'fun'
     parseFunDec()
   else if at 'class'
@@ -67,12 +99,6 @@ parseAssignmentStatement = ->
   if at 'global'
     match()
     global = true
-  # if at 'const'
-  #   match()
-  #   constant = true
-  #   if at 'global'        #fix this to be more elegant
-  #     match()
-  #     global = true
   identifier = new VariableReference(match 'id')
   if at ['++','--']
     return new PostUnaryExpression(identifier, match().lexeme)
@@ -83,11 +109,15 @@ parseAssignmentStatement = ->
   else
     match '='
     value = parseExpression()
-  new AssignmentStatement(identifier, value, global, constant)
+  new AssignmentStatement(identifier, value, global)
   
 parseWhileLoop = ->
-  match 'while'
-  condition = parseExpression()
+  if at 'loop'
+    match()
+    condition = new BooleanLiteral(true)
+  else if at 'while'
+    match()
+    condition = parseExpression()
   body = parseBody()
   new WhileLoop(condition, body)
 
@@ -95,7 +125,6 @@ parseBody = ->
   match '{'
   body = parseBlock()
   match '}'
-  match 'EOL'
   body
 
 parseReturnStatement = ->
@@ -129,20 +158,36 @@ parseIfStatement = ->
 
 parseForLoop = ->
   match 'for'
-  iteration = parseExpression()
+  if at 'id'
+    ids = [new VariableReference(match 'id')]
+    if at ','
+      match()
+      ids.push new VariableReference(match 'id')
+    match 'in'
+  source = parseExpression()
   body = parseBody()
-  new ForLoop(iteration, body)
+  new ForLoop(source, body, ids)
 
 parseFunDec = ->
   match 'fun'
   identifier = new VariableReference(match 'id')
   params = parseParams()
   body = parseBody()
-  new FunctionDeclaration(identifier, param, body)
+  new FunctionDeclaration(identifier, params, body)
 
 parseParams = ->
+  params = []
   match '('
-  match 'id'
+  while not at ')'
+    id = new VariableReference(match 'id')
+    if at '='
+      match()
+      exp = parseExpression()
+      id = new AssignmentStatement(id, exp)
+    params.push id
+    match ',' if not at ')'
+  match ')'
+  params
 
 parseClassDec = ->
   match 'class'
@@ -175,22 +220,32 @@ parseExp2 = ->
   left
 
 parseExp3 = ->
+  left = null
+  right = null
   if at '..'
-    match()
-    right = parseExp4()
-    return Range(right = right)
-  left = parseExp4()
-  if at '..'
-    match
-    left = new Range
-  if at 'to'
     match()
     right = parseExp4()
     if at 'by'
       match()
       step = parseExp4()
-    left = new Range(left, right, step)
-  left
+    return new Range(left, right, step)
+  else
+    left = parseExp4()
+    if at '..'
+      match
+      if at 'by'
+        match()
+        step = parseExp4()
+      left = new Range(left, right, step)
+    else if at 'to'
+      match()
+      right = parseExp4()
+      if at 'by'
+        match()
+        step = parseExp4()
+      left = new Range(left, right, step)
+    left
+      
 
 parseExp4 = ->
   left = parseExp5()
@@ -226,13 +281,13 @@ parseExp7 = ->
 
 parseExp8 = ->
   if at 'new'
-    parseObjectConstruction()
+    parseObjectInstance()
   left = parseExp9()
   while at ['.','[','(']
     if at '.'
       match()
       right = parseExp9()
-      left = new FieldAccess(left, right)
+      left = new ObjectFieldAccess(left, right)
     if at '['
       match()
       right = parseExpression()
@@ -290,13 +345,57 @@ parseExpList = (exps = [], end = ')') ->
     match ',' if not at end
   exps
 
-parseObjectConstruction = ->
+parseLambdaExp = ->
+  params = parseParams()
+  match '->'
+  block = parseBody()
+  new Lambda(params, block)
+
+parseObjectCreation = ->
   match 'new'
   classId = new VariableReference(match 'id')
   match '('
   args = parseExpList()
   match ')'
-  new Object(classId, args)
+  new ObjectInstance(classId, args)
+
+parseMapLiteral = ->
+  keys = []
+  values = []
+  match '{'
+  while not at '}'
+    keys.push parseExp9()
+    match ':'
+    values.push parseExpression()
+    match ',' if not at '}'
+  new MapLiteral(keys, values)
+
+parseListLiteral = ->
+  match '['
+  if at ']'
+    return new ListLiteral()
+  else
+    exp = parseExpression()
+    if at 'for'
+      parseListComprehension(exp)
+    else
+      exps = parseExpList([exp],']')
+      match ']'
+      new ListLiteral(exps)
+
+parseSetLiteral = ->
+  match '<'
+  exps = parseExpList([],'>')
+  match '>'
+  new SetLiteral(exps)
+
+parseListComprehension = (exp) ->
+  match 'for'
+  id = new VariableReference(match 'id')
+  match 'in'
+  source = parseExpression()
+  match ']'
+  new ListComprehension(exp, id, source)
 
 at = (kind) ->
   if tokens.length is 0
@@ -305,6 +404,14 @@ at = (kind) ->
     kind.some(at)
   else
     kind is tokens[0].kind
+
+nextIs = (kind) ->
+  if tokens.length < 2
+    false
+  else if Array.isArray kind
+    kind.some(at)
+  else
+    kind is tokens[1].kind
 
 match = (kind) ->
   if tokens.length is 0
