@@ -11,16 +11,16 @@ class ExpectedASTs
           (Block (Return a))
         else
           (Block (Return
-            (Call gcd (b, (% a b)))))))
+            (Call gcd (b, (% a b))))))))
     (Call print
-      ((Call gcd (9, 3))))'
+      ((Call gcd (9, 3))))))'
 
   @countdown = '(Program (Block
     (Function countdown ()
       (Block 
         (For (Range 10 to 1 by 1)
           (Block
-           (Call print (countdown)))))))'
+           (Call print (countdown))))))))'
 
   @helloworld = '(Program (Block (Call print (hello world)))'
 
