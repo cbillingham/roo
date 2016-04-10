@@ -30,7 +30,7 @@ print( gcd(9,3) )      # prints 3
 ```
 
 ## Syntax
-Check out a railroad diagram of our grammar here: [Roo Railroad Diagram](cbillingham.github.io/roo/railroaddiagram)
+Check out a railroad diagram of our grammar here: [Roo Railroad Diagram](https://cbillingham.github.io/roo/railroaddiagram)
 ### MicroSyntax
 ```
 endofline ::= newline | $
