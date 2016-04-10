@@ -8,6 +8,12 @@ expectedAST = require './data/parser/expected-output/asts'
   
 describe 'The parser', ->
 
+   it 'correctly parses a simple assignment statement', (done) ->
+      scan 'test/data/good-programs/simple-assignment.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.assignmentStatement
+         done()
+
    it 'correctly parses an empty program', (done) ->
       scan 'test/data/parser/empty.roo', (tokens) ->
          program = parse tokens
@@ -25,3 +31,12 @@ describe 'The parser', ->
          program = parse tokens
          program.toString().should.equal expectedAST.countdown
          done()
+
+   it 'correctly parses a while loop program', (done) ->
+      scan 'test/data/good-programs/while-loop.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.whileLoop
+
+   it 'correctly parses object creation'
+   it 'correctly parses map creation'
+   it ''
