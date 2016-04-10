@@ -364,7 +364,7 @@ parseMapLiteral = ->
   values = []
   match '{'
   while not at '}'
-    keys.push parseExp9()
+    keys.push(match('id').lexeme)
     match ':'
     values.push parseExpression()
     match ',' if not at '}'

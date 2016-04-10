@@ -1,0 +1,17 @@
+int = 4
+
+string = 'hello'
+
+boolean = true
+
+float = 3.14159
+
+theNull = null
+
+#tuple = (3, 4)
+
+list = [1, 2, 3, 4]
+
+#set = <1, 2, 3, 4>
+
+map = {first : 1, second : 2}

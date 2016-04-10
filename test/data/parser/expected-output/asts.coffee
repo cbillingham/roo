@@ -22,4 +22,6 @@ class ExpectedASTs
           (Block
            (Call print (countdown))))))))'
 
+  @whileLoop = '(Program (Block (While (< x 10) (Block (Call print ("x is less than 10"))))))'
+
 module.exports = ExpectedASTs
