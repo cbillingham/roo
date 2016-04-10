@@ -1,0 +1,478 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Roo by cbillingham</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Roo</h1>
+        <p>Senior compiler project for CMSI 488</p>
+
+        <p class="view"><a href="https://github.com/cbillingham/roo">View the Project on GitHub <small>cbillingham/roo</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/cbillingham/roo/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/cbillingham/roo/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/cbillingham/roo">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p><img src="https://github.com/cbillingham/roo/blob/master/images/roo.jpg?raw=true" alt="Logo"></p>
+
+<p>A simple, curly-brace language that compiles to Javascript. Roo combines the scripting benefits of a dynamically typed language with a readable syntax that is inspired by Java and Swift. While the basic syntax of Roo is inspired by Java and Swift, Roo adds modern functionailty, such as list comprehensions, default parameters, and much more, to the programmers toolbelt.</p>
+
+<h2>
+<a id="compile" class="anchor" href="#compile" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Compile</h2>
+
+<pre><code>kanga helloWorld.roo
+</code></pre>
+
+<h2>
+<a id="hello-world" class="anchor" href="#hello-world" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Hello World</h2>
+
+<pre><code># helloWorld.roo
+
+print("Hello, World!")
+</code></pre>
+
+<h2>
+<a id="example-program" class="anchor" href="#example-program" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example Program</h2>
+
+<pre><code># gcd.roo
+
+fun gcd(a, b) {
+  if b is 0 {
+    return a
+  } else { 
+    return gcd(b, a%b)
+  }
+}
+
+print( gcd(9,3) )      # prints 3
+</code></pre>
+
+<h2>
+<a id="syntax" class="anchor" href="#syntax" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Syntax</h2>
+
+<p>Check out a railroad diagram of our grammar here: <a href="http://htmlpreview.github.io/?https://raw.githubusercontent.com/cbillingham/roo/master/images/RailroadDiagram.xhtml">Roo Railroad Diagram</a></p>
+
+<h3>
+<a id="microsyntax" class="anchor" href="#microsyntax" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>MicroSyntax</h3>
+
+<pre><code>endofline ::= newline | $
+newline   ::= [\s* (\r*\n)+]
+letter    ::= [\p{L}]
+digit     ::= [\p{Nd}]
+keyword   ::= 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'
+            | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'
+            | 'class'|'new'
+id        ::= letter(letter|digit|_)*
+intlit    ::= digit+
+floatlit  ::= digit* '.' digit+
+assignop  ::= '='|'+='|'-='|'*='|'/='|'%='
+relop     ::= '&lt;'|'&lt;='|'=='|'is'|'!='|'isnt'|'&gt;='|'&gt;'
+addop     ::= '+'|'-'
+mulop     ::= '*'|'/'|'%'|'//'
+expop     ::= '**'
+prefixop  ::= '!'|'-'
+postfixop ::= '++'|'--'
+boollit   ::= 'true'|'false'
+char      ::= [^\p{Cc}'"\\] | [\\] [rnst'"\\]
+stringlit ::= ('"' char* '"') | ("'" char* "'")
+nulllit   ::= 'null'
+skip      ::= [\x09-\x0d \u2028\u2029\p{Zs}] | comment
+comment   ::= '#' [^\n]* newline
+            | '/#' .* '#/'
+</code></pre>
+
+<h3>
+<a id="macrosyntax" class="anchor" href="#macrosyntax" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>MacroSyntax</h3>
+
+<pre><code>Program       ::= Block
+Block         ::= (Stmt? endofline)*
+Stmt          ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp
+                | ReturnStmt | BreakStmt | ContinueStmt
+
+Dec           ::= AssignStmt | FunDec | ObjectDec
+AssignStmt    ::= 'global'? Var assignop Exp | Increment
+Increment     ::= Var postfixop
+FunDec        ::= 'fun' id Params Body
+Params        ::= '(' (Param (',' Param)*)? ')'
+Param         ::= id '=' Exp | id
+ObjectDec     ::= 'class' id Body
+
+Loop          ::= 'loop' Body
+WhileLoop     ::= 'while' Exp Body
+ForLoop       ::= 'for' Exp Body
+IfStmt        ::= 'if' Exp Body (ElseIfStmt)* ElseSmt?
+ElseIfStmt    ::= 'else if' Exp Body
+ElseStmt      ::= 'else' Body
+BreakStmt     ::= 'break'
+ContinueStmt  ::= 'continue'
+ReturnStmt    ::= 'return' Exp
+
+Body          ::= '{' Block? '}'
+Exp           ::= Exp1 (( 'or' | '||' ) Exp1)*
+Exp1          ::= Exp2 (( 'and' | '&amp;&amp;' ) Exp2)*
+Exp2          ::= Exp3 (relop Exp3)?
+Exp3          ::= Range | Exp4
+Range         ::= Exp4 'to' Exp4 step?
+                | Exp4 '..' step?
+                | '..' Exp4 step?
+Step          ::= 'by' Exp4
+Exp4          ::= Exp5 (addop Exp5)*
+Exp5          ::= Exp6 (mulop Exp6)*
+Exp6          ::= PrefixOp? Exp7
+Exp7          ::= Exp8 (expop Exp8)?
+Exp8          ::= ObjectCreation | Var | Exp9
+Exp9          ::= Literal | '(' Exp ')' | Lambda | Comprehension
+
+Literal       ::= nulllit | boollit | intlit | floatlit | stringlit
+                | TupleLit | ListLit | SetLit | MapLit
+Var           ::= id ( '[' Exp ']' | '.' id | '(' ExpList ')' )*
+ExpList       ::= Exp (',' Exp)*
+Lambda        ::= Params '-&gt;' Body
+Comprehension ::= '[' Exp 'for' id 'in' Exp ']'
+ObjCreation   ::= 'new' Var '(' ExpList ')'
+TupleLit      ::= '(' TupleList? ')'
+TupleList     ::= Exp ',' (Exp (',' Exp)* ','?)?
+ListLit       ::= '[' ExpList? ']'
+SetLit        ::= '&lt;' ExpList? '&gt;'
+MapLit        ::= '{' BindingList? '}'
+BindingList   ::= Binding (',' Binding)*
+Binding       ::= endofline? id ':' Exp endofline?
+</code></pre>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h2>
+
+<h3>
+<a id="comments" class="anchor" href="#comments" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Comments</h3>
+
+<p>Single line comments are created with #</p>
+
+<pre><code># this is a comment
+</code></pre>
+
+<p>Multi-line comments are created with a /# ... #/</p>
+
+<pre><code>/#
+this is a mult-line comment
+still a comment?
+yep, still a comment
+#/
+</code></pre>
+
+<h3>
+<a id="assignments" class="anchor" href="#assignments" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Assignments</h3>
+
+<p>Variable assignments are simple. No keyword or special symbol necessary.</p>
+
+<pre><code>x
+y = 3
+z = "hello"
+</code></pre>
+
+<h3>
+<a id="types" class="anchor" href="#types" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Types</h3>
+
+<p>Roo has the following built-in primitive types:</p>
+
+<pre><code>x = 3                      # int
+
+y = 3.0                    # double
+y = 3.4
+y = 0.4
+y = .3
+y = 3.                     # syntax error
+
+w = true                   # bool
+w = false
+
+z = null                   # roo has a null type, which can be assigned to variables
+</code></pre>
+
+<p>Roo also has built in reference types including String, List, Set, Tuple, and Map.</p>
+
+<pre><code>s = "a"                    # Roo does not have characters, only strings
+s = "hello"                
+s = 'a'                    # Strings can use both single or double quotes
+s = 'hello'
+
+a = [1,2,3]                # lists are ordered and mutable
+
+b = (1,2,3)                # tuples are ordered and immutable
+
+c = &lt;1,2,3&gt;                # sets are unordered and mutable
+
+d = [x:1, y:2, z:3]        # maps are a mutable collection of key-value pairs
+</code></pre>
+
+<h4>
+<a id="list-ranges-comprehensions-and-slices" class="anchor" href="#list-ranges-comprehensions-and-slices" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>List Ranges, Comprehensions, and Slices</h4>
+
+<p>Roo adds modern list functionality to make your code more readable and easier to write.</p>
+
+<pre><code>x = [0 to 3]               # using list ranges is the same as saying [0,1,2,3]
+</code></pre>
+
+<p>Use a similar syntax for returning list slices</p>
+
+<pre><code>l = ['hi','bye',1,3]
+y = l[0 to 1]               # y = ['hi','bye']
+y = l[0 to 2 by 2]          # y = ['hi',1]
+</code></pre>
+
+<p>Roo also has list comprehensions.</p>
+
+<pre><code>l = [0,1,2,3]
+y = [x*2 for x in l]        # y = [0,2,4,6]
+</code></pre>
+
+<h3>
+<a id="operators" class="anchor" href="#operators" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Operators</h3>
+
+<p>Roo adds some additional keywords as operators for readability. The following is a list of operators that Roo supports.</p>
+
+<pre><code>Roo                                     JavaScript
+--------                                --------------
+&gt;                                       &gt;
+&gt;=                                      &gt;=
+&lt;                                       &lt;
+&lt;=                                      &lt;=
+is,   ==                                ===
+isnt, !=                                !==
+!                                       !
+and,  &amp;&amp;                                &amp;&amp;
+or,   ||                                ||
+true                                    true
+false                                   false
+
+a ** b                                  Math.pow(a, b)
+a // b                                  Math.floor(a / b)
+
+a * b                                   a * b
+a / b                                   a / b
+a % b                                   a % b
+
+a++                                     a = a + 1
+a--                                     a = a - 1
+</code></pre>
+
+<h3>
+<a id="if-statements" class="anchor" href="#if-statements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>If Statements</h3>
+
+<pre><code>if x &gt; 3 {
+  return "x is greater than 3"
+} else {
+  return "x is less than or equal to 3"
+}
+
+# is equivalent to
+
+if x &gt; 3 {return "x is greater than 3"}
+else {return "x is less than or equal to 3"}
+</code></pre>
+
+<h3>
+<a id="for-loops" class="anchor" href="#for-loops" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>For Loops</h3>
+
+<p>For loops use list comprehensions which allow you to easily loop through objects or lists.</p>
+
+<pre><code>people = ["jack", "jill"]
+
+for person in people {
+  goUpTheHill(person)
+}
+</code></pre>
+
+<p>If you need the index as well just use the built in enumerate function.</p>
+
+<pre><code>for index, person in enumerate(people) {
+  setAge(person, 8+index)
+}
+</code></pre>
+
+<p>For looping over a certain range of numbers use the 'to' keyword.</p>
+
+<pre><code>for countdown in 10 to 1 {
+  print(countdown)
+}
+</code></pre>
+
+<p>When the above code is executed it returns:</p>
+
+<pre><code>10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+</code></pre>
+
+<p>If you don't need the values of your loop you can just run the following. Also use the 'by' keyword to change your iteration number.</p>
+
+<pre><code>                                     # Javascript equivalent
+
+count = 8                            # var count = 8
+
+for 1 to count by 2 {                # for (int i = 1; i &lt;= count; i=i+2) {
+  x = x/y                            #    x = x/y
+}                                    # }
+</code></pre>
+
+<p>When the above code is executed it will divide x by y 4 times, looping through 1 to 8, increasing by 2 each time.</p>
+
+<h3>
+<a id="while-loops" class="anchor" href="#while-loops" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>While Loops</h3>
+
+<p>While loops are standard syntax.</p>
+
+<pre><code>while x &lt; y {
+  print "x&lt;y is true"
+}
+</code></pre>
+
+<p>You can run a while true loop with the following:</p>
+
+<pre><code>loop {
+  if x &lt; y {
+    break
+  }
+  print "x&lt;y is true"
+  x--
+}
+</code></pre>
+
+<h3>
+<a id="functions" class="anchor" href="#functions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Functions</h3>
+
+<p>Functions are declared with the keyword fun.</p>
+
+<pre><code>fun gcd(a, b) {
+  if b is 0 {
+    return a
+  } else { 
+    return gcd(b, a%b)
+  }
+}
+</code></pre>
+
+<p>In Roo functions are also objects, so they are first-class by default.</p>
+
+<pre><code>fun printResult(f, a) {
+  print( f(a) )
+}
+
+fun square(a) {
+  return a*a
+}
+
+fun double(a) {
+  return a*2
+}
+
+printResult(square, 3)           # prints 9
+printResult(double, 3)           # prints 6
+</code></pre>
+
+<p>Roo also allows anonymous functions by using the single arrow () -&gt;</p>
+
+<pre><code>fun add(b) {
+  return (a) -&gt; {return a+b} 
+}
+
+add5 = add(5)
+</code></pre>
+
+<h3>
+<a id="insist-statement" class="anchor" href="#insist-statement" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Insist Statement</h3>
+
+<p>To easily check function arguments, you can use the insist keyword to remove the boilerplate of throwing exceptions for illegal arguments.</p>
+
+<pre><code>fun divide(x, y) {
+  insist y isnt 0
+
+  return x / y
+}
+
+divide(4,0)        # throws an illegal argument exception
+</code></pre>
+
+<h2>
+<a id="scoping" class="anchor" href="#scoping" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Scoping</h2>
+
+<p>Roo uses lexical, function scoping. Variable declarations are bound to the local scope, unless the <strong><strong>global</strong></strong> keyword is used.
+Variables declared in lower scopes shadow those in higher scopes with the same name.</p>
+
+<pre><code>x = 4                   #local
+</code></pre>
+
+<pre><code>() -&gt; {
+  global x = 4         #global 
+}
+</code></pre>
+
+<pre><code>x = 4 
+
+fun add1(y) {
+  return x + 1          # returns 5
+}
+</code></pre>
+
+<pre><code>x = 4 
+
+fun add1(y) {
+  x = 7
+  return x + 1          # returns 8
+}
+</code></pre>
+
+<pre><code>x = 4 
+
+fun printNum(z) {
+  global y = 47
+  print(z)                
+}
+
+printNum(x)            #prints 4
+printNum(y)            #prints 47
+</code></pre>
+
+<pre><code>x = 47
+
+fun printANumber() {
+   x = 4
+   fun doThePrinting() {
+      print(x)          
+   }
+   doThePrinting()
+}
+
+printANumber()        #prints 4
+</code></pre>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/cbillingham">cbillingham</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
