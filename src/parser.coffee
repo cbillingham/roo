@@ -39,7 +39,7 @@ ListComprehension   = require './entities/list-comprehension'
 Lambda              = require './entities/lambda'
 ObjectInstance      = require './entities/object-instance'
 
-errors
+errors = []
 tokens = []
 startTokenTypes = ["fun","global","if","else","for","while","break","continue","return",
                    "loop","class","insist","nulllit","boollit","intlit","!","-","{","("

@@ -11,4 +11,4 @@ class ContinueStatement
   optimize: ->
     #TO DO
 
-module.exports = BreakStatement
+module.exports = ContinueStatement

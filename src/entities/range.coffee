@@ -11,4 +11,4 @@ class Range
   optimize: ->
     #TODO
 
-module.exports = AssignmentStatement
+module.exports = Range
