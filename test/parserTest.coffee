@@ -25,3 +25,9 @@ describe 'The parser', ->
          program = parse tokens
          program.toString().should.equal expectedAST.countdown
          done()
+
+   it 'correctly parse the hello world program', (done) ->
+      scan 'test/data/good-programs/helloworld.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.helloworld
+         done()
