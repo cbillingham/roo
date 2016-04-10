@@ -19,3 +19,9 @@ describe 'The parser', ->
          program = parse tokens
          program.toString().should.equal expectedAST.gcd
          done()
+
+   it 'correctly parses the countdown program', (done) ->
+      scan 'test/data/parser/countdown.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.countdown
+         done()

@@ -1,0 +1,9 @@
+#countdown.roo
+
+fun countdown () {
+	for countdown in 10 to 1 {
+ 		print(countdown)
+	}
+}
+
+#prints 10 9 8 7 6 5 4 3 2 1 each on a newline
