@@ -3,7 +3,7 @@ class FunctionCall
   constructor: (@function, @args) ->
 
   toString: ->
-    "(Call #{@function} (#{@args.join(', ')})"
+    "(Call #{@function} (#{@args.join(', ')}))"
 
   analyze: ->
     #todo
