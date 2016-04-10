@@ -24,4 +24,6 @@ class ExpectedASTs
 
   @whileLoop = '(Program (Block (While (< x 10) (Block (Call print ("x is less than 10"))))))'
 
+  @assignmentStatements = '(Program (Block (Assign int = 4) (Assign string = "hello") (Assign boolean = true) (Assign float = 3.14159) (Assign theNull = null) (Assign list = [1, 0, 2, 3, 4]) (Assign map = {first: 1, second: 2})))'
+
 module.exports = ExpectedASTs

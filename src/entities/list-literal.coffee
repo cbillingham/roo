@@ -3,7 +3,7 @@ class ListLiteral
   constructor: (@elements) ->
 
   toString: ->
-    "[#{@elemenst.join(', ')}]"
+    "[#{@elements.join(', ')}]"
 
   analyze: ->
     #todo

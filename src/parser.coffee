@@ -368,6 +368,7 @@ parseMapLiteral = ->
     match ':'
     values.push parseExpression()
     match ',' if not at '}'
+  match '}'
   new MapLiteral(keys, values)
 
 parseListLiteral = ->

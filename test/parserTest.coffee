@@ -11,7 +11,7 @@ describe 'The parser', ->
    it 'correctly parses simple assignment statements', (done) ->
       scan 'test/data/good-programs/simple-assignment.roo', (tokens) ->
          program = parse tokens
-         program.toString().should.equal expectedAST.assignmentStatement
+         program.toString().should.equal expectedAST.assignmentStatements
          done()
 
    it 'correctly parses an empty program', (done) ->
