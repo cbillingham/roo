@@ -1,16 +1,14 @@
 class BooleanLiteral
-    constructor: (@value) ->
 
-    value: ->
-        @value
+  constructor: (@value) ->
 
-    toString: ->
-        @value
+  toString: ->
+    @value
 
-    analyze: (context) ->
-        #todo
+  analyze: (context) ->
+    #todo
 
-    optimize: -> 
-        this
+  optimize: -> 
+    this
 
 module.exports = BooleanLiteral

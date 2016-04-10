@@ -1,16 +1,14 @@
 class FloatLiteral
-    constructor: (@value) ->
 
-    value: ->
-        @value
+  constructor: (@value) ->
 
-    toString: ->
-        @value
+  toString: ->
+    @value
 
-    analyze: ->
-        #todo
+  analyze: ->
+    #todo
 
-    optimize: ->
-        this
+  optimize: ->
+    this
 
 module.exports = FloatLiteral

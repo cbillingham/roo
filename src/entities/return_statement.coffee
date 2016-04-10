@@ -3,12 +3,12 @@ class ReturnStatement
   constructor: (@expression) ->
 
   toString: ->
-     "(Return #{@expression})"
+    "(Return #{@expression})"
 
   analyze: ->
-     #TODO
+    #TODO
 
   optimize: ->
-     #TODO
+    #TODO
 
 module.exports = ReturnStatement

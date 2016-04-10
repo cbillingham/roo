@@ -2,13 +2,13 @@ class WhileLoop
 
   constructor: (@condition, @body) ->
 
-  toString: () ->
+  toString: ->
     "(While #{@condition} #{@body})"
 
   analyze: (context) ->
     #TO DO
 
-  optimize: () ->
+  optimize: ->
     #TO DO
 
 module.exports = WhileLoop

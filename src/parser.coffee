@@ -9,9 +9,35 @@ error = require './error'
 Program             = require './entities/program'
 Block               = require './entities/block'
 AssignmentStatement = require './entities/assignment-statement'
+ArgumentList        = require './entities/argument-list'
 WhileLoop           = require './entities/while-loop'
 IfStatement         = require './entities/if-statement'
 ReturnStatement     = require './entities/return-statement'
+BreakStatement      = require './entities/break-statement'
+ContinueStatement   = require './entities/continue-statement'
+ForLoop             = require './entities/for-loop'
+VariableReference   = require './entities/variable-reference'
+FunctionDeclaration = require './entities/function-declaration'
+ClassDeclaration    = require './entities/class-declaration'
+BinaryExpression    = require './entities/binary-expression'
+PreUnaryExpression  = require './entities/pre-unary-expression'
+PostUnaryExpression = require './entities/post-unary-expression'
+Range               = require './entities/range'
+FunctionCall        = require './entities/function-call'
+ObjectFieldAccess   = require './entities/object-field-access'
+CollectionAccess    = require './entities/collection-access'
+BooleanLiteral      = require './entities/boolean-literal'
+FloatLiteral        = require './entities/float-literal'
+IntegerLiteral      = require './entities/integer-literal'
+StringLiteral       = require './entities/string-literal'
+NullLiteral         = require './entities/null-literal'
+MapLiteral          = require './entities/map-literal'
+SetLiteral          = require './entities/set-literal'
+ListLiteral         = require './entities/list-literal'
+TupleLiteral        = require './entities/tuple-literal'
+ListComprehension   = require './entities/list-comprehension'
+Lambda              = require './entities/lambda'
+ObjectInstance      = require './entities/object-instance'
 
 errors
 tokens = []
@@ -235,9 +261,9 @@ parseExp7 = ->
     left = new BinaryExpression(op, left, right)
   left
 
-parseExp8 = ->
+parseExp9 = ->
   if at 'new'
-    parseObjectCreation()
+    parseObjectInstance()
   left = parseExp9()
   while at ['.','[','(']
     if at '.'
@@ -313,13 +339,18 @@ parseObjectCreation = ->
   match '('
   args = parseExpList()
   match ')'
-  new Object(classId, args)
+  new ObjectInstance(classId, args)
 
 parseMapLiteral = ->
+  keys = []
+  values = []
   match '{'
-  exps = parseExpList([],'}')
-  match '}'
-  new MapLiteral(exps)
+  while not at '}'
+    keys.push parseExp9()
+    match ':'
+    values.push parseExpression()
+    match ',' if not at '}'
+  new MapLiteral(keys, values)
 
 parseListLiteral = ->
   match '['
@@ -338,7 +369,7 @@ parseSetLiteral = ->
   match '<'
   exps = parseExpList([],'>')
   match '>'
-  new MapLiteral(exps)
+  new SetLiteral(exps)
 
 parseListComprehension = (exp) ->
   match 'for'

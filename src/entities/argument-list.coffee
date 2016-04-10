@@ -1,9 +1,9 @@
 class ArgumentList
 
-  constructor: (@op, @left, @right) ->
+  constructor: (@expressions) ->
 
   toString: ->
-    "(#{@op} #{@left} #{@right})"
+    "(#{@expressions.join(', ')})"
 
   analyze: (context) ->
     #TO DO
@@ -11,4 +11,4 @@ class ArgumentList
   optimize: ->
     #TO DO
 
-module.exports = BinaryExpression
+module.exports = ArgumentList

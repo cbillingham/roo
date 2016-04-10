@@ -1,20 +1,17 @@
 class AssignmentStatement
   
-  constructor: (@variableReference, @value, @global = false, @constant = false) ->
+  constructor: (@variableReference, @value, @global = false) ->
 
   toString: ->
-     "(Assign #{"global " if @global}#{"const " if @constant} #{@variableReference} = #{@value})"
+    "(Assign #{if @global then 'global ' else ''}#{@variableReference} = #{@value})"
   
   isGlobal: ->
     @global
 
-  isConst: ->
-    @const
-
   analyze: ->
-     #TODO
+    #TODO
 
   optimize: ->
-     #TODO
+    #TODO
 
 module.exports = AssignmentStatement

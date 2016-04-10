@@ -3,12 +3,12 @@ class Range
   constructor: (@left="start", @right="end", @step=1) ->
 
   toString: ->
-     "(Range #{@left} to #{@right} by #{@step})"
+    "(Range #{@left} to #{@right} by #{@step})"
 
   analyze: ->
-     #TODO
+    #TODO
 
   optimize: ->
-     #TODO
+    #TODO
 
 module.exports = AssignmentStatement
