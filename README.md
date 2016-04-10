@@ -1,4 +1,4 @@
-![Logo](https://raw.githubusercontent.com/cbillingham/roo/master/roo.jpg)
+![Logo](/images/roo.jpg?raw=true)
 
 A simple, curly-brace language that compiles to Javascript. Roo combines the scripting benefits of a dynamically typed language with a readable syntax that is inspired by Java and Swift. While the basic syntax of Roo is inspired by Java and Swift, Roo adds modern functionailty, such as list comprehensions, default parameters, and much more, to the programmers toolbelt.
 
@@ -30,6 +30,7 @@ print( gcd(9,3) )      # prints 3
 ```
 
 ## Syntax
+Check out a railroad diagram of our grammar here: [Roo Railroad Diagram](http://htmlpreview.github.io/?https://raw.githubusercontent.com/cbillingham/roo/master/images/RailroadDiagram.xhtml)
 ### MicroSyntax
 ```
 endofline ::= newline | $
@@ -37,11 +38,12 @@ newline   ::= [\s* (\r*\n)+]
 letter    ::= [\p{L}]
 digit     ::= [\p{Nd}]
 keyword   ::= 'global'|'if'|'else'|'for'|'while'|'break'|'continue'|'loop'|'true'
-            | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'|
-            | 'class'|'new'|'const'
+            | 'false'|'to'|'by'|'is'|'isnt'|'in'|'and'|'or'|'insist'|'return'|'null'
+            | 'class'|'new'
 id        ::= letter(letter|digit|_)*
 intlit    ::= digit+
 floatlit  ::= digit* '.' digit+
+assignop  ::= '='|'+='|'-='|'*='|'/='|'%='
 relop     ::= '<'|'<='|'=='|'is'|'!='|'isnt'|'>='|'>'
 addop     ::= '+'|'-'
 mulop     ::= '*'|'/'|'%'|'//'
@@ -50,7 +52,7 @@ prefixop  ::= '!'|'-'
 postfixop ::= '++'|'--'
 boollit   ::= 'true'|'false'
 char      ::= [^\p{Cc}'"\\] | [\\] [rnst'"\\]
-stringlit ::= ('"' char* '"') | (\x27 char* \x27)
+stringlit ::= ('"' char* '"') | ("'" char* "'")
 nulllit   ::= 'null'
 skip      ::= [\x09-\x0d \u2028\u2029\p{Zs}] | comment
 comment   ::= '#' [^\n]* newline
@@ -58,42 +60,59 @@ comment   ::= '#' [^\n]* newline
 ```
 ### MacroSyntax
 ```
-Program      ::= Block
-Block        ::= (Stmt endofline)*
-Stmt         ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp | AssignStmt
-               | ReturnStmt | BreakStmt | ContinueStmt
-AssignStmt   ::= 'global'? id '=' Exp | Increment
-Increment    ::= Var postfixop
+Program       ::= Block
+Block         ::= (Stmt? endofline)*
+Stmt          ::= WhileLoop | IfStmt | Loop | ForLoop | Dec | Exp
+                | ReturnStmt | BreakStmt | ContinueStmt
 
-Dec          ::= VarDec | FunDec | ObjectDec
-VarDec       :: 'global'? id '=' Exp
-FunDec       ::= 'fun' id Params Body
-Params       ::= '(' IdList ')'
-IdList       ::= id (',' id)*
-ObjectDec    ::= 'class' id Body
+Dec           ::= AssignStmt | FunDec | ObjectDec
+AssignStmt    ::= 'global'? Var assignop Exp | Increment
+Increment     ::= Var postfixop
+FunDec        ::= 'fun' id Params Body
+Params        ::= '(' (Param (',' Param)*)? ')'
+Param         ::= id '=' Exp | id
+ObjectDec     ::= 'class' id Body
 
-Loop         ::= 'loop' Body
-WhileLoop    ::= 'while' Exp Body
-ForLoop      ::= 'for' Exp Body
-IfStmt       ::= 'if' Exp Body (ElseIfStmt)* ElseSmt?
-ElseIfStmt   ::= 'else if' Exp Body
-ElseStmt     ::= 'else' Body
-BreakStmt    ::= 'break'
-ContinueStmt ::= 'continue'
-ReturnStmt   ::= 'return' Exp
+Loop          ::= 'loop' Body
+WhileLoop     ::= 'while' Exp Body
+ForLoop       ::= 'for' Exp Body
+IfStmt        ::= 'if' Exp Body (ElseIfStmt)* ElseSmt?
+ElseIfStmt    ::= 'else if' Exp Body
+ElseStmt      ::= 'else' Body
+BreakStmt     ::= 'break'
+ContinueStmt  ::= 'continue'
+ReturnStmt    ::= 'return' Exp
 
-Body         ::= '{' Block? '}'
-Exp          ::= Exp1 (( 'or' | 'and' | '||' | '&&' ) Exp1)*
-Exp1         ::= Exp2 (relop Exp2)?
-Exp2         ::= Exp3 (addop Exp3)*
-Exp3         ::= Exp4 (mulop Exp4)*
-Exp4         ::= Exp5 (expop Exp5)*
-Exp5         ::= PrefixOp? Exp6
-Exp6         ::= Literal | AssignStmt | Var | '('Exp')'
-Literal      ::= nulllit | boollit | intlit | floatlit | stringlit
-Var          ::= id | FunCall | Var '[' Exp ']' | Var '.' id
-FunCall      ::= id '(' ExpList ')'
-ExpList      ::= (Exp (',' Exp)*)?
+Body          ::= '{' Block? '}'
+Exp           ::= Exp1 (( 'or' | '||' ) Exp1)*
+Exp1          ::= Exp2 (( 'and' | '&&' ) Exp2)*
+Exp2          ::= Exp3 (relop Exp3)?
+Exp3          ::= Range | Exp4
+Range         ::= Exp4 'to' Exp4 step?
+                | Exp4 '..' step?
+                | '..' Exp4 step?
+Step          ::= 'by' Exp4
+Exp4          ::= Exp5 (addop Exp5)*
+Exp5          ::= Exp6 (mulop Exp6)*
+Exp6          ::= PrefixOp? Exp7
+Exp7          ::= Exp8 (expop Exp8)?
+Exp8          ::= ObjectCreation | Var | Exp9
+Exp9          ::= Literal | '(' Exp ')' | Lambda | Comprehension
+
+Literal       ::= nulllit | boollit | intlit | floatlit | stringlit
+                | TupleLit | ListLit | SetLit | MapLit
+Var           ::= id ( '[' Exp ']' | '.' id | '(' ExpList ')' )*
+ExpList       ::= Exp (',' Exp)*
+Lambda        ::= Params '->' Body
+Comprehension ::= '[' Exp 'for' id 'in' Exp ']'
+ObjCreation   ::= 'new' Var '(' ExpList ')'
+TupleLit      ::= '(' TupleList? ')'
+TupleList     ::= Exp ',' (Exp (',' Exp)* ','?)?
+ListLit       ::= '[' ExpList? ']'
+SetLit        ::= '<' ExpList? '>'
+MapLit        ::= '{' BindingList? '}'
+BindingList   ::= Binding (',' Binding)*
+Binding       ::= endofline? id ':' Exp endofline?
 ```
 
 ## Features
@@ -120,12 +139,6 @@ x
 y = 3
 z = "hello"
 ```
-If you would like to create an immutable variable, just use const or final.
-
-```
-const ONE = 1
-```
-
 ### Types
 Roo has the following built-in primitive types:
 
@@ -234,7 +247,7 @@ for person in people {
 If you need the index as well just use the built in enumerate function.
 
 ```
-for (index, person) in enumerate(people) {
+for index, person in enumerate(people) {
   setAge(person, 8+index)
 }
 ```
