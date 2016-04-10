@@ -96,17 +96,16 @@ Exp4          ::= Exp5 (addop Exp5)*
 Exp5          ::= Exp6 (mulop Exp6)*
 Exp6          ::= PrefixOp? Exp7
 Exp7          ::= Exp8 (expop Exp8)?
-Exp8          ::= Object | Var | Exp9
-Exp9          ::= Literal | '(' Exp ')' | Lambda | Comprehension | ObjCreation
+Exp8          ::= ObjectCreation | Var | Exp9
+Exp9          ::= Literal | '(' Exp ')' | Lambda | Comprehension
 
 Literal       ::= nulllit | boollit | intlit | floatlit | stringlit
                 | TupleLit | ListLit | SetLit | MapLit
 Var           ::= id ( '[' Exp ']' | '.' id | '(' ExpList ')' )*
-Object        ::= 'new' Var
 ExpList       ::= Exp (',' Exp)*
 Lambda        ::= Params '->' Body
 Comprehension ::= '[' Exp 'for' id 'in' Exp ']'
-ObjCreation   ::= 'new' id '(' ExpList ')'
+ObjCreation   ::= 'new' Var '(' ExpList ')'
 TupleLit      ::= '(' TupleList? ')'
 TupleList     ::= Exp ',' (Exp (',' Exp)* ','?)?
 ListLit       ::= '[' ExpList? ']'
