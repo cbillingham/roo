@@ -41,10 +41,10 @@ ObjectInstance      = require './entities/object-instance'
 
 errors = []
 tokens = []
-startTokenTypes = ["fun","global","if","else","for","while","break","continue","return",
+startTokenTypes = ["fun","global","if","for","while","break","continue","return",
                    "loop","class","insist","nulllit","boollit","intlit","!","-","{","("
                    "floatlit","stringlit","maplit","setlit","listlit","tuplelit","new"
-                   "<","["]
+                   "<","[","id"]
 
 module.exports = (scannerOutput) ->
   tokens = scannerOutput
@@ -63,6 +63,9 @@ parseBlock = ->
     if at 'EOF'
       break
     statements.push parseStatement()
+    while at 'EOL'
+      match 'EOL'
+    break unless at startTokenTypes
   new Block(statements)
 
 parseStatement = ->
@@ -78,8 +81,13 @@ parseStatement = ->
     parseContinueStatement()
   else if at 'break'
     parseBreakStatement()
-  else if at ['global','id']
+  else if at 'global'
     parseAssignmentStatement()
+  else if at 'id'
+    if nextIs '='
+      parseAssignmentStatement
+    else
+      parseExpression()
   else if at 'fun'
     parseFunDec()
   else if at 'class'
@@ -117,7 +125,6 @@ parseBody = ->
   match '{'
   body = parseBlock()
   match '}'
-  match 'EOL'
   body
 
 parseReturnStatement = ->
@@ -178,7 +185,8 @@ parseParams = ->
       exp = parseExpression()
       id = new AssignmentStatement(id, exp)
     params.push id
-    match ','
+    match ',' if not at ')'
+  match ')'
   params
 
 parseClassDec = ->
@@ -217,17 +225,27 @@ parseExp3 = ->
   if at '..'
     match()
     right = parseExp4()
+    if at 'by'
+      match()
+      step = parseExp4()
+    return new Range(left, right, step)
   else
     left = parseExp4()
     if at '..'
       match
+      if at 'by'
+        match()
+        step = parseExp4()
+      left = new Range(left, right, step)
     else if at 'to'
       match()
       right = parseExp4()
-  if at 'by'
-    match()
-    step = parseExp4()
-  new Range(left, right, step)
+      if at 'by'
+        match()
+        step = parseExp4()
+      left = new Range(left, right, step)
+    left
+      
 
 parseExp4 = ->
   left = parseExp5()
@@ -261,7 +279,7 @@ parseExp7 = ->
     left = new BinaryExpression(op, left, right)
   left
 
-parseExp9 = ->
+parseExp8 = ->
   if at 'new'
     parseObjectInstance()
   left = parseExp9()
@@ -386,6 +404,14 @@ at = (kind) ->
     kind.some(at)
   else
     kind is tokens[0].kind
+
+nextIs = (kind) ->
+  if tokens.length < 2
+    false
+  else if Array.isArray kind
+    kind.some(at)
+  else
+    kind is tokens[1].kind
 
 match = (kind) ->
   if tokens.length is 0

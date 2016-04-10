@@ -5,7 +5,7 @@ class IfStatement
 
   toString: ->
     s = "If #{@conditions[0]} #{@bodies[0]}"
-    for condition, body in _.zip(conditions[1..], bodies[1..])
+    for [condition, body] in _.zip(@conditions[1..], @bodies[1..])
       if condition?
         s = s.concat " else if #{condition} #{body}"
       else
