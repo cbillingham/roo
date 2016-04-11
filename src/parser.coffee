@@ -63,6 +63,7 @@ parseBlock = ->
     if at 'EOF'
       break
     statements.push parseStatement()
+    match 'EOL'
     while at 'EOL'
       match 'EOL'
     break unless at startTokenTypes
@@ -324,7 +325,8 @@ parseExp9 = ->
   else if at '{'
     parseMapLiteral()
   else if at '('
-    if isLambda
+    if isLambda()
+      console.log "+++++++++++++++++++++++++++++++++"
       return parseLambdaExp()
     match '('
     if at ')'
@@ -342,7 +344,7 @@ parseExp9 = ->
 parseExpList = (exps = [], end = ')') ->
   while not at end
     exps.push parseExpression()
-    match ',' if not at end
+    if at ',' then match ',' else break
   exps
 
 parseLambdaExp = ->

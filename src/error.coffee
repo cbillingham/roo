@@ -11,7 +11,10 @@
 
 error = (message, location) ->
   if location and location.line
-    message += " at line #{location.line}"
+    if location.kind is 'EOL'
+      message+= " at end of line #{location.line}"
+    else
+      message += " at line #{location.line}"
     if location.col
       message += ", column #{location.col}"
   if not error.quiet
