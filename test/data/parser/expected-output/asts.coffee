@@ -26,4 +26,19 @@ class ExpectedASTs
 
   @assignmentStatements = '(Program (Block (Assign int = 4) (Assign string = "hello") (Assign boolean = true) (Assign float = 3.14159) (Assign theNull = null) (Assign list = [1, 0, 2, 3, 4]) (Assign map = {first: 1, second: 2})))'
 
+  @fibonacci = '(Program (Block
+    (Function fibonacci (max)
+      (Block
+        (Assign a = 0)
+        (Assign b = 1)
+        f
+        (For (Range 1 to max by 1)
+          (Block
+            (Assign f = (+ a b))
+            (Assign a = b)
+            (Assign b = f)))
+        (Return f)))
+    (Call print
+      ((Call fibonacci (5))))))'
+
 module.exports = ExpectedASTs

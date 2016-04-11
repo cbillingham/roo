@@ -37,3 +37,11 @@ describe 'The parser', ->
          program = parse tokens
          program.toString().should.equal expectedAST.whileLoop
          done()
+
+   it 'correctly parses the fibonacci program', (done) ->
+      scan 'test/data/parser/fibonacci.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.fibonacci
+         done()
+
+
