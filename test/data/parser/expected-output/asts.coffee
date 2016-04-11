@@ -23,7 +23,7 @@ class ExpectedASTs
            (Call print (countdown))))))))'
 
   @helloworld = '(Program (Block
-    (Call print (hello world))))'
+    (Call print ("hello world"))))'
 
     
 

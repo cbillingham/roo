@@ -85,7 +85,7 @@ parseStatement = ->
     parseAssignmentStatement()
   else if at 'id'
     if nextIs '='
-      parseAssignmentStatement
+      parseAssignmentStatement()
     else
       parseExpression()
   else if at 'fun'
