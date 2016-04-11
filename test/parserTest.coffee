@@ -44,4 +44,10 @@ describe 'The parser', ->
          program.toString().should.equal expectedAST.fibonacci
          done()
 
+   it 'correctly parses the anonymous function', (done) ->
+      scan 'test/data/parser/anonymousFunction.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.anonymousFun
+         done()
+
 

@@ -41,4 +41,21 @@ class ExpectedASTs
     (Call print
       ((Call fibonacci (5))))))'
 
+  @anonymousFun = '(Program (Block 
+    (Function add (b) 
+      (Block
+        (Return ((a) -> (Block (Return (+ a b)))))))
+    (Assign add5 = (Call add (5)))))'
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = ExpectedASTs

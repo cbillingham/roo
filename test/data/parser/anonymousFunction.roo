@@ -1,0 +1,7 @@
+#anonymous function
+
+fun add(b) {
+  return (a) -> {return a+b} 
+}
+
+add5 = add(5)
