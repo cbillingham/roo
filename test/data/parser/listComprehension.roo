@@ -1,0 +1,17 @@
+#List Ranges, Comprehensions, and Slices
+         
+#same as saying [0,1,2,3]
+x = [0 to 3]    
+
+l = ['hi','bye', 1, 3]
+
+# y = ['hi','bye']
+y = l[0 to 1]            
+
+# z = ['hi',1]   
+z = l[0 to 2 by 2]          
+
+n = [0,1,2,3]
+
+# y = [0,2,4,6]
+y = [x*2 for x in l]        

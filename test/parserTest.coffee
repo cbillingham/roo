@@ -50,4 +50,10 @@ describe 'The parser', ->
          program.toString().should.equal expectedAST.anonymousFun
          done()
 
+   it 'correctly parses the list comprehension program', (done) ->
+      scan 'test/data/parser/listComprehension.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.listComprehension
+         done()
+
 
