@@ -170,7 +170,7 @@ b = (1,2,3)                # tuples are ordered and immutable
 
 c = <1,2,3>                # sets are unordered and mutable
 
-d = [x:1, y:2, z:3]        # maps are a mutable collection of key-value pairs
+d = {x:1, y:2, z:3}        # maps are a mutable collection of key-value pairs
 ```
 #### List Ranges, Comprehensions, and Slices
 Roo adds modern list functionality to make your code more readable and easier to write.
