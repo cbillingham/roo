@@ -24,7 +24,7 @@ class ExpectedASTs
 
   @whileLoop = '(Program (Block (While (< x 10) (Block (Call print ("x is less than 10"))))))'
 
-  @assignmentStatements = '(Program (Block (Assign int = 4) (Assign string = "hello") (Assign boolean = true) (Assign float = 3.14159) (Assign theNull = null) (Assign list = [1, 0, 2, 3, 4]) (Assign map = {first: 1, second: 2})))'
+  @assignmentStatements = '(Program (Block (Assign int = 4) (Assign string = "hello") (Assign boolean = true) (Assign float = 3.14159) (Assign theNull = null) (Assign list = [1, 2, 3, 4]) (Assign map = {first: 1, second: 2})))'
 
   @fibonacci = '(Program (Block
     (Function fibonacci (max)
@@ -52,16 +52,21 @@ class ExpectedASTs
     (Assign l = ["hi", "bye", 1, 3])
     (Assign y = ([] l (Range 0 to 1 by 1)))
     (Assign z = ([] l (Range 0 to 2 by 2)))
-    (Assign n = [0,1,2,3])
-    (Assign y = [(* x 2) for x in l])))'
+    (Assign n = [0, 1, 2, 3])
+    (Assign y = [(* x 2) for x in n])))'
 
-
-# (Assign y = l[(Range 0 to 1 by 1)])
-# (Assign z = l[(Range 0 to 2 by 2)])
-
-
-
-
+  @collections = '(Program (Block
+    []
+    [1, 2, 3, 4]
+    <>
+    <1, 2, 3, 4>
+    {}
+    {x: 1, y: 2}
+    ()
+    1
+    (1,)
+    (1, 2, 3)
+    (1, 2, 3)))'
 
 
 

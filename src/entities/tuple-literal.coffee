@@ -1,9 +1,12 @@
 class TupleLiteral
 
-  constructor: (@elements) ->
+  constructor: (@elements=[]) ->
 
   toString: ->
-    "(#{@elemenst.join(', ')})"
+    if @elements.length is 1
+      return "(#{@elements[0]},)"
+    else
+      "(#{@elements.join(', ')})"
 
   analyze: ->
 

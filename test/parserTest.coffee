@@ -56,4 +56,10 @@ describe 'The parser', ->
          program.toString().should.equal expectedAST.listComprehension
          done()
 
+   it 'correctly parses collection literals', (done) ->
+      scan 'test/data/parser/collections.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.collections
+         done()
+
 

@@ -2,7 +2,7 @@ _ = require 'underscore'
 
 class MapLiteral
 
-  constructor: (@keys, @values) ->
+  constructor: (@keys=[], @values=[]) ->
 
   toString: ->
     '{' + _.zip(@keys, @values).map((val) ->
