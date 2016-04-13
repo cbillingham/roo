@@ -55,14 +55,16 @@ module.exports = (scannerOutput) ->
 parseProgram = ->
   new Program(parseBlock())
 
-parseBlock = ->
+parseBlock = (body = false) ->
   statements= []
   loop
     while at 'EOL'
       match 'EOL'
-    if at 'EOF'
+    if at 'EOF' or (body and at '}')
       break
     statements.push parseStatement()
+    if (body and at '}')
+      break
     match 'EOL'
     while at 'EOL'
       match 'EOL'
@@ -124,7 +126,7 @@ parseWhileLoop = ->
 
 parseBody = ->
   match '{'
-  body = parseBlock()
+  body = parseBlock(body = true)
   match '}'
   body
 
