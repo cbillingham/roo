@@ -37,3 +37,15 @@ describe 'The parser', ->
          program = parse tokens
          program.toString().should.equal expectedAST.whileLoop
          done()
+
+   it 'correctly parses object instantiation', (done) ->
+      scan 'test/data/good-programs/object-instantiation.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.objects
+         done()
+
+   it 'correctly parses lambda functions', (done) ->
+      scan 'test/data/good-programs/lambda.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.lambdas
+         done()
