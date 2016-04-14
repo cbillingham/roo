@@ -1,0 +1,4 @@
+#prefixops
+
+t = !false
+f = !true

@@ -84,9 +84,6 @@ describe 'The parser', ->
       scan 'test/data/parser/forLoop.roo', (tokens) ->
          program = parse tokens
          program.toString().should.equal expectedAST.forLoop
-<<<<<<< Updated upstream
-         done()
-=======
          done()
 
    it 'correctly parses the order of operations in the correct order', (done) ->
@@ -95,5 +92,14 @@ describe 'The parser', ->
          program.toString().should.equal expectedAST.orderOfOperations
          done()
 
+   it 'correctly parses the prefix ops', (done) ->
+         scan 'test/data/parser/prefixOp.roo', (tokens) ->
+            program = parse tokens
+            program.toString().should.equal expectedAST.prefixOp
+            done()
 
->>>>>>> Stashed changes
+   it 'correctly parses the postfix ops', (done) ->
+         scan 'test/data/parser/prefixOp.roo', (tokens) ->
+            program = parse tokens
+            program.toString().should.equal expectedAST.postfixOp
+            done()

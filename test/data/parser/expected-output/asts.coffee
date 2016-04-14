@@ -105,6 +105,16 @@ class ExpectedASTs
         (() -> (Block (Return 3)))
         (() -> (Block()))
         ((x, y, z, a) -> (Block (Return 3)))))'
+  
+  @prefixOp = '(Program (Block 
+    (Assign t = (! false))
+    (Assign f = (! true))))'
+
+  @postfixOp = '(Program (Block 
+    (Assign a = 1)
+    (a ++)
+    (Assign b = 2)
+    (b --)))'
 
   @orderOfOperations = '(Program (Block 
     (Assign a = (+ (* 2 10) (* 5 (/ 6 2))))

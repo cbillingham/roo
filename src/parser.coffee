@@ -95,7 +95,7 @@ parseStatement = ->
   else if at 'class'
     parseClassDec()
   else
-    parseExpression()
+    parseExpression(
 
 parseAssignmentStatement = ->
   if at 'global'
