@@ -49,3 +49,39 @@ describe 'The parser', ->
          program = parse tokens
          program.toString().should.equal expectedAST.lambdas
          done()
+
+   it 'correctly parses the fibonacci program', (done) ->
+      scan 'test/data/parser/fibonacci.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.fibonacci
+         done()
+
+   it 'correctly parses the anonymous function', (done) ->
+      scan 'test/data/parser/anonymousFunction.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.anonymousFun
+         done()
+
+   it 'correctly parses the list comprehension program', (done) ->
+      scan 'test/data/parser/listComprehension.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.listComprehension
+         done()
+
+   it 'correctly parses collection literals', (done) ->
+      scan 'test/data/parser/collections.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.collections
+         done()
+
+   it 'correctly parses map literals', (done) ->
+      scan 'test/data/parser/mapLiterals.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.mapLiterals
+         done()
+
+   it 'correctly parses for loops', (done) ->
+      scan 'test/data/parser/forLoop.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.forLoop
+         done()

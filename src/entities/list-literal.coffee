@@ -1,6 +1,6 @@
 class ListLiteral
 
-  constructor: (@elements) ->
+  constructor: (@elements=[]) ->
 
   toString: ->
     "[#{@elements.join(', ')}]"

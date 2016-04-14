@@ -42,9 +42,11 @@ ObjectInstance      = require './entities/object-instance'
 errors = []
 tokens = []
 startTokenTypes = ["fun","global","if","for","while","break","continue","return",
-                   "loop","class","insist","nulllit","boollit","intlit","!","-","{","("
-                   "floatlit","stringlit","maplit","setlit","listlit","tuplelit","new"
-                   "<","[","id"]
+                   "loop","class","insist","nulllit","boollit","intlit","!","-","{","(",
+                   "floatlit","stringlit","new","<","[","id"]
+
+startExpTypes = ["nulllit","boollit","intlit","!","-","{","(","floatlit","stringlit",
+                 "new","<","id"]
 
 module.exports = (scannerOutput) ->
   tokens = scannerOutput
@@ -213,7 +215,7 @@ parseExp1 = ->
 
 parseExp2 = ->
   left = parseExp3()
-  if at ['<','>','<=','>=','==','!=','is','isnt']
+  if (at ['<','>','<=','>=','==','!=','is','isnt']) and (nextIs startExpTypes)
     op = match().lexeme
     right = parseExp3()
     left = new BinaryExpression(op, left, right)
@@ -324,10 +326,11 @@ parseExp9 = ->
   else if at '{'
     parseMapLiteral()
   else if at '('
-    if isLambda
+    if isLambda()
       return parseLambdaExp()
     match '('
     if at ')'
+      match()
       return new TupleLiteral()
     else
       exp = parseExpression()
@@ -337,11 +340,13 @@ parseExp9 = ->
       match ')'
     exp
   else
+    console.log tokens[0], tokens[1]
     error 'Illegal start of expression', tokens[0]
 
 parseExpList = (exps = [], end = ')') ->
   while not at end
-    exps.push parseExpression()
+    exp = parseExpression()
+    exps.push exp
     match ',' if not at end
   exps
 
@@ -374,12 +379,14 @@ parseMapLiteral = ->
 parseListLiteral = ->
   match '['
   if at ']'
+    match()
     return new ListLiteral()
   else
     exp = parseExpression()
     if at 'for'
       parseListComprehension(exp)
     else
+      match ',' if at ','
       exps = parseExpList([exp],']')
       match ']'
       new ListLiteral(exps)
@@ -410,7 +417,7 @@ nextIs = (kind) ->
   if tokens.length < 2
     false
   else if Array.isArray kind
-    kind.some(at)
+    kind.some(nextIs)
   else
     kind is tokens[1].kind
 
@@ -426,8 +433,8 @@ isLambda = ->
   parens = 0
   pos = 0
   for token in tokens
-    parens++ if tokens.kind is '('
-    parens-- if tokens.kind is ')'
+    parens++ if token.kind is '('
+    parens-- if token.kind is ')'
     pos++
     break if parens is 0
   tokens[pos].kind is '->'
