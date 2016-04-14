@@ -99,7 +99,7 @@ describe 'The parser', ->
             done()
 
    it 'correctly parses the postfix ops', (done) ->
-         scan 'test/data/parser/prefixOp.roo', (tokens) ->
+         scan 'test/data/parser/postfixOp.roo', (tokens) ->
             program = parse tokens
             program.toString().should.equal expectedAST.postfixOp
             done()
