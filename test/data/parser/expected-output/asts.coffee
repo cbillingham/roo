@@ -105,4 +105,18 @@ class ExpectedASTs
         (() -> (Block (Return 3)))
         (() -> (Block()))
         ((x, y, z, a) -> (Block (Return 3)))))'
+
+  @orderOfOperations = '(Program (Block 
+    (Assign a = (+ (* 2 10) (* 5 (/ 6 2))))
+    (Assign b = (+ (* (/ 12 4) 3) 10))
+    (Assign c = (+ (* 1 (+ (* (- 4 7) 2) (/ 4 2))) (/ 16 4)))
+    (Assign d = (/ (+ 5 5) 2))
+    (Assign e = (/ (* (** 5 5) 5) 5))
+    (Assign f = (+ (* 1 (+ (* (- 4 7) 2) (/ 4 2))) (** 16 4)))
+    (Assign g = (* (/ 20 4) (** 2 3)))
+    (Assign h = (> (/ 20 4) (** 2 3)))
+    (Assign i = (< (+ 2 (/ 10 5)) (+ 5 4)))
+    (Assign j = (< (/ (+ 5 5) 2) (** 5 (+ 5 (/ 4 2)))))
+    (Assign k = (< (/ (+ 5.143 5.0532) 2) (** 5 (+ 5.353 (/ 4 2.657)))))))'
+
 module.exports = ExpectedASTs

@@ -84,4 +84,16 @@ describe 'The parser', ->
       scan 'test/data/parser/forLoop.roo', (tokens) ->
          program = parse tokens
          program.toString().should.equal expectedAST.forLoop
+<<<<<<< Updated upstream
          done()
+=======
+         done()
+
+   it 'correctly parses the order of operations in the correct order', (done) ->
+      scan 'test/data/parser/orderOfOps.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.orderOfOperations
+         done()
+
+
+>>>>>>> Stashed changes
