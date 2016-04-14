@@ -73,6 +73,16 @@ class ExpectedASTs
     (Assign b = {x: "hey", y: "whatsup", z: "hello"})
     (Assign c = {a: 7.274482, b: "hi", c: "1738"})))'
 
+  @forLoop = '(Program (Block
+    (Assign people = ["jack", "jill"])
+    (For people
+      (Block 
+        (Call goUpTheHill (person))))
+    (Assign count = 8)
+    (For (Range 1 to count by 2)
+      (Block 
+        (Assign x = (/ x y))))))'
+
 
 
 module.exports = ExpectedASTs

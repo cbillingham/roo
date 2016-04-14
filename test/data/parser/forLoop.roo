@@ -1,0 +1,12 @@
+#for loop 
+
+people = ["jack", "jill"]
+
+for person in people {
+  goUpTheHill(person)
+}
+
+count = 8                          
+for 1 to count by 2 {                
+  x = x/y                           
+}                                    

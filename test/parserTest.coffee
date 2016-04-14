@@ -68,4 +68,10 @@ describe 'The parser', ->
          program.toString().should.equal expectedAST.mapLiterals
          done()
 
+   it 'correctly parses for loops', (done) ->
+      scan 'test/data/parser/forLoop.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.forLoop
+         done()
+
 
