@@ -281,7 +281,7 @@ parseExp7 = ->
 
 parseExp8 = ->
   if at 'new'
-    parseObjectInstance()
+    parseObjectCreation()
   left = parseExp9()
   while at ['.','[','(']
     if at '.'
@@ -356,7 +356,7 @@ parseObjectCreation = ->
   classId = new VariableReference(match 'id')
   match '('
   args = parseExpList()
-  match ')'
+  match ')'   
   new ObjectInstance(classId, args)
 
 parseMapLiteral = ->
