@@ -68,6 +68,11 @@ class ExpectedASTs
     (1, 2, 3)
     (1, 2, 3)))'
 
+  @mapLiterals = '(Program (Block
+    (Assign a = {x: 1, y: 2, z: 3})
+    (Assign b = {x: "hey", y: "whatsup", z: "hello"})
+    (Assign c = {a: 7.274482, b: "hi", c: "1738"})))'
+
 
 
 module.exports = ExpectedASTs

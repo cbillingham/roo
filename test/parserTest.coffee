@@ -62,4 +62,10 @@ describe 'The parser', ->
          program.toString().should.equal expectedAST.collections
          done()
 
+   it 'correctly parses map literals', (done) ->
+      scan 'test/data/parser/mapLiterals.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.mapLiterals
+         done()
+
 
