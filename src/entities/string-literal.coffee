@@ -5,7 +5,6 @@ class StringLiteral
   toString: ->
     "\"#{@value}\""
 
-
   analyze: (context) ->
     #todo
 
