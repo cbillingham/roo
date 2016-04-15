@@ -16,7 +16,7 @@ checkFileForErrors = (name) ->
     file = path.join(SYNTAX_ERROR_DIR, name)
     scan file, (tokens) ->
       priorErrorCount = error.count
-      parse tokens
+      program = parse tokens
       error.count.should.be.above priorErrorCount
       done()
 
