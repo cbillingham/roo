@@ -1,0 +1,15 @@
+#fibonacci.roo
+
+fun fibonacci (max) {
+	a = 0
+	b = 1
+	f 
+    for 1 to max by 1 {
+        f = a + b
+        a = b
+        b = f
+    }
+    return f
+}
+
+print(fibonacci(5))

@@ -42,9 +42,12 @@ ObjectInstance      = require './entities/object-instance'
 errors = []
 tokens = []
 startTokenTypes = ["fun","global","if","for","while","break","continue","return",
-                   "loop","class","insist","nulllit","boollit","intlit","!","-","{","("
-                   "floatlit","stringlit","maplit","setlit","listlit","tuplelit","new"
-                   "<","[","id"]
+                   "loop","class","insist","nulllit","boollit","intlit","!","-","{","(",
+                   "floatlit","stringlit","new","<","[","id"]
+
+startExpTypes = ["nulllit","boollit","intlit","!","-","{","(","floatlit","stringlit",
+                 "new","<","id"]
+assignOps = ['=','%=','*=','/=','+=','-=','++','--']
 
 module.exports = (scannerOutput) ->
   tokens = scannerOutput
@@ -56,11 +59,11 @@ parseProgram = ->
   new Program(parseBlock())
 
 parseBlock = (body = false) ->
-  statements= []
+  statements = []
   loop
     while at 'EOL'
       match 'EOL'
-    if at 'EOF' or (body and at '}')
+    if (at 'EOF') or (body and at '}')
       break
     statements.push parseStatement()
     if (body and at '}')
@@ -87,7 +90,7 @@ parseStatement = ->
   else if at 'global'
     parseAssignmentStatement()
   else if at 'id'
-    if nextIs '='
+    if isAssignment()
       parseAssignmentStatement()
     else
       parseExpression()
@@ -102,9 +105,9 @@ parseAssignmentStatement = ->
   if at 'global'
     match()
     global = true
-  identifier = new VariableReference(match 'id')
+  identifier = parseVariable()
   if at ['++','--']
-    return new PostUnaryExpression(identifier, match().lexeme)
+    return new PostUnaryExpression(match().lexeme, identifier)
   if at ['%=','*=','/=','+=','-=']
     op = match().lexeme[0]
     right = parseExpression()
@@ -113,6 +116,40 @@ parseAssignmentStatement = ->
     match '='
     value = parseExpression()
   new AssignmentStatement(identifier, value, global)
+
+parseVariable = ->
+  id = new VariableReference(match 'id')
+  while at ['.','[']
+    if at '.'
+      match()
+      right = new VariableReference(match 'id')
+      id = new ObjectFieldAccess(id, right)
+    if at '['
+      match()
+      right = parseExpression()
+      match ']'
+      id = new CollectionAccess(id, right)
+  id
+
+isAssignment = ->
+  pos = 1
+  brackets = 0
+  while (tokens[pos].kind in ['.','['])
+    if tokens[pos].kind is '['
+      loop
+        if at 'EOL'
+          return false
+        brackets++ if tokens[pos].kind is '['
+        brackets-- if tokens[pos].kind is ']'
+        pos++
+        break if brackets is 0
+    else if tokens[pos].kind is '.'
+      pos++
+      if tokens[pos].kind isnt 'id'
+        return false
+      pos++
+  return (tokens[pos].kind in assignOps)
+
   
 parseWhileLoop = ->
   if at 'loop'
@@ -216,7 +253,7 @@ parseExp1 = ->
 
 parseExp2 = ->
   left = parseExp3()
-  if at ['<','>','<=','>=','==','!=','is','isnt']
+  if (at ['<','>','<=','>=','==','!=','is','isnt']) and (nextIs startExpTypes)
     op = match().lexeme
     right = parseExp3()
     left = new BinaryExpression(op, left, right)
@@ -284,12 +321,12 @@ parseExp7 = ->
 
 parseExp8 = ->
   if at 'new'
-    parseObjectInstance()
+    return parseObjectCreation()
   left = parseExp9()
   while at ['.','[','(']
     if at '.'
       match()
-      right = parseExp9()
+      right = new VariableReference(match 'id')
       left = new ObjectFieldAccess(left, right)
     if at '['
       match()
@@ -305,7 +342,7 @@ parseExp8 = ->
 
 parseExp9 = ->
   if at 'boollit'
-    value = Boolean(match().lexeme)
+    value = match().lexeme is "true"
     new BooleanLiteral(value)
   else if at 'intlit'
     value = Number(match().lexeme)
@@ -328,10 +365,10 @@ parseExp9 = ->
     parseMapLiteral()
   else if at '('
     if isLambda()
-      console.log "+++++++++++++++++++++++++++++++++"
       return parseLambdaExp()
     match '('
     if at ')'
+      match()
       return new TupleLiteral()
     else
       exp = parseExpression()
@@ -342,6 +379,12 @@ parseExp9 = ->
     exp
   else
     error 'Illegal start of expression', tokens[0]
+
+parseExpList = (exps = [], end = ')') ->
+  while not at end
+    exp = parseExpression()
+    exps.push exp
+    match ',' if not at end
 
 parseExpList = (exps = [], end = ')') ->
   while not at end
@@ -360,7 +403,7 @@ parseObjectCreation = ->
   classId = new VariableReference(match 'id')
   match '('
   args = parseExpList()
-  match ')'
+  match ')'   
   new ObjectInstance(classId, args)
 
 parseMapLiteral = ->
@@ -368,21 +411,24 @@ parseMapLiteral = ->
   values = []
   match '{'
   while not at '}'
-    keys.push parseExp9()
+    keys.push(match('id').lexeme)
     match ':'
     values.push parseExpression()
     match ',' if not at '}'
+  match '}'
   new MapLiteral(keys, values)
 
 parseListLiteral = ->
   match '['
   if at ']'
+    match()
     return new ListLiteral()
   else
     exp = parseExpression()
     if at 'for'
       parseListComprehension(exp)
     else
+      match ',' if at ','
       exps = parseExpList([exp],']')
       match ']'
       new ListLiteral(exps)
@@ -413,7 +459,7 @@ nextIs = (kind) ->
   if tokens.length < 2
     false
   else if Array.isArray kind
-    kind.some(at)
+    kind.some(nextIs)
   else
     kind is tokens[1].kind
 
@@ -429,8 +475,11 @@ isLambda = ->
   parens = 0
   pos = 0
   for token in tokens
-    parens++ if tokens.kind is '('
-    parens-- if tokens.kind is ')'
+    parens++ if token.kind is '('
+    parens-- if token.kind is ')'
     pos++
     break if parens is 0
-  tokens[pos].kind is '->'
+  if tokens[pos]?
+    tokens[pos].kind is '->'
+  else
+    false

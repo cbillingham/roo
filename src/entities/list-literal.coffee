@@ -1,9 +1,9 @@
 class ListLiteral
 
-  constructor: (@elements) ->
+  constructor: (@elements=[]) ->
 
   toString: ->
-    "[#{@elemenst.join(', ')}]"
+    "[#{@elements.join(', ')}]"
 
   analyze: ->
     #todo
