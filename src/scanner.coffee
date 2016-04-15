@@ -6,7 +6,7 @@ error     = require './error'
 LETTER = XRegExp '[\\p{L}]'
 DIGIT = XRegExp '[\\p{Nd}]'
 WORD_CHAR = XRegExp '[\\p{L}\\p{Nd}_]'
-INVALID_STR_CHAR = XRegExp '[\p{C}]'
+INVALID_STR_CHAR = XRegExp '[\\p{C}]'
 
 KEYWORDS = /^(fun|global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist|self)$/
 
@@ -85,7 +85,7 @@ scan = (line, linenumber, tokens) ->
 
       while line[pos] isnt endOfString.slice(-1)[0]
         if INVALID_STR_CHAR.test line[pos]
-          error "Illegal character: #(line[pos])", {line: linenumber, col: pos+1}
+          error "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
           pos++
         if line[pos] is '\\'
           pos++
@@ -94,7 +94,7 @@ scan = (line, linenumber, tokens) ->
             interp = true
             break
           if /[^rnst'"]/.test line[pos]
-            error "Illegal character: #(line[pos])", {line: linenumber, col: pos+1}
+            error "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
             pos++
         else
           pos++ 
@@ -161,5 +161,5 @@ scan = (line, linenumber, tokens) ->
         emit 'id', word
 
     else
-      error "Illegal character: #(line[pos])", {line: linenumber, col: pos+1}
+      error "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
       pos++
