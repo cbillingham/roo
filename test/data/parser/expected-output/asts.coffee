@@ -129,4 +129,8 @@ class ExpectedASTs
     (Assign j = (< (/ (+ 5 5) 2) (** 5 (+ 5 (/ 4 2)))))
     (Assign k = (< (/ (+ 5.143 5.0532) 2) (** 5 (+ 5.353 (/ 4 2.657)))))))'
 
+  @helloworld = '(Program (Block
+    (Call print ("hello world"))))'
+
+
 module.exports = ExpectedASTs
