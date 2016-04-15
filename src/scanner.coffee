@@ -25,7 +25,7 @@ module.exports = (filename, callback) ->
   linenumber = 0
   stream.on 'line', (line) ->
     scan line, ++linenumber, tokens
-    tokens.push {kind: 'EOL', lexeme: 'EOL'} #after every line (even blanks)
+    tokens.push {kind: 'EOL', lexeme: 'EOL', line: linenumber} #after every line (even blanks)
   stream.on 'close', () ->
     tokens.push {kind: 'EOF', lexeme: 'EOF'}
     callback tokens

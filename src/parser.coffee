@@ -55,14 +55,17 @@ module.exports = (scannerOutput) ->
 parseProgram = ->
   new Program(parseBlock())
 
-parseBlock = ->
+parseBlock = (body = false) ->
   statements= []
   loop
     while at 'EOL'
       match 'EOL'
-    if at 'EOF'
+    if at 'EOF' or (body and at '}')
       break
     statements.push parseStatement()
+    if (body and at '}')
+      break
+    match 'EOL'
     while at 'EOL'
       match 'EOL'
     break unless at startTokenTypes
@@ -85,7 +88,7 @@ parseStatement = ->
     parseAssignmentStatement()
   else if at 'id'
     if nextIs '='
-      parseAssignmentStatement
+      parseAssignmentStatement()
     else
       parseExpression()
   else if at 'fun'
@@ -123,7 +126,7 @@ parseWhileLoop = ->
 
 parseBody = ->
   match '{'
-  body = parseBlock()
+  body = parseBlock(body = true)
   match '}'
   body
 
@@ -324,7 +327,8 @@ parseExp9 = ->
   else if at '{'
     parseMapLiteral()
   else if at '('
-    if isLambda
+    if isLambda()
+      console.log "+++++++++++++++++++++++++++++++++"
       return parseLambdaExp()
     match '('
     if at ')'
@@ -342,7 +346,7 @@ parseExp9 = ->
 parseExpList = (exps = [], end = ')') ->
   while not at end
     exps.push parseExpression()
-    match ',' if not at end
+    if at ',' then match ',' else break
   exps
 
 parseLambdaExp = ->
