@@ -155,7 +155,7 @@ describe 'The scanner', ->
          i(tokens[4]).should.equal i {kind:')', lexeme:')', line:1, col:15}
          i(tokens[5]).should.equal i {kind:'+', lexeme:'+', line:1, col:15}
          i(tokens[6]).should.equal i {kind:'stringlit', lexeme:'!', line:1, col:16}
-         i(tokens[7]).should.equal i {kind:'EOL', lexeme:'EOL'}
+         i(tokens[7]).should.equal i {kind:'EOL', lexeme:'EOL', line:1}
          i(tokens[8]).should.equal i {kind:'stringlit', lexeme:'I feel so ', line:2, col:2}
          i(tokens[9]).should.equal i {kind:'+', lexeme:'+', line:2, col:2}
          i(tokens[10]).should.equal i {kind:'(', lexeme:'(', line:2, col:2}
@@ -177,11 +177,11 @@ describe 'The scanner', ->
          i(tokens[26]).should.equal i {kind:')', lexeme:')', line:2, col:53}
          i(tokens[27]).should.equal i {kind:'+', lexeme:'+', line:2, col:53}
          i(tokens[28]).should.equal i {kind:'stringlit', lexeme:'.', line:2, col:54}
-         i(tokens[29]).should.equal i {kind:'EOL', lexeme:'EOL'}
+         i(tokens[29]).should.equal i {kind:'EOL', lexeme:'EOL', line:2}
          done()
 
    it 'recognizes bad string chars', (done) ->
       startError = error.count
-      scan 'test/data/syntax-errors/bad-strings', (tokens) ->
+      scan 'test/data/scanner-errors/bad-strings', (tokens) ->
          (error.count).should.equal (startError + 2)
          done()
