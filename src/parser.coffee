@@ -330,14 +330,7 @@ parseExp9 = ->
     parseMapLiteral()
   else if at '('
     if isLambda()
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
       console.log "+++++++++++++++++++++++++++++++++"
->>>>>>> master
-=======
-      console.log "+++++++++++++++++++++++++++++++++"
->>>>>>> master
       return parseLambdaExp()
     match '('
     if at ')'
@@ -354,22 +347,17 @@ parseExp9 = ->
     console.log tokens[0], tokens[1]
     error 'Illegal start of expression', tokens[0]
 
+# parseExpList = (exps = [], end = ')') ->
+#   while not at end
+#     exp = parseExpression()
+#     exps.push exp
+#     match ',' if not at end
+
 parseExpList = (exps = [], end = ')') ->
-  while not at end
-<<<<<<< HEAD
-<<<<<<< HEAD
-    exp = parseExpression()
-    exps.push exp
-    match ',' if not at end
-=======
-    exps.push parseExpression()
-    if at ',' then match ',' else break
->>>>>>> master
-=======
-    exps.push parseExpression()
-    if at ',' then match ',' else break
->>>>>>> master
-  exps
+while not at end
+  exps.push parseExpression()
+  if at ',' then match ',' else break
+exps
 
 parseLambdaExp = ->
   params = parseParams()
