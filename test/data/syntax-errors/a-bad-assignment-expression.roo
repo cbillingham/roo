@@ -1,1 +1,2 @@
 x = while + 2
+x : int = 2
