@@ -172,6 +172,38 @@ c = <1,2,3>                # sets are unordered and mutable
 
 d = {x:1, y:2, z:3}        # maps are a mutable collection of key-value pairs
 ```
+
+You can define a class to create your own data types.
+
+```
+class CartesianPoint {
+  constructor(xCoordinate, yCoordinate) {
+    this.xCoordinate = xCoordinate
+    this.yCoordinate = yCoordinate
+  }
+  
+  translate(newXCoordinate, newYCoordinate) {
+    this.xCoordinate = newXCoordinate
+    this.yCoordinate = newYCoordinate
+  }
+  
+  toString() {
+    print('(${this.xCoordinate}, ${this.yCoordinate}')
+  }
+}
+```
+To create an instance of a class, use the new keyword.
+```
+homeCoordinate = new CartesianPoint(0,0)
+homeCoordinate.translate(7,7)  #homeCoordinate is now at (7,7)
+```
+####String Interpolation
+To compose string literals containing values from expressions, use string interpolation.
+```
+dogName = 'pluto'
+print("The dog's name is ${dogName}.") # prints "The dog's name is pluto."
+```
+
 #### List Ranges, Comprehensions, and Slices
 Roo adds modern list functionality to make your code more readable and easier to write.
 
