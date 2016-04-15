@@ -32,6 +32,7 @@ describe 'The parser', ->
          program.toString().should.equal expectedAST.countdown
          done()
 
+<<<<<<< HEAD
    it 'correctly parses a while loop program', (done) ->
       scan 'test/data/good-programs/while-loop.roo', (tokens) ->
          program = parse tokens
@@ -103,3 +104,10 @@ describe 'The parser', ->
             program = parse tokens
             program.toString().should.equal expectedAST.postfixOp
             done()
+=======
+   it 'correctly parses the hello world program', (done) ->
+      scan 'test/data/good-programs/helloworld.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.helloworld
+         done()
+>>>>>>> master

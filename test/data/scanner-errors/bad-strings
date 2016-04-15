@@ -1,0 +1,3 @@
+x = "hi \ the best"
+x = 'this not a valid \n' #this one is good
+x = 'this not a valid \\'

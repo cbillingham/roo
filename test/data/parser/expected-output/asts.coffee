@@ -22,6 +22,7 @@ class ExpectedASTs
           (Block
            (Call print (countdown))))))))'
 
+<<<<<<< HEAD
   @whileLoop = '(Program (Block (While (< x 10) (Block (Call print ("x is less than 10"))))))'
 
   @assignmentStatements = '(Program
@@ -128,5 +129,11 @@ class ExpectedASTs
     (Assign i = (< (+ 2 (/ 10 5)) (+ 5 4)))
     (Assign j = (< (/ (+ 5 5) 2) (** 5 (+ 5 (/ 4 2)))))
     (Assign k = (< (/ (+ 5.143 5.0532) 2) (** 5 (+ 5.353 (/ 4 2.657)))))))'
+=======
+  @helloworld = '(Program (Block
+    (Call print ("hello world"))))'
+
+    
+>>>>>>> master
 
 module.exports = ExpectedASTs
