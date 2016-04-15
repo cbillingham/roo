@@ -3,6 +3,8 @@ scan = require '../src/scanner'
 should = require 'should'
 error = require '../src/error'
 {inspect: i} = require 'util'
+
+error.quiet = true
   
 describe 'The scanner', ->
 
@@ -143,4 +145,43 @@ describe 'The scanner', ->
          i(tokens[16]).should.equal i {kind:'floatlit', lexeme:'.35', line:4, col:6}
          i(tokens[17]).should.equal i {kind:'EOL',lexeme:'EOL'}
          i(tokens[18]).should.equal i {kind:'EOF',lexeme:'EOF'}
+         done()
+   it 'recognizes string interpolation', (done) ->
+      scan 'test/data/token-tests/string-interpolation', (tokens) ->
+         i(tokens[0]).should.equal i {kind:'stringlit', lexeme:'Hello, ', line:1, col:2}
+         i(tokens[1]).should.equal i {kind:'+', lexeme:'+', line:1, col:2}
+         i(tokens[2]).should.equal i {kind:'(', lexeme:'(', line:1, col:2}
+         i(tokens[3]).should.equal i {kind:'id', lexeme:'name', line:1, col:11}
+         i(tokens[4]).should.equal i {kind:')', lexeme:')', line:1, col:15}
+         i(tokens[5]).should.equal i {kind:'+', lexeme:'+', line:1, col:15}
+         i(tokens[6]).should.equal i {kind:'stringlit', lexeme:'!', line:1, col:16}
+         i(tokens[7]).should.equal i {kind:'EOL', lexeme:'EOL'}
+         i(tokens[8]).should.equal i {kind:'stringlit', lexeme:'I feel so ', line:2, col:2}
+         i(tokens[9]).should.equal i {kind:'+', lexeme:'+', line:2, col:2}
+         i(tokens[10]).should.equal i {kind:'(', lexeme:'(', line:2, col:2}
+         i(tokens[11]).should.equal i {kind:'stringlit', lexeme:'so ', line:2, col:15}
+         i(tokens[12]).should.equal i {kind:'+', lexeme:'+', line:2, col:15}
+         i(tokens[13]).should.equal i {kind:'(', lexeme:'(', line:2, col:15}
+         i(tokens[14]).should.equal i {kind:'id', lexeme:'emotion', line:2, col:20}
+         i(tokens[15]).should.equal i {kind:')', lexeme:')', line:2, col:27}
+         i(tokens[16]).should.equal i {kind:'+', lexeme:'+', line:2, col:27}
+         i(tokens[17]).should.equal i {kind:'stringlit', lexeme:'', line:2, col:28}
+         i(tokens[18]).should.equal i {kind:')', lexeme:')', line:2, col:29}
+         i(tokens[19]).should.equal i {kind:'+', lexeme:'+', line:2, col:29}
+         i(tokens[20]).should.equal i {kind:'stringlit', lexeme:' today because of ', line:2, col:30}
+         i(tokens[21]).should.equal i {kind:'+', lexeme:'+', line:2, col:30}
+         i(tokens[22]).should.equal i {kind:'(', lexeme:'(', line:2, col:30}
+         i(tokens[23]).should.equal i {kind:'intlit', lexeme:'1', line:2, col:50}
+         i(tokens[24]).should.equal i {kind:'+', lexeme:'+', line:2, col:51}
+         i(tokens[25]).should.equal i {kind:'intlit', lexeme:'1', line:2, col:52}
+         i(tokens[26]).should.equal i {kind:')', lexeme:')', line:2, col:53}
+         i(tokens[27]).should.equal i {kind:'+', lexeme:'+', line:2, col:53}
+         i(tokens[28]).should.equal i {kind:'stringlit', lexeme:'.', line:2, col:54}
+         i(tokens[29]).should.equal i {kind:'EOL', lexeme:'EOL'}
+         done()
+
+   it 'recognizes bad string chars', (done) ->
+      startError = error.count
+      scan 'test/data/syntax-errors/bad-strings', (tokens) ->
+         (error.count).should.equal (startError + 2)
          done()
