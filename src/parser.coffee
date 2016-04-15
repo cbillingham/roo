@@ -331,6 +331,10 @@ parseExp9 = ->
   else if at '('
     if isLambda()
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+      console.log "+++++++++++++++++++++++++++++++++"
+>>>>>>> master
 =======
       console.log "+++++++++++++++++++++++++++++++++"
 >>>>>>> master
@@ -353,9 +357,14 @@ parseExp9 = ->
 parseExpList = (exps = [], end = ')') ->
   while not at end
 <<<<<<< HEAD
+<<<<<<< HEAD
     exp = parseExpression()
     exps.push exp
     match ',' if not at end
+=======
+    exps.push parseExpression()
+    if at ',' then match ',' else break
+>>>>>>> master
 =======
     exps.push parseExpression()
     if at ',' then match ',' else break
