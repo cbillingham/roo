@@ -354,10 +354,10 @@ parseExp9 = ->
 #     match ',' if not at end
 
 parseExpList = (exps = [], end = ')') ->
-while not at end
-  exps.push parseExpression()
-  if at ',' then match ',' else break
-exps
+  while not at end
+    exps.push parseExpression()
+    if at ',' then match ',' else break
+  exps
 
 parseLambdaExp = ->
   params = parseParams()

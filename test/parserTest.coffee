@@ -109,4 +109,3 @@ describe 'The parser', ->
          program = parse tokens
          program.toString().should.equal expectedAST.helloworld
          done()
-
