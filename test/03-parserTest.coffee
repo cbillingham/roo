@@ -109,3 +109,9 @@ describe 'The parser', ->
          program = parse tokens
          program.toString().should.equal expectedAST.helloworld
          done()
+
+   it 'correctly parses the insist statement', (done) ->
+      scan 'test/data/good-programs/insist.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.insist
+         done()

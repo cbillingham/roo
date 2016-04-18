@@ -1,0 +1,5 @@
+insist x < 4
+
+fun divide(x, y) {
+    insist x isnt 0
+}
