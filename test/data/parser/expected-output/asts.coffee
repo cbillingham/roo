@@ -132,5 +132,9 @@ class ExpectedASTs
 
   @helloworld = '(Program (Block
     (Call print ("hello world"))))'
+  
+  @insist = '(Program (Block
+    (Insist (< x 4))
+    (Function divide (x, y) (Block (Insist (isnt x 0))))))'
 
 module.exports = ExpectedASTs

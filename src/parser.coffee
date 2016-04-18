@@ -38,6 +38,7 @@ TupleLiteral        = require './entities/tuple-literal'
 ListComprehension   = require './entities/list-comprehension'
 Lambda              = require './entities/lambda'
 ObjectInstance      = require './entities/object-instance'
+InsistStatement     = require './entities/insist-statement'
 
 errors = []
 tokens = []
@@ -89,6 +90,8 @@ parseStatement = ->
     parseBreakStatement()
   else if at 'global'
     parseAssignmentStatement()
+  else if at 'insist'
+    parseInsistStatement()
   else if at 'id'
     if isAssignment()
       parseAssignmentStatement()
@@ -483,3 +486,8 @@ isLambda = ->
     tokens[pos].kind is '->'
   else
     false
+
+parseInsistStatement = =>
+  match 'insist'
+  condition = parseExpression()
+  new InsistStatement(condition);
