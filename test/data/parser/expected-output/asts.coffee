@@ -25,6 +25,9 @@ class ExpectedASTs
   @helloworld = '(Program (Block
     (Call print ("hello world"))))'
 
+  @accesses = '(Program (Block
+    (x)))'
+
     
 
 module.exports = ExpectedASTs

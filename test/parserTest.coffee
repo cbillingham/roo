@@ -31,3 +31,9 @@ describe 'The parser', ->
          program = parse tokens
          program.toString().should.equal expectedAST.helloworld
          done()
+
+   it 'correctly parses accesses', (done) ->
+      scan 'test/data/parser/accesses.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.accesses
+         done()
