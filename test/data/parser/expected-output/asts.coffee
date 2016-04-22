@@ -129,4 +129,13 @@ class ExpectedASTs
     (Assign j = (< (/ (+ 5 5) 2) (** 5 (+ 5 (/ 4 2)))))
     (Assign k = (< (/ (+ 5.143 5.0532) 2) (** 5 (+ 5.353 (/ 4 2.657)))))))'
 
+  @setBugs = '(Program (Block 
+  <1,2,3,false>
+  <6, 7, 8, 9>
+  {x: 3}
+  (1,)
+  [1, 2, false]
+  <1, 2.3, false>
+  ["string", "yo", false]))'
+
 module.exports = ExpectedASTs

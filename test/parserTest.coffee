@@ -38,17 +38,17 @@ describe 'The parser', ->
          program.toString().should.equal expectedAST.whileLoop
          done()
 
-   it 'correctly parses object instantiation', (done) ->
+   ###it 'correctly parses object instantiation', (done) ->
       scan 'test/data/good-programs/object-instantiation.roo', (tokens) ->
          program = parse tokens
          program.toString().should.equal expectedAST.objects
-         done()
+         done()###
 
-   it 'correctly parses lambda functions', (done) ->
+   ###it 'correctly parses lambda functions', (done) ->
       scan 'test/data/good-programs/lambda.roo', (tokens) ->
          program = parse tokens
          program.toString().should.equal expectedAST.lambdas
-         done()
+         done()###
 
    it 'correctly parses the fibonacci program', (done) ->
       scan 'test/data/parser/fibonacci.roo', (tokens) ->
@@ -92,14 +92,20 @@ describe 'The parser', ->
          program.toString().should.equal expectedAST.orderOfOperations
          done()
 
-   it 'correctly parses the prefix ops', (done) ->
+   ###it 'correctly parses the prefix ops', (done) ->
          scan 'test/data/parser/prefixOp.roo', (tokens) ->
             program = parse tokens
             program.toString().should.equal expectedAST.prefixOp
-            done()
+            done()###
 
-   it 'correctly parses the postfix ops', (done) ->
+   ###it 'correctly parses the postfix ops', (done) ->
          scan 'test/data/parser/postfixOp.roo', (tokens) ->
             program = parse tokens
             program.toString().should.equal expectedAST.postfixOp
+            done()###
+
+   it 'correctly parses the following possible bugs', (done) ->
+         scan 'test/data/parser/setBugs.roo', (tokens) ->
+            program = parse tokens
+            program.toString().should.equal expectedAST.setBugs
             done()
