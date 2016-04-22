@@ -18,6 +18,15 @@ class AnalysisContext
   addVariable: (name, entity) ->
     @symbolTable[name] = entity
 
+  isVariableDeclared: (token) ->
+    variable = @symbolTable[token.lexeme]
+    if variable
+      return true
+    else if not @parent
+      return false
+    else
+      @parent.isVariableDeclared token
+
   lookupVariable: (token) ->
     variable = @symbolTable[token.lexeme]
     if variable
