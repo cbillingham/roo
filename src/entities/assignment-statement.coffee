@@ -8,8 +8,8 @@ class AssignmentStatement
   isGlobal: ->
     @global
 
-  analyze: ->
-    if 
+  analyze: (context) ->
+    #todo
 
   optimize: ->
     #TODO
