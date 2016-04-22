@@ -104,7 +104,7 @@ describe 'The parser', ->
          program.toString().should.equal expectedAST.postfixOp
          done()
 
-   it 'correctly parses the following possible bugs', (done) ->
+   it 'correctly parses complex set syntax correctly', (done) ->
          scan 'test/data/parser/setBugs.roo', (tokens) ->
             program = parse tokens
             program.toString().should.equal expectedAST.setBugs

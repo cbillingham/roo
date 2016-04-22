@@ -131,9 +131,9 @@ class ExpectedASTs
     (Assign k = (< (/ (+ 5.143 5.0532) 2) (** 5 (+ 5.353 (/ 4 2.657)))))))'
 
   @setBugs = '(Program (Block 
-  <1,2,3,false>
+  <1, 2, 3, (> 4 5)>
   <6, 7, 8, 9>
-  {x: 3}
+  {x: ((y) -> (Block (Return (* y y))))}
   (1,)
   [1, 2, false]
   <1, 2.3, false>
