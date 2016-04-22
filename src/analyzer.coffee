@@ -2,26 +2,29 @@ error = require './error'
 VariableReference = require './entities/variable-reference'
 
 class AnalysisContext
+  constructor: (@parent, global) ->
+    @symbolTable = {}
+    if global
+      @global = @symbolTable
+    else
+      @global = @parent.global
 
-    constructor: (@parent) ->
-        @symbolTable = {}
+  @initialContext: () ->
+    new AnalysisContext(null, global = true)
 
-    @initialContext: () ->
-        new AnalysisContext(null)
+  createChildContext: ->
+    new AnalysisContext(this)
 
-    createChildContext: ->
-        new AnalysisContext(this)
+  addVariable: (name, entity) ->
+    @symbolTable[name] = entity
 
-    addVariable: (name, entity) ->
-        @symbolTable[name] = entity
-
-    lookupVariable: (token) ->
-        variable = @symbolTable[token.lexeme]
-        if variable
-            variable
-        else if not @parent
-            error "Variable #{token.lexeme} not found", token
-        else
-            @parent.lookupVariable token
+  lookupVariable: (token) ->
+    variable = @symbolTable[token.lexeme]
+    if variable
+      variable
+    else if not @parent
+      error "Variable #{token.lexeme} not found", token
+    else
+      @parent.lookupVariable token
 
 exports.initialContext = AnalysisContext.initialContext
