@@ -6,14 +6,15 @@ error     = require './error'
 LETTER = XRegExp '[\\p{L}]'
 DIGIT = XRegExp '[\\p{Nd}]'
 WORD_CHAR = XRegExp '[\\p{L}\\p{Nd}_]'
+INVALID_STR_CHAR = XRegExp '[\\p{C}]'
 
-KEYWORDS = /^(fun|global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist)$/
+KEYWORDS = /^(fun|global|if|else|for|while|break|continue|return|loop|true|false|to|by|is|isnt|in|and|or|class|null|new|insist|self)$/
 
 TWO_CHAR_TOKENS = /[%<>=+\-*\/!]=|\+\+|\.\.|--|\/\/|->|\*\*|&&|\|\|/
 ONE_CHAR_TOKENS = /[\[+%\-*\/(),:=<>\]\{\}!.]/
 
 inComment = false
-endOfString = '"'
+endOfString = []
 
 module.exports = (filename, callback) ->
   baseStream = fs.createReadStream filename, {encoding: 'utf8'}
@@ -24,7 +25,7 @@ module.exports = (filename, callback) ->
   linenumber = 0
   stream.on 'line', (line) ->
     scan line, ++linenumber, tokens
-    tokens.push {kind: 'EOL', lexeme: 'EOL'} #after every line (even blanks)
+    tokens.push {kind: 'EOL', lexeme: 'EOL', line: linenumber} #after every line (even blanks)
   stream.on 'close', () ->
     tokens.push {kind: 'EOF', lexeme: 'EOF'}
     callback tokens
@@ -35,9 +36,10 @@ scan = (line, linenumber, tokens) ->
   [start, pos] = [0,0]
 
   emit = (kind, lexeme) ->
-    tokens.push {kind, lexeme: lexeme or kind, line: linenumber, col: start+1}
+    tokens.push {kind, lexeme: (if lexeme? then lexeme else kind), line: linenumber, col: start+1}
   
   inString = false
+  inStringInterp = []
 
   loop
 
@@ -63,20 +65,53 @@ scan = (line, linenumber, tokens) ->
     # Line is comment
     break if (line[pos] is '#')
 
+    if inStringInterp.length > 0
+      if line[pos] is '{'
+        inStringInterp.push(inStringInterp.pop()+1)
+      if line[pos] is '}'
+        x = inStringInterp.pop()
+        if x > 1
+          inStringInterp.push(x-1)
+        else
+          emit ')', ')'
+          emit '+', '+'
+          inString = true
+
     # String Literals
     if inString
       pos++
-      while line[pos] isnt endOfString
-        pos++ 
+      start = pos # Ignore beginning "
+      interp = false
 
-      start++ # Ignore the opening "
-      pos++   # Ignore the ending " next loop
+      while line[pos] isnt endOfString.slice(-1)[0]
+        if INVALID_STR_CHAR.test line[pos]
+          error "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
+          pos++
+        if line[pos] is '\\'
+          pos++
+          if line[pos] is '{'
+            inStringInterp.push(1)
+            interp = true
+            break
+          if /[^rnst'"]/.test line[pos]
+            error "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
+            pos++
+        else
+          pos++ 
+
+      pos++   # Ignore the ending " or '{' next loop
       inString = false
-      emit 'stringlit', line.substring start, pos-1
+      if interp
+        emit 'stringlit', line.substring start, pos-2  #ignore '\{'
+        emit '+', '+'
+        emit '(', '('
+      else
+        emit 'stringlit', line.substring start, pos-1
+        endOfString.pop()
 
     else if line[pos] is "'" or line[pos] is '"'
       inString = true
-      endOfString = line[pos]
+      endOfString.push(line[pos])
 
 
     # Numeric literals
@@ -126,5 +161,5 @@ scan = (line, linenumber, tokens) ->
         emit 'id', word
 
     else
-      error "Illegal character: #(line[pos])", {line: linenumber, col: pos+1}
+      error "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
       pos++

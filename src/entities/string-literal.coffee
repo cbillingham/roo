@@ -3,7 +3,7 @@ class StringLiteral
   constructor: (@value) ->
 
   toString: ->
-   "\"#{@value}\""
+    "\"#{@value}\""
 
   analyze: (context) ->
     #todo

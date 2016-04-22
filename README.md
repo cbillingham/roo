@@ -172,6 +172,7 @@ c = <1,2,3>                # sets are unordered and mutable
 
 d = {x:1, y:2, z:3}        # maps are a mutable collection of key-value pairs
 ```
+
 #### List Ranges, Comprehensions, and Slices
 Roo adds modern list functionality to make your code more readable and easier to write.
 
@@ -191,6 +192,39 @@ Roo also has list comprehensions.
 ```
 l = [0,1,2,3]
 y = [x*2 for x in l]        # y = [0,2,4,6]
+```
+
+###String Interpolation
+To compose string literals containing values from expressions, use string interpolation.
+```
+dogName = 'pluto'
+print("The dog's name is \{dogName}.") # prints "The dog's name is pluto."
+```
+
+### Classes
+You can define a class to create your own data types.
+
+```
+class CartesianPoint {
+  fun constructor(xCoordinate, yCoordinate) {
+    self.xCoordinate = xCoordinate
+    self.yCoordinate = yCoordinate
+  }
+  
+  fun translate(newXCoordinate, newYCoordinate) {
+    self.xCoordinate = newXCoordinate
+    self.yCoordinate = newYCoordinate
+  }
+  
+  fun toString() {
+    print('\{self.xCoordinate}, \{self.yCoordinate}')
+  }
+}
+```
+To create an instance of a class, use the new keyword.
+```
+homeCoordinate = new CartesianPoint(0,0)
+homeCoordinate.translate(7,7)  #homeCoordinate is now at (7,7)
 ```
 
 ### Operators

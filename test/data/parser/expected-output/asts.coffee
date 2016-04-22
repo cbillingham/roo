@@ -30,17 +30,18 @@ class ExpectedASTs
     (Assign string = "hello") 
     (Assign boolean = true) 
     (Assign float = 3.14159) 
-    (Assign theNull = null) 
-    (Assign list = [1, 0, 2, 3, 4])
-     (Assign map = {first: 1, second: 2})))'
+    (Assign theNull = null)
+    (Assign tuple = (3, 4))
+    (Assign list = [1, 2, 3, 4])
+    (Assign set = <1, 2, 3, 4>)
+    (Assign map = {first: 1, second: 2})
+    (Assign (. ([] x ([] t (+ 1 1))) bestTime) = 4.23)))'
   
   @objects = '(Program
       (Block
         (Assign x =
           (Object Object ()))
-        (Assign y = (Object Object2 ())))))'
-
-  @assignmentStatements = '(Program (Block (Assign int = 4) (Assign string = "hello") (Assign boolean = true) (Assign float = 3.14159) (Assign theNull = null) (Assign list = [1, 2, 3, 4]) (Assign map = {first: 1, second: 2})))'
+        (Assign y = (Object Object2 ()))))'
 
   @fibonacci = '(Program (Block
     (Function fibonacci (max)
@@ -103,8 +104,8 @@ class ExpectedASTs
       (Block
         ((x, y) -> (Block (+ x y)))
         (() -> (Block (Return 3)))
-        (() -> (Block()))
-        ((x, y, z, a) -> (Block (Return 3)))))'
+        (() -> (Block ))
+        ((x, y, z, (Assign a = 3)) -> (Block (Return 3)))))'
   
   @prefixOp = '(Program (Block 
     (Assign t = (! false))
@@ -137,5 +138,12 @@ class ExpectedASTs
   [1, 2, false]
   <1, 2.3, false>
   ["string", "yo", false]))'
+
+  @helloworld = '(Program (Block
+    (Call print ("hello world"))))'
+  
+  @insist = '(Program (Block
+    (Insist (< x 4))
+    (Function divide (x, y) (Block (Insist (isnt x 0))))))'
 
 module.exports = ExpectedASTs
