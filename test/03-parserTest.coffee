@@ -99,9 +99,15 @@ describe 'The parser', ->
             done()
 
    it 'correctly parses the postfix ops', (done) ->
-         scan 'test/data/good-programs/postfixOp.roo', (tokens) ->
+      scan 'test/data/good-programs/postfixOp.roo', (tokens) ->
+         program = parse tokens
+         program.toString().should.equal expectedAST.postfixOp
+         done()
+
+   it 'correctly parses complex set syntax correctly', (done) ->
+         scan 'test/data/parser/setBugs.roo', (tokens) ->
             program = parse tokens
-            program.toString().should.equal expectedAST.postfixOp
+            program.toString().should.equal expectedAST.setBugs
             done()
 
    it 'correctly parses the hello world program', (done) ->
