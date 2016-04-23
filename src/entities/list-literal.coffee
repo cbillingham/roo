@@ -5,7 +5,7 @@ class ListLiteral
   toString: ->
     "[#{@elements.join(', ')}]"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

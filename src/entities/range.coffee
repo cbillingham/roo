@@ -5,7 +5,7 @@ class Range
   toString: ->
     "(Range #{@left} to #{@right} by #{@step})"
 
-  analyze: ->
+  analyze: (context) ->
     #TODO
 
   optimize: ->

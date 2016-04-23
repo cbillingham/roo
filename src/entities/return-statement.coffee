@@ -5,7 +5,7 @@ class ReturnStatement
   toString: ->
     "(Return #{@expression})"
 
-  analyze: ->
+  analyze: (context) ->
     #TODO
 
   optimize: ->

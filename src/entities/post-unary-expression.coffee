@@ -5,7 +5,7 @@ class PostUnaryExpression
   toString: ->
     "(#{@operand} #{@op})"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

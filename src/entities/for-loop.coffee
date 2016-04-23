@@ -8,7 +8,7 @@ class ForLoop
     else
       "(For #{@source} #{@body})"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

@@ -5,7 +5,7 @@ class Program
   toString: ->
     "(Program #{@block})"
 
-  analyze: ->
+  analyze: (context) ->
     #TODO
 
   optimize: ->

@@ -12,7 +12,7 @@ class IfStatement
         s = s.concat " else #{body}"
     s = "(#{s})"
 
-  analyze: ->
+  analyze: (context) ->
       #todo
 
   optimize: ->

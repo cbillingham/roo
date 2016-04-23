@@ -5,7 +5,7 @@ class ClassDeclaration
   toString: ->
     "(Class #{@name} #{@body})"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

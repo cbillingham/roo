@@ -5,7 +5,7 @@ class PreUnaryExpression
   toString: ->
     "(#{@op} #{@operand})"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

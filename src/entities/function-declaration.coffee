@@ -5,7 +5,7 @@ class FunctionDeclaration
   toString: ->
     "(Function #{@name} (#{@params.join(', ')}) #{@body})"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

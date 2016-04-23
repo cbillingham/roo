@@ -5,7 +5,7 @@ class ListComprehension
   toString: ->
     "[#{@exp} for #{@id} in #{@source}]"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

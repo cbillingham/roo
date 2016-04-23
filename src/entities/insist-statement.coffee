@@ -4,7 +4,7 @@ class InsistStatement
   toString: ->
     "(Insist #{@condition})"
 
-  analyze: ->
+  analyze: (context)->
 
   optimize: ->
 

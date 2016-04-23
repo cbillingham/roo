@@ -5,7 +5,7 @@ class CollectionAccess
   toString: ->
     "([] #{@source} #{@element})"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

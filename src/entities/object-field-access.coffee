@@ -5,7 +5,7 @@ class ObjectFieldAccess
   toString: ->
     "(. #{@source} #{@field})"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

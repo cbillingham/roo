@@ -5,7 +5,7 @@ class FunctionCall
   toString: ->
     "(Call #{@function} (#{@args.join(', ')}))"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->
