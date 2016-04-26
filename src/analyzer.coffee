@@ -27,6 +27,9 @@ class AnalysisContext
     else
       @parent.isVariableDeclared token
 
+  isInLoop: (token) ->
+    
+
   lookupVariable: (token) ->
     variable = @symbolTable[token.lexeme]
     if variable
