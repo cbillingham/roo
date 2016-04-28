@@ -44,16 +44,16 @@ generator =
     emit '}'
 
   PrintStatement: (p) ->
-    emit "console.log(#{gen p.expression})"
+    emit "console.log(#{gen p.expression});"
 
   BreakStatement: (b) ->
-    emit "break"
+    emit "break;"
 
   ContinueStatement: (c) ->
-    emit "continue"
+    emit "continue;"
 
   IfStatement: (i) ->
-    emit: "#{i.toString()}"
+    emit "#{i.toString()}"
 
   Lambda: (l) ->
     emit "(#{gen l.params}) => {
@@ -80,25 +80,32 @@ generator =
     #TODO
 
   FunctionCall: (f) ->
-    #TODO
+    #TODO 
 
   ListComprehension: (l) ->
     #TODO
 
-  ObjectFieldAccess: (o) ->
-    #TODO
+  ObjectFieldAccess: (o, f) ->
+    emit "#{o.source}.#{f}"
 
   ObjectInstance: (o) ->
     #TODO
 
   PostUnaryExpression: (p) ->
-    #TODO
+    emit p.toString()
 
   PreUnaryExpression: (p) ->
-    #TODO
+    emit p.toString()
 
   Range: (r) ->
-    #TODO
+    start = "#{r.left}"
+    end = "#{r.right}"
+    step = "#{r.step}"
+
+    range = []
+    range.push(x for x in [start..end] by step)
+
+    emit range.toString()
 
   VariableReference: (v) ->
     #TODO
@@ -107,7 +114,7 @@ generator =
     emit "while (#{gen w.condition}){#{gen w.body}}"
 
   ReturnStatement: (r) ->
-    emit "return #{gen r.expression}"
+    emit "return #{gen r.expression};"
 
   FunctionDeclaration: (f) ->
     emit "var #{makeVariable f.name} (#{gen f.params}) => { }"
@@ -118,8 +125,8 @@ generator =
 
   NullLiteral: (literal) -> literal.toString()
 
-  TupleLiteral: (literal) ->
-    #TODO
+  TupleLiteral: (literal) -> 
+    emit "[literal.elements[0], literal.elements[1]]"
 
   MapLiteral: (literal) -> literal.toString()
 
@@ -128,7 +135,7 @@ generator =
   FloatLiteral: (literal) -> literal.toString()
 
   SetLiteral: (literal) ->
-    #TODO
+    emit "new Set(#{literal.elements})"
 
   VariableReference: (v) -> 
     if(v.global) 
