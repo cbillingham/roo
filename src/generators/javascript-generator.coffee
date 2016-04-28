@@ -35,27 +35,100 @@ generator =
     gen statement for statement in block.statements
     indentLevel--
 
-  VariableDeclaration: (v) ->
-    initializer = {'int': '0', 'bool': 'false'}[v.type]
-    emit "var #{makeVariable v} = #{initializer};"
-
   AssignmentStatement: (s) ->
     emit "#{gen s.target} = #{gen s.source};"
-
-  ReadStatement: (s) ->
-    emit "#{makeVariable(v.referent)} = prompt();" for v in s.varrefs
-
-  WriteStatement: (s) ->
-    emit "alert(#{gen(e)});" for e in s.expressions
 
   WhileStatement: (s) ->
     emit "while (#{gen s.condition}) {"
     gen s.body
     emit '}'
 
+  PrintStatement: (p) ->
+    emit "console.log(#{gen p.expression})"
+
+  BreakStatement: (b) ->
+    emit "break"
+
+  ContinueStatement: (c) ->
+    emit "continue"
+
+  IfStatement: (i) ->
+    emit: "#{i.toString()}"
+
+  Lambda: (l) ->
+    emit "(#{gen l.params}) => {
+      #{gen l.body}
+    }"
+
+  ClassDeclaration: (c) ->
+    emit "class #{makeVariable(c.name)} {"
+      #TODO
+    emit "}"
+
+  CollectionAccess: (c) ->
+    #TODO
+
+  InsistStatement: (i) ->
+    emit "if (!(#{gen i.condition}){
+        throw \"argument failed condition: #{i.condition.toString()})\"
+      }"
+
+  ArgumentList: (a) ->
+    #TODO
+
+  ForLoop: (f) ->
+    #TODO
+
+  FunctionCall: (f) ->
+    #TODO
+
+  ListComprehension: (l) ->
+    #TODO
+
+  ObjectFieldAccess: (o) ->
+    #TODO
+
+  ObjectInstance: (o) ->
+    #TODO
+
+  PostUnaryExpression: (p) ->
+    #TODO
+
+  PreUnaryExpression: (p) ->
+    #TODO
+
+  Range: (r) ->
+    #TODO
+
+  VariableReference: (v) ->
+    #TODO
+
+  WhileLoop: (w) ->
+    emit "while (#{gen w.condition}){#{gen w.body}}"
+
+  ReturnStatement: (r) ->
+    emit "return #{gen r.expression}"
+
+  FunctionDeclaration: (f) ->
+    emit "var #{makeVariable f.name} (#{gen f.params}) => { }"
+
   IntegerLiteral: (literal) -> literal.toString()
 
   BooleanLiteral: (literal) -> literal.toString()
+
+  NullLiteral: (literal) -> literal.toString()
+
+  TupleLiteral: (literal) ->
+    #TODO
+
+  MapLiteral: (literal) -> literal.toString()
+
+  ListLiteral: (literal) -> literal.toString()
+
+  FloatLiteral: (literal) -> literal.toString()
+
+  SetLiteral: (literal) ->
+    #TODO
 
   VariableReference: (v) -> makeVariable v.referent
 
