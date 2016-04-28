@@ -80,7 +80,7 @@ generator =
     #TODO
 
   FunctionCall: (f) ->
-    #TODO
+    #TODO 
 
   ListComprehension: (l) ->
     #TODO
@@ -118,8 +118,8 @@ generator =
 
   NullLiteral: (literal) -> literal.toString()
 
-  TupleLiteral: (literal) ->
-    #TODO
+  TupleLiteral: (literal) -> 
+    emit "[literal.elements[0], literal.elements[1]]"
 
   MapLiteral: (literal) -> literal.toString()
 
