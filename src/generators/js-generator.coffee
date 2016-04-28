@@ -1,11 +1,14 @@
 util = require('util')
-HashMap = require('hashmap').HashMap
+Context = require('../entities/Context')
 
 module.exports = (program) ->
   gen program
 
 indentPadding = 4
 indentLevel = 0
+globalContext = new Context()
+currentContext = globalContext
+lastId = 0
 
 emit = (line) ->
   pad = indentPadding * indentLevel
@@ -14,14 +17,9 @@ emit = (line) ->
 makeOp = (op) ->
   {not: '!', and: '&&', or: '||', '==': '===', '!=': '!=='}[op] or op
 
-makeVariable = do (lastId = 0, map = new HashMap()) ->
-  (v) ->
-    map.set v, ++lastId if not map.has v
-    '_v' + map.get v
-
 gen = (e) ->
   generator[e.constructor.name](e)
-
+  
 generator =
 
   Program: (program) ->
@@ -32,8 +30,10 @@ generator =
 
   Block: (block) ->
     indentLevel++
+    currentContext = new Context(currentContext)
     gen statement for statement in block.statements
     indentLevel--
+    currentContext = currentContext.parent
 
   AssignmentStatement: (s) ->
     emit "#{gen s.target} = #{gen s.source};"
@@ -61,7 +61,7 @@ generator =
     }"
 
   ClassDeclaration: (c) ->
-    emit "class #{makeVariable(c.name)} {"
+    emit "class #{currentContext.makeVariable(c.name)} {"
       #TODO
     emit "}"
 
@@ -130,7 +130,11 @@ generator =
   SetLiteral: (literal) ->
     #TODO
 
-  VariableReference: (v) -> makeVariable v.referent
+  VariableReference: (v) -> 
+    if(v.global) 
+      globalContext.makeVariable(v.referent, lastId)
+    else
+      currentContext.makeVariable(v.referent, lastId)
 
   UnaryExpression: (e) -> "(#{makeOp e.op.lexeme} #{gen e.operand})"
 

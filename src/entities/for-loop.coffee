@@ -13,5 +13,5 @@ class ForLoop
 
   optimize: ->
     #todo
-
+    
 module.exports = ForLoop
