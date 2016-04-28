@@ -92,10 +92,10 @@ generator =
     #TODO
 
   PostUnaryExpression: (p) ->
-    #TODO
+    emit p.toString()
 
   PreUnaryExpression: (p) ->
-    #TODO
+    emit p.toString()
 
   Range: (r) ->
     #TODO

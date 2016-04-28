@@ -3,7 +3,7 @@ class PostUnaryExpression
   constructor: (@op, @operand) ->
 
   toString: ->
-    "(#{@operand} #{@op})"
+    "(#{@operand}#{@op})"
 
   analyze: (context) ->
     #todo
