@@ -44,13 +44,13 @@ generator =
     emit '}'
 
   PrintStatement: (p) ->
-    emit "console.log(#{gen p.expression})"
+    emit "console.log(#{gen p.expression});"
 
   BreakStatement: (b) ->
-    emit "break"
+    emit "break;"
 
   ContinueStatement: (c) ->
-    emit "continue"
+    emit "continue;"
 
   IfStatement: (i) ->
     emit: "#{i.toString()}"
@@ -107,7 +107,7 @@ generator =
     emit "while (#{gen w.condition}){#{gen w.body}}"
 
   ReturnStatement: (r) ->
-    emit "return #{gen r.expression}"
+    emit "return #{gen r.expression};"
 
   FunctionDeclaration: (f) ->
     emit "var #{makeVariable f.name} (#{gen f.params}) => { }"
