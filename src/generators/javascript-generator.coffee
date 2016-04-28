@@ -85,8 +85,8 @@ generator =
   ListComprehension: (l) ->
     #TODO
 
-  ObjectFieldAccess: (o) ->
-    emit "#{o.name}."
+  ObjectFieldAccess: (o, f) ->
+    emit "#{o.source}.#{f}"
 
   ObjectInstance: (o) ->
     #TODO
@@ -128,7 +128,7 @@ generator =
   FloatLiteral: (literal) -> literal.toString()
 
   SetLiteral: (literal) ->
-    #TODO
+    emit "new Set(#{literal.elements})"
 
   VariableReference: (v) -> makeVariable v.referent
 
