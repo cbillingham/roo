@@ -53,7 +53,7 @@ generator =
     emit "continue;"
 
   IfStatement: (i) ->
-    emit: "#{i.toString()}"
+    emit "#{i.toString()}"
 
   Lambda: (l) ->
     emit "(#{gen l.params}) => {
@@ -86,7 +86,7 @@ generator =
     #TODO
 
   ObjectFieldAccess: (o) ->
-    #TODO
+    emit "#{o.name}."
 
   ObjectInstance: (o) ->
     #TODO
