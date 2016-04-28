@@ -98,7 +98,14 @@ generator =
     emit p.toString()
 
   Range: (r) ->
-    #TODO
+    start = "#{r.left}"
+    end = "#{r.right}"
+    step = "#{r.step}"
+
+    range = []
+    range.push(x for x in [start..end] by step)
+
+    emit range.toString()
 
   VariableReference: (v) ->
     #TODO
