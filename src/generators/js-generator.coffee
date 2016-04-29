@@ -74,7 +74,7 @@ generator =
       }"
 
   ArgumentList: (a) ->
-    #TODO
+    emit a.toString()
 
   ForLoop: (f) ->
     #TODO
