@@ -10,6 +10,9 @@ globalContext = new Context()
 currentContext = globalContext
 lastId = 0
 
+getNewId = () ->
+  lastId += 1
+
 emit = (line) ->
   pad = indentPadding * indentLevel
   console.log(Array(pad+1).join(' ') + line)
@@ -18,6 +21,7 @@ makeOp = (op) ->
   {not: '!', and: '&&', or: '||', '==': '===', '!=': '!=='}[op] or op
 
 gen = (e) ->
+  console.log(e)
   generator[e.constructor.name](e)
   
 generator =
@@ -139,9 +143,9 @@ generator =
 
   VariableReference: (v) -> 
     if(v.global) 
-      globalContext.makeVariable(v.referent, lastId)
+      globalContext.makeVariable(v.referent, getNewId())
     else
-      currentContext.makeVariable(v.referent, lastId)
+      currentContext.makeVariable(v.referent, getNewId())
 
   UnaryExpression: (e) -> "(#{makeOp e.op.lexeme} #{gen e.operand})"
 
