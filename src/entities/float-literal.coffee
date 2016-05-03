@@ -5,7 +5,7 @@ class FloatLiteral
   toString: ->
     @value
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

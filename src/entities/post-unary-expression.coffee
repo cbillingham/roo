@@ -3,9 +3,9 @@ class PostUnaryExpression
   constructor: (@op, @operand) ->
 
   toString: ->
-    "(#{@operand} #{@op})"
+    "(#{@operand}#{@op})"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

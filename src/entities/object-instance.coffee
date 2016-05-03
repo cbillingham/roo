@@ -5,7 +5,7 @@ class ObjectInstance
   toString: ->
     "(Object #{@class} (#{@args.join(', ')}))"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

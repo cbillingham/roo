@@ -8,7 +8,7 @@ class TupleLiteral
     else
       "(#{@elements.join(', ')})"
 
-  analyze: ->
+  analyze: (context) ->
 
   optimize: ->
     #todo

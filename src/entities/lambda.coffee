@@ -5,7 +5,7 @@ class Lambda
   toString: ->
     "((#{@params.join(', ')}) -> #{@body})"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

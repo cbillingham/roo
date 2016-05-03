@@ -8,10 +8,10 @@ class ForLoop
     else
       "(For #{@source} #{@body})"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->
     #todo
-
+    
 module.exports = ForLoop

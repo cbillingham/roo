@@ -1,15 +1,15 @@
 class AssignmentStatement
   
-  constructor: (@variableReference, @value, @global = false) ->
+  constructor: (@target, @value, @global = false) ->
 
   toString: ->
-    "(Assign #{if @global then 'global ' else ''}#{@variableReference} = #{@value})"
+    "(Assign #{if @global then 'global ' else ''}#{@target} = #{@value})"
   
   isGlobal: ->
     @global
 
-  analyze: ->
-    #TODO
+  analyze: (context) ->
+    #todo
 
   optimize: ->
     #TODO

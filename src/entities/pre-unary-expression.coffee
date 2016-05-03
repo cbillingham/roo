@@ -3,9 +3,9 @@ class PreUnaryExpression
   constructor: (@op, @operand) ->
 
   toString: ->
-    "(#{@op} #{@operand})"
+    "(#{@op}#{@operand})"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

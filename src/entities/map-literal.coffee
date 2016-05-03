@@ -9,7 +9,7 @@ class MapLiteral
       "#{val[0]}: #{val[1]}"
     ).join(', ') + '}'
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

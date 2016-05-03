@@ -5,7 +5,7 @@ class SetLiteral
   toString: ->
     "<#{@elements.join(', ')}>"
 
-  analyze: ->
+  analyze: (context) ->
     #todo
 
   optimize: ->

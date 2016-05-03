@@ -6,7 +6,7 @@ class Block
   toString: ->
     "(Block #{@statements.join(' ')})"
 
-  analyze: ->
+  analyze: (context) ->
     #TODO
 
   optimize: ->
