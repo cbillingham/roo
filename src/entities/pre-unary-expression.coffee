@@ -3,7 +3,7 @@ class PreUnaryExpression
   constructor: (@op, @operand) ->
 
   toString: ->
-    "(#{@op}#{@operand})"
+    "(#{@op} #{@operand})"
 
   analyze: (context) ->
     #todo
