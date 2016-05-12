@@ -6,7 +6,7 @@ class VariableReference
     @token.lexeme
 
   analyze: (context) ->
-    @referent = context.lookupVariable @token
+    #runtime undeclared var error
 
   optimize: ->
     this

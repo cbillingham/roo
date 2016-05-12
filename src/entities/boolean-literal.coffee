@@ -6,7 +6,7 @@ class BooleanLiteral
     @value
 
   analyze: (context) ->
-    #todo
+    #pass
 
   optimize: -> 
     this

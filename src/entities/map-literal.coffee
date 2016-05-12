@@ -10,9 +10,14 @@ class MapLiteral
     ).join(', ') + '}'
 
   analyze: (context) ->
-    #todo
+    for key in @keys
+      key.analyze context
+    for value in @values
+      value.analyze context
 
   optimize: ->
-    #todo
+    @keys = (key.optimize() for key in @keys)
+    @values = (value.optimize() for value in @values)
+    this
 
 module.exports = MapLiteral

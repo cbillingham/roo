@@ -1,3 +1,5 @@
+initialContext = require('../analyzer').initialContext
+
 class Program
 
   constructor: (@block) ->
@@ -6,9 +8,10 @@ class Program
     "(Program #{@block})"
 
   analyze: (context) ->
-    #TODO
+    @block.analyze initialContext()
 
   optimize: ->
-    #TODO
+    @block = @block.optimize()
+    return this
 
 module.exports = Program

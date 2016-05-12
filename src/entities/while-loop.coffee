@@ -1,3 +1,5 @@
+BooleanLiteral = require './boolean-literal'
+
 class WhileLoop
 
   constructor: (@condition, @body) ->
@@ -6,9 +8,14 @@ class WhileLoop
     "(While #{@condition} #{@body})"
 
   analyze: (context) ->
-    #TO DO
+    @condition.analyze context
+    @body.analyze context.createChildContext({inLoop:true})
 
   optimize: ->
-    #TO DO
+    @condition = @condition.optimize()
+    @body = @body.optimize()
+    if (@condition instanceof BooleanLiteral and @condition.value() is false)
+      return null
+    return this
 
 module.exports = WhileLoop

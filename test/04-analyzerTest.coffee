@@ -11,7 +11,7 @@ TEST_DIR = 'test/data/semantic-errors'
 
 describe 'The analyzer detects an error for', () ->
   fs.readdirSync(TEST_DIR).forEach (name) ->
-    check = name.replace(/-/g, ' ').replace(/\.iki$/, '')
+    check = name.replace(/-/g, ' ').replace(/\.roo$/, '')
     it check, (done) ->
       scan path.join(TEST_DIR, name), (tokens) ->
         priorErrorCount = error.count

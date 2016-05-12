@@ -7,7 +7,7 @@ class NullLiteral
     @value
 
   analyze: (context) ->
-    #todo
+    #pass
 
   optimize: -> 
     this

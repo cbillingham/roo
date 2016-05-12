@@ -6,9 +6,13 @@ class ObjectInstance
     "(Object #{@class} (#{@args.join(', ')}))"
 
   analyze: (context) ->
-    #todo
+    @class.analyze context
+    for arg in @args
+      arg.analyze context
 
   optimize: ->
-    #todo
+    @class = @class.optimize()
+    @args = (@arg.optimize for arg in @args)
+    this
 
 module.exports = ObjectInstance

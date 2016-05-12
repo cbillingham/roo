@@ -6,9 +6,12 @@ class ObjectFieldAccess
     "(. #{@source} #{@field})"
 
   analyze: (context) ->
-    #todo
+    @source.analyze context
+    @field.analyze context
 
   optimize: ->
-    #todo
+    @source = @source.optimize()
+    @field = @field.optimize()
+    this
 
 module.exports = ObjectFieldAccess

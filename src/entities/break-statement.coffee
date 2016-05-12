@@ -1,3 +1,5 @@
+error = require './../error'
+
 class BreakStatement
 
   constructor: ->
@@ -6,9 +8,10 @@ class BreakStatement
     "(Break)"
 
   analyze: (context) ->
-    #TO DO
+    if not context.inLoop
+      error "Break Statement outside loop"
 
   optimize: ->
-    #TO DO
+    this
 
 module.exports = BreakStatement

@@ -6,9 +6,11 @@ class ArgumentList
     "(#{@expressions.join(', ')})"
 
   analyze: (context) ->
-    #TO DO
+    for expression in @expressions
+      expression.analyze context
 
   optimize: ->
-    #TO DO
+    @expressions = (e.optimize() for e in @expressions)
+    this
 
 module.exports = ArgumentList

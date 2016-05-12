@@ -6,7 +6,7 @@ class FloatLiteral
     @value
 
   analyze: (context) ->
-    #todo
+    #pass
 
   optimize: ->
     this

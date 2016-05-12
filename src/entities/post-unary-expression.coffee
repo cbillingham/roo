@@ -6,9 +6,9 @@ class PostUnaryExpression
     "(#{@operand} #{@op})"
 
   analyze: (context) ->
-    #todo
+    @operand.analyze context
 
   optimize: ->
-    #todo
+    this
 
 module.exports = PostUnaryExpression

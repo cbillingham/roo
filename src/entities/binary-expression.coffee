@@ -6,9 +6,12 @@ class BinaryExpression
     "(#{@op} #{@left} #{@right})"
 
   analyze: (context) ->
-    #TO DO
+    @left.analyze context 
+    @right.analyze context 
 
   optimize: ->
-    #TO DO
+    @left = @left.optimize()
+    @right = @right.optimize()
+    this
 
 module.exports = BinaryExpression

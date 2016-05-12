@@ -9,9 +9,12 @@ class ForLoop
       "(For #{@source} #{@body})"
 
   analyze: (context) ->
-    #todo
+    @source.analyze context
+    @body.analyze context.createChildContext({inLoop:true})
 
   optimize: ->
-    #todo
+    @source = @source.optimize()
+    @body = @body.optimize()
+    this
     
 module.exports = ForLoop
