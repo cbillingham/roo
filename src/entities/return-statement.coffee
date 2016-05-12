@@ -1,3 +1,5 @@
+error = require './../error'
+
 class ReturnStatement
   
   constructor: (@expression) ->
@@ -6,9 +8,10 @@ class ReturnStatement
     "(Return #{@expression})"
 
   analyze: (context) ->
-    #TODO
+    if not context.inFunction
+      error "Return Statement outside function"
 
   optimize: ->
-    #TODO
+    this
 
 module.exports = ReturnStatement

@@ -9,9 +9,12 @@ class AssignmentStatement
     @global
 
   analyze: (context) ->
-    #todo
+    @target.analyze context
+    @value.analyze context
 
   optimize: ->
-    #TODO
+    @target = @target.optimize()
+    @value = @value.optimize()
+    this
 
 module.exports = AssignmentStatement

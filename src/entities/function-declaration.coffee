@@ -6,9 +6,10 @@ class FunctionDeclaration
     "(Function #{@name} (#{@params.join(', ')}) #{@body})"
 
   analyze: (context) ->
-    #todo
+    @body.analyze context.createChildContext({inFunction:true})
 
   optimize: ->
-    #todo
+    @body = @body.optimize()
+    this
 
 module.exports = FunctionDeclaration

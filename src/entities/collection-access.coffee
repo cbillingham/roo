@@ -6,9 +6,12 @@ class CollectionAccess
     "([] #{@source} #{@element})"
 
   analyze: (context) ->
-    #todo
+    @source.analyze context
+    @element.analyze context
 
   optimize: ->
-    #todo
+    @source = @source.optimize()
+    @element = @element.optimize()
+    this
 
 module.exports = CollectionAccess

@@ -6,9 +6,12 @@ class ListComprehension
     "[#{@exp} for #{@id} in #{@source}]"
 
   analyze: (context) ->
-    #todo
+    @exp.analyze context
+    @source.analyze context
 
   optimize: ->
-    #todo
+    @exp = @exp.optimize()
+    @source = @source.optimize()
+    this
 
 module.exports = ListComprehension

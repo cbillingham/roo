@@ -1,3 +1,5 @@
+error = require './../error'
+
 class ContinueStatement
 
   constructor: ->
@@ -6,9 +8,10 @@ class ContinueStatement
     "(Continue)"
 
   analyze: (context) ->
-    #TO DO
+    if not context.inLoop
+      error "Continue Statement outside loop"
 
   optimize: ->
-    #TO DO
+    this
 
 module.exports = ContinueStatement

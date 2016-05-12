@@ -6,9 +6,11 @@ class ListLiteral
     "[#{@elements.join(', ')}]"
 
   analyze: (context) ->
-    #todo
+    for element in @elements
+      element.analyze context
 
   optimize: ->
-    #todo
+    @elements = (element.optimize() for element in @elements)
+    this
 
 module.exports = ListLiteral

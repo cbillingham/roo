@@ -13,9 +13,14 @@ class IfStatement
     s = "(#{s})"
 
   analyze: (context) ->
-      #todo
+    for condition in @conditions
+      condition.analyze context
+    for body in @bodies
+      body.analyze context        #same scope for if blocks
 
   optimize: ->
-      #todo
+    @conditions = (condition.optimize() for condition in @conditions)
+    @bodies = (body.optmize() for body in @bodies)
+    this
 
 module.exports = IfStatement

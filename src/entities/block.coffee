@@ -7,9 +7,12 @@ class Block
     "(Block #{@statements.join(' ')})"
 
   analyze: (context) ->
-    #TODO
+    for statement in @statements
+      statement.analyze context
 
   optimize: ->
-    #TODO
+    @statements = (s.optimize() for s in @statements)
+    @statements = (s for s in @statements when s isnt null)
+    this
 
 module.exports = Block

@@ -6,7 +6,7 @@ class IntegerLiteral
     @value
 
   analyze: (context) ->
-    #todo
+    #pass
 
   optimize: -> 
     this

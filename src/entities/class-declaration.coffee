@@ -6,9 +6,12 @@ class ClassDeclaration
     "(Class #{@name} #{@body})"
 
   analyze: (context) ->
-    #todo
+    @name.analyze context
+    @body.analyze context.createChildContext()
 
   optimize: ->
-    #todo
+    @name = @name.optimize()
+    @body = @body.optimize()
+    this
 
 module.exports = ClassDeclaration

@@ -6,7 +6,7 @@ class StringLiteral
     "\"#{@value}\""
 
   analyze: (context) ->
-    #todo
+    #pass
 
   optimize: -> 
     this

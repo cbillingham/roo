@@ -6,9 +6,11 @@ class FunctionCall
     "(Call #{@function} (#{@args.join(', ')}))"
 
   analyze: (context) ->
-    #todo
+    for arg in @args
+      arg.analyze context
 
   optimize: ->
-    #todo
+    @args = (arg.optimize() for arg in @args)
+    this
 
 module.exports = FunctionCall
