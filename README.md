@@ -2,6 +2,14 @@
 
 A simple, curly-brace language that compiles to Javascript. Roo combines the scripting benefits of a dynamically typed language with a readable syntax that is inspired by Java and Swift. While the basic syntax of Roo is inspired by Java and Swift, Roo adds modern functionailty, such as list comprehensions, default parameters, and much more, to the programmers toolbelt.
 
+### About
+Roo was created as part of the compilers class at Loyola Marymount University during the spring 2016 semester. It is the brain child of:
+* [Cameron Billingham](https://github.com/cbillingham)
+* [Jeff Fennell](https://github.com/jtfennell)
+* [Matt Flickner](https://github.com/mwflickner)
+* [Misa Pham](https://github.com/misaqpham)
+* [Joseph Barbosa](https://github.com/jbarbosa1)
+
 ## Compile
 ```
 kanga helloWorld.roo
